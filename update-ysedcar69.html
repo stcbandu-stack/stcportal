@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ติดตามความคืบหน้ารถมือสอง 2569</title>
+    <title>ติดตามความคืบหน้ามือสอง 2569</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -11,7 +11,7 @@
     <!-- PapaParse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         body {
@@ -47,7 +47,7 @@
     <header class="bg-white shadow-sm p-4 sticky top-0 z-50 w-full border-b border-gray-200">
         <div class="flex flex-col md:flex-row justify-start items-center gap-6">
             <h1 class="text-xl font-bold text-blue-900 flex-shrink-0">
-                <i class="fa-solid fa-chart-line mr-2"></i>ความคืบหน้ามือสอง 2569
+                <i class="fa-solid fa-chart-line mr-2"></i>ความคืบหน้ารถมือสอง 2569
             </h1>
             
             <div class="flex items-center gap-2 text-sm bg-gray-50 p-2 rounded-lg border border-gray-200 shadow-inner">
@@ -150,6 +150,7 @@
         const loadingStatus = document.getElementById('loading-status');
 
         function init() {
+            checkProtocol();
             monthFilter.innerHTML = '';
             for (const month in csvLinks) {
                 const option = document.createElement('option');
@@ -160,7 +161,20 @@
             loadData();
         }
 
-        function loadData() {
+        function checkProtocol() {
+            if (window.location.protocol === 'file:') {
+                const warningDiv = document.createElement('div');
+                warningDiv.className = "bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 mb-4 fixed bottom-0 right-0 m-6 z-50 shadow-lg rounded max-w-sm animate-bounce-slow";
+                warningDiv.innerHTML = `
+                    <p class="font-bold flex items-center"><i class="fa-solid fa-triangle-exclamation mr-2"></i> แจ้งเตือน: เปิดแบบ Offline</p>
+                    <p class="text-xs mt-1">คุณกำลังเปิดไฟล์โดยตรง (file://) บราวเซอร์อาจบล็อกการดึงข้อมูลจาก Google Sheets</p>
+                    <button onclick="this.parentElement.style.display='none'" class="absolute top-1 right-2 text-amber-600 hover:text-amber-900"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                document.body.appendChild(warningDiv);
+            }
+        }
+
+        async function loadData() {
             const selectedMonth = monthFilter.value;
             const url = csvLinks[selectedMonth];
 
@@ -173,79 +187,69 @@
                 return;
             }
 
-            // ใช้ Papa.parse แบบ download: true เพื่อเลี่ยงปัญหา Network Error แบบ manual fetch
-            Papa.parse(url, {
-                download: true,
-                header: false, // โหลดแบบไม่ระบุ Header ก่อน เพื่อแก้ปัญหาบรรทัดแรกว่าง
-                skipEmptyLines: true,
-                complete: function(results) {
-                    loadingStatus.classList.add('hidden');
-                    
-                    if (!results.data || results.data.length === 0) {
-                        container.innerHTML = `<div class="text-red-500 font-bold p-10">ไม่พบข้อมูลในไฟล์ CSV</div>`;
-                        return;
-                    }
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP Status: ${response.status}`);
+                const csvText = await response.text();
 
-                    // *** MANUAL HEADER DETECTION & PARSING ***
-                    // ค้นหาบรรทัดที่เป็น Header จริงๆ (ต้องมีคำว่า "สาขา" และ "สถานะ")
-                    let headerRowIndex = -1;
-                    const rawData = results.data;
-                    
-                    for (let i = 0; i < Math.min(rawData.length, 20); i++) {
-                        const rowStr = JSON.stringify(rawData[i]);
-                        if (rowStr.includes("สาขา") && (rowStr.includes("สถานะ") || rowStr.includes("Status"))) {
-                            headerRowIndex = i;
-                            break;
-                        }
-                    }
-
-                    if (headerRowIndex === -1) {
-                         container.innerHTML = `<div class="text-red-500 font-bold p-10">ไม่พบหัวตารางที่ถูกต้อง (ต้องมีคอลัมน์ 'สาขา' และ 'สถานะเคส')</div>`;
-                         return;
-                    }
-
-                    console.log(`Found header at row index: ${headerRowIndex}`);
-                    
-                    // แปลง Array of Arrays ให้เป็น Array of Objects ตาม Header ที่เจอ
-                    const headers = rawData[headerRowIndex].map(h => h.trim());
-                    const cleanData = [];
-                    
-                    for (let i = headerRowIndex + 1; i < rawData.length; i++) {
-                        const row = rawData[i];
-                        // ข้ามแถวที่มีจำนวนคอลัมน์ไม่เท่ากับ Header หรือเป็นแถวว่าง
-                        if (row.length !== headers.length) {
-                            // พยายาม Map เท่าที่ได้
-                            let obj = {};
-                            headers.forEach((h, index) => {
-                                obj[h] = row[index] || "";
-                            });
-                            cleanData.push(obj);
-                        } else {
-                            let obj = {};
-                            headers.forEach((h, index) => {
-                                obj[h] = row[index];
-                            });
-                            cleanData.push(obj);
-                        }
-                    }
-
-                    processData(cleanData, selectedMonth);
-                },
-                error: function(err) {
-                    loadingStatus.classList.add('hidden');
-                    container.innerHTML = `<div class="text-red-500 font-bold p-10">เกิดข้อผิดพลาดในการโหลด CSV: ${err.message || "Unknown Error"}</div>`;
+                if (csvText.trim().startsWith("<!DOCTYPE html") || csvText.includes("<html")) {
+                    throw new Error("ลิงก์ไม่ถูกต้อง (ได้รับ HTML แทน CSV)");
                 }
-            });
+
+                Papa.parse(csvText, {
+                    header: false,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        loadingStatus.classList.add('hidden');
+                        if (!results.data || results.data.length === 0) {
+                            container.innerHTML = `<div class="text-red-500 font-bold p-10">ไม่พบข้อมูลในไฟล์ CSV</div>`;
+                            return;
+                        }
+
+                        // MANUAL HEADER DETECTION
+                        let headerRowIndex = -1;
+                        const rawData = results.data;
+                        for (let i = 0; i < Math.min(rawData.length, 20); i++) {
+                            const rowStr = JSON.stringify(rawData[i]);
+                            if (rowStr.includes("สาขา") && (rowStr.includes("สถานะ") || rowStr.includes("Status"))) {
+                                headerRowIndex = i;
+                                break;
+                            }
+                        }
+
+                        if (headerRowIndex === -1) {
+                            container.innerHTML = `<div class="text-red-500 font-bold p-10">ไม่พบหัวตารางที่ถูกต้อง</div>`;
+                            return;
+                        }
+
+                        const headers = rawData[headerRowIndex].map(h => h.trim());
+                        const cleanData = [];
+                        for (let i = headerRowIndex + 1; i < rawData.length; i++) {
+                            const row = rawData[i];
+                            let obj = {};
+                            headers.forEach((h, index) => { obj[h] = row[index] || ""; });
+                            cleanData.push(obj);
+                        }
+
+                        processData(cleanData, selectedMonth);
+                    },
+                    error: function(err) {
+                        loadingStatus.classList.add('hidden');
+                        throw new Error(`Papa Parse Error: ${err.message}`);
+                    }
+                });
+            } catch (error) {
+                loadingStatus.classList.add('hidden');
+                container.innerHTML = `<div class="text-red-500 font-bold p-10">Error: ${error.message}</div>`;
+            }
         }
 
         // --- Smart Column Finder ---
         function findColumnMap(dataRows) {
             if (!dataRows || dataRows.length === 0) return {};
             const keys = Object.keys(dataRows[0]);
-            console.log("Detected CSV Headers:", keys);
             
             const mapping = {};
-            // Updated targets based on your CSV file
             const targets = {
                 branch: ["สาขา"],
                 bookingMonth: ["เดือนที่ส่งเคส", "เดือนจอง", "เดือน"],
@@ -270,7 +274,6 @@
         function isMonthMatch(text, monthName) {
             if (!text) return false;
             if (monthName === "Current Data") return true; 
-
             const aliases = monthAliases[monthName] || [monthName];
             const lowerText = text.toLowerCase();
             return aliases.some(alias => lowerText.includes(alias));
@@ -288,6 +291,7 @@
                     carriedOver: 0,
                     cashPurchase: 0,
                     finance: {},
+                    financeDetails: {}, 
                     status: {},
                     source: {},
                     brands: {},
@@ -298,15 +302,9 @@
                 sourceList.forEach(s => branchData[b].source[s] = 0);
             });
 
-            let validRowCount = 0;
-
             data.forEach(row => {
                 let branchRaw = (colMap.branch ? row[colMap.branch] : "").trim();
-                
-                // STRICT FILTER: ต้องมีสาขา ถึงจะนับ
                 if (!branchRaw) return;
-
-                validRowCount++;
 
                 const bookingMonth = (colMap.bookingMonth ? row[colMap.bookingMonth] : "").trim();
                 const bookingDate = (colMap.bookingDate ? row[colMap.bookingDate] : "").trim();
@@ -319,7 +317,6 @@
                 if (branchMapping[branchRaw]) branchRaw = branchMapping[branchRaw];
 
                 let targetBranches = ["รวมทั้งหมด"]; 
-                
                 if (branches.includes(branchRaw)) {
                     targetBranches.push(branchRaw);
                 } else {
@@ -333,32 +330,21 @@
 
                     stats.totalCases++;
 
+                    // Date Logic
                     let isCurrent = false;
-                    if (selectedMonth === "Current Data") {
-                        isCurrent = true; 
-                    } else {
-                        if (isMonthMatch(bookingMonth, selectedMonth) || isMonthMatch(bookingDate, selectedMonth)) {
-                            isCurrent = true;
-                        }
-                    }
+                    if (selectedMonth === "Current Data") isCurrent = true; 
+                    else if (isMonthMatch(bookingMonth, selectedMonth) || isMonthMatch(bookingDate, selectedMonth)) isCurrent = true;
 
-                    if (isCurrent) {
-                        stats.currentCases++;
-                    } else {
-                        stats.carriedOver++;
-                    }
+                    if (isCurrent) stats.currentCases++;
+                    else stats.carriedOver++;
 
-                    if (financeRaw.includes("สด") || financeRaw.includes("Cash") || financeRaw === "ซื้อสด") {
-                        stats.cashPurchase++;
-                    }
+                    if (financeRaw.includes("สด") || financeRaw.includes("Cash") || financeRaw === "ซื้อสด") stats.cashPurchase++;
 
+                    // Finance Logic
                     let financeKey = "Other";
                     for (const key in financeStyles) {
                         if (key === "Other") continue;
-                        if (financeRaw.toLowerCase().includes(key.toLowerCase())) {
-                            financeKey = key;
-                            break;
-                        }
+                        if (financeRaw.toLowerCase().includes(key.toLowerCase())) { financeKey = key; break; }
                     }
                     if (financeRaw.includes("ทหารไทย")) financeKey = "TTB";
                     if (financeRaw.includes("ไทยพาณิชย์")) financeKey = "SCB";
@@ -370,25 +356,24 @@
 
                     if (!stats.finance[financeKey]) stats.finance[financeKey] = { old: 0, current: 0, total: 0 };
 
-                    if (isCurrent) {
-                        stats.finance[financeKey].current++;
-                    } else {
-                        stats.finance[financeKey].old++;
-                    }
+                    if (isCurrent) stats.finance[financeKey].current++;
+                    else stats.finance[financeKey].old++;
                     stats.finance[financeKey].total++;
 
+                    // Status Logic
                     let matchedStatus = statusList.find(s => s === statusRaw);
-                    if (!matchedStatus) {
-                         matchedStatus = statusList.find(s => statusRaw.includes(s));
-                    }
+                    if (!matchedStatus) matchedStatus = statusList.find(s => statusRaw.includes(s));
                     const finalStatus = matchedStatus || "อื่นๆ";
                     
-                    if (stats.status[finalStatus] !== undefined) {
-                        stats.status[finalStatus]++;
-                    } else {
-                         stats.status["อื่นๆ"]++;
-                    }
+                    if (stats.status[finalStatus] !== undefined) stats.status[finalStatus]++;
+                    else stats.status["อื่นๆ"]++;
 
+                    // NEW: เก็บข้อมูลสถานะลงในไฟแนนซ์
+                    if (!stats.financeDetails[financeKey]) stats.financeDetails[financeKey] = {};
+                    if (!stats.financeDetails[financeKey][finalStatus]) stats.financeDetails[financeKey][finalStatus] = 0;
+                    stats.financeDetails[financeKey][finalStatus]++;
+
+                    // Source & Models Logic
                     let matchedSource = sourceList.find(s => sourceRaw.includes(s));
                     const finalSource = matchedSource || "อื่นๆ";
                     if (stats.source[finalSource] !== undefined) stats.source[finalSource]++;
@@ -400,14 +385,12 @@
                 });
             });
             
-            console.log("Total Valid Rows Processed:", validRowCount);
             renderDashboard(branchData);
         }
 
         function renderDashboard(data) {
             branches.forEach(branch => {
                 const bData = data[branch];
-                
                 const card = document.createElement('div');
                 card.className = "card-width bg-white rounded-xl shadow-lg flex flex-col border border-gray-200 flex-shrink-0 h-fit mb-4";
                 
@@ -442,75 +425,103 @@
                     </div>
                 `;
 
-                // 2. Finance Breakdown (Show ALL)
-                let part2HTML = `<div class="space-y-2"><h3 class="font-bold text-gray-700 border-b pb-1 text-sm flex items-center"><i class="fa-solid fa-money-bill-wave mr-2 text-blue-500"></i>ข้อมูลไฟแนนซ์</h3>`;
+                // 2. Finance Master Table (High Contrast & Merged Columns)
+                let part2HTML = `<div class="mt-4"><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-money-bill-wave mr-2 text-blue-500"></i>ข้อมูลไฟแนนซ์และสถานะ</h3>`;
                 
+                part2HTML += `
+                    <div class="overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+                        <table class="w-full text-xs">
+                            <thead class="bg-gray-100 text-gray-700 border-b-2 border-gray-300 font-bold uppercase tracking-wider">
+                                <tr>
+                                    <th class="px-2 py-2 text-left w-2/5">ไฟแนนซ์ / ยอดงาน</th>
+                                    <th class="px-2 py-2 text-left w-3/5">สถานะเคสของไฟแนนซ์</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y-2 divide-gray-200 bg-white">
+                `;
+
                 Object.keys(financeStyles).forEach(fin => {
                     if (fin === "Other") return; 
                     const fData = bData.finance[fin] || { old: 0, current: 0, total: 0 };
-                    // REMOVED: if (fData.total === 0) return; -> Now showing all
                     const style = financeStyles[fin];
-                    const opacityClass = fData.total === 0 ? "opacity-60 grayscale" : "";
+                    const details = bData.financeDetails[fin] || {};
+                    const opacityClass = fData.total === 0 ? "opacity-40 grayscale" : "";
+
+                    // Build Status Tags
+                    let statusTags = "";
+                    const sortedStatuses = Object.entries(details).sort((a,b) => b[1] - a[1]);
+                    
+                    if (sortedStatuses.length > 0) {
+                        statusTags = `<div class="flex flex-wrap gap-1">`;
+                        sortedStatuses.forEach(([st, count]) => {
+                             let bg = "bg-gray-100 text-gray-600";
+                             if(st.includes("ผ่าน") || st.includes("อนุมัติ")) bg = "bg-blue-100 text-blue-700";
+                             else if(st.includes("ส่งมอบ")) bg = "bg-green-100 text-green-700";
+                             else if(st.includes("รอ")) bg = "bg-yellow-50 text-yellow-700";
+                             else if(st.includes("รีเจค") || st.includes("ไม่ผ่าน")) bg = "bg-red-50 text-red-700";
+
+                             statusTags += `<span class="${bg} px-1.5 py-0.5 rounded-[3px] text-[9px] border border-black/5 whitespace-nowrap font-medium">${st} <b>(${count})</b></span>`;
+                        });
+                        statusTags += `</div>`;
+                    } else {
+                        statusTags = `<span class="text-gray-300 italic text-[9px]">-</span>`;
+                    }
 
                     part2HTML += `
-                        <div class="flex items-center justify-between rounded-md px-2 py-1.5 shadow-sm border border-gray-100 ${opacityClass}" style="background-color: ${style.bg};">
-                            <div class="font-bold text-xs w-24 truncate drop-shadow-sm" style="color: ${style.text}; text-shadow: 0px 0px 2px rgba(0,0,0,0.1);">${fin}</div>
-                            <div class="flex gap-1.5 text-center text-[10px]">
-                                <div class="flex flex-col w-10 bg-white/90 rounded p-0.5 shadow-sm">
-                                    <span class="text-gray-400 text-[8px]">ยกมา</span>
-                                    <span class="font-bold text-sm leading-none text-red-600">${fData.old}</span>
+                        <tr class="${opacityClass} hover:bg-blue-50/30 transition-colors even:bg-gray-50/50">
+                            <!-- Col 1: Finance Name & Big Numbers -->
+                            <td class="px-3 py-3 align-top border-r border-gray-200">
+                                <div class="flex flex-col gap-2">
+                                    <!-- Finance Badge -->
+                                    <span class="font-bold px-2 py-1 rounded text-xs shadow-sm block text-center truncate ring-1 ring-black/5" style="background-color: ${style.bg}; color: ${style.text}; text-shadow: 0 0 1px rgba(0,0,0,0.1);">${fin}</span>
+                                    
+                                    <!-- Big Numbers Grid -->
+                                    <div class="grid grid-cols-3 gap-1 mt-1">
+                                        <div class="flex flex-col items-center bg-white p-1 rounded border border-gray-200 shadow-sm">
+                                            <span class="text-gray-400 text-[8px] leading-none uppercase tracking-wide mb-0.5">ยกมา</span>
+                                            <span class="font-extrabold text-base md:text-lg leading-none text-red-600">${fData.old}</span>
+                                        </div>
+                                        <div class="flex flex-col items-center bg-white p-1 rounded border border-gray-200 shadow-sm">
+                                            <span class="text-gray-400 text-[8px] leading-none uppercase tracking-wide mb-0.5">ใหม่</span>
+                                            <span class="font-extrabold text-base md:text-lg leading-none text-blue-600">${fData.current}</span>
+                                        </div>
+                                        <div class="flex flex-col items-center bg-gray-100 p-1 rounded border border-gray-300 shadow-inner">
+                                            <span class="text-gray-500 text-[8px] leading-none uppercase tracking-wide mb-0.5">รวม</span>
+                                            <span class="font-extrabold text-base md:text-lg leading-none text-gray-800">${fData.total}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col w-10 bg-white/90 rounded p-0.5 shadow-sm">
-                                    <span class="text-gray-400 text-[8px]">ปัจจุบัน</span>
-                                    <span class="font-bold text-sm leading-none text-blue-500">${fData.current}</span>
-                                </div>
-                                <div class="flex flex-col w-10 bg-white/90 rounded p-0.5 shadow-sm ring-1 ring-black/5">
-                                    <span class="text-gray-400 text-[8px]">รวม</span>
-                                    <span class="font-bold text-sm leading-none text-green-700">${fData.total}</span>
-                                </div>
-                            </div>
-                        </div>
+                            </td>
+                            
+                            <!-- Col 2: Status Tags -->
+                            <td class="px-2 py-2 align-top">
+                                ${statusTags}
+                            </td>
+                        </tr>
                     `;
                 });
-                part2HTML += `</div>`;
 
-                // 3. Status Breakdown (Show ALL & Health Colors)
-                let part3StatusHTML = `<div><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-list-check mr-2 text-blue-500"></i>สถานะเคส</h3><div class="grid grid-cols-1 gap-1.5">`;
-                
+                part2HTML += `</tbody></table></div></div>`;
+
+                // 3. Status Breakdown (Overall)
+                let part3StatusHTML = `<div class="mt-4"><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-list-check mr-2 text-blue-500"></i>สถานะเคสรวม</h3><div class="grid grid-cols-1 gap-1.5">`;
                 statusList.forEach(status => {
                     const count = bData.status[status] || 0;
-
-                    // Default (Gray/Neutral)
                     let colorClass = "bg-gray-50 text-gray-500 border-gray-200"; 
                     let icon = "fa-circle";
-                    let opacityClass = count === 0 ? "opacity-50" : ""; // Dim empty ones
+                    let opacityClass = count === 0 ? "opacity-50" : ""; 
 
-                    // Health Coloring Logic
                     if (status.includes("ส่งมอบแล้ว") || status.includes("ซื้อสด")) {
-                        // Success (Green)
-                        colorClass = "bg-green-100 text-green-800 border-green-300 font-semibold";
-                        icon = "fa-circle-check";
-                        opacityClass = ""; // Always bright if it matches logic
+                        colorClass = "bg-green-100 text-green-800 border-green-300 font-semibold"; icon = "fa-circle-check"; opacityClass = "";
                     } else if (status.includes("ผ่าน") || status.includes("อนุมัติ")) {
-                        // Good Progress (Blue)
-                        colorClass = "bg-blue-100 text-blue-800 border-blue-300 font-semibold";
-                        icon = "fa-thumbs-up";
-                        opacityClass = "";
+                        colorClass = "bg-blue-100 text-blue-800 border-blue-300 font-semibold"; icon = "fa-thumbs-up"; opacityClass = "";
                     } else if (status.includes("รอ") || status.includes("จอง")) {
-                        // Warning/Waiting (Yellow/Orange)
-                        colorClass = "bg-yellow-50 text-yellow-800 border-yellow-300";
-                        icon = "fa-clock";
-                    } else if (status.includes("รีเจค") || status.includes("ไม่ผ่าน") || status.includes("ยกเลิก") || status.includes("ติดต่อไม่ได้")) {
-                        // Fail/Bad (Red)
-                        colorClass = "bg-red-100 text-red-800 border-red-300";
-                        icon = "fa-circle-xmark";
+                        colorClass = "bg-yellow-50 text-yellow-800 border-yellow-300"; icon = "fa-clock";
+                    } else if (status.includes("รีเจค") || status.includes("ไม่ผ่าน") || status.includes("ยกเลิก")) {
+                        colorClass = "bg-red-100 text-red-800 border-red-300"; icon = "fa-circle-xmark";
                     }
 
-                    if (count === 0) {
-                        // Override for empty rows to keep them subtle
-                         colorClass = "bg-gray-50 text-gray-400 border-gray-100";
-                         opacityClass = "opacity-60";
-                    }
+                    if (count === 0) { colorClass = "bg-gray-50 text-gray-400 border-gray-100"; opacityClass = "opacity-60"; }
 
                     part3StatusHTML += `
                         <div class="flex items-center justify-between px-3 py-1.5 rounded border ${colorClass} ${opacityClass} text-xs transition hover:brightness-95">
@@ -524,17 +535,14 @@
                 });
                 part3StatusHTML += `</div></div>`;
 
-                // 4. Source Breakdown
-                let part3SourceHTML = `<div><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-bullhorn mr-2 text-blue-500"></i>ที่มาลูกค้า</h3><div class="grid grid-cols-2 gap-2">`;
-                
+                // 4. Source & Models
+                let part3SourceHTML = `<div class="mt-4"><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-bullhorn mr-2 text-blue-500"></i>ที่มาลูกค้า</h3><div class="grid grid-cols-2 gap-2">`;
                 let hasSource = false;
                 sourceList.forEach(source => {
                     const count = bData.source[source] || 0;
                     if (count === 0) return;
                     hasSource = true;
-                    
                     const style = sourceStyles[source] || { icon: "fa-circle-question", bg: "bg-gray-50", border: "border-gray-200", text: "text-gray-700" };
-                    
                     part3SourceHTML += `
                         <div class="flex items-center justify-between p-2 rounded border ${style.bg} ${style.border} ${style.text}">
                              <div class="flex items-center gap-1.5 overflow-hidden">
@@ -548,12 +556,9 @@
                 if (!hasSource) part3SourceHTML += `<div class="col-span-2 text-center text-gray-400 text-xs italic">ไม่มีข้อมูลที่มา</div>`;
                 part3SourceHTML += `</div></div>`;
 
-                // 5. Car Brands & Models
-                let part4HTML = `<div><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-car mr-2 text-blue-500"></i>รุ่นรถที่ขาย</h3>`;
-                
+                let part4HTML = `<div class="mt-4"><h3 class="font-bold text-gray-700 border-b pb-1 mb-2 text-sm flex items-center"><i class="fa-solid fa-car mr-2 text-blue-500"></i>รุ่นรถที่ขาย</h3>`;
                 part4HTML += `<div class="flex flex-wrap gap-2 mb-3">`;
                 if(Object.keys(bData.brands).length === 0) part4HTML += `<span class="text-gray-400 text-xs italic">ไม่มีข้อมูล</span>`;
-                
                 for(const [brand, count] of Object.entries(bData.brands)) {
                     part4HTML += `
                         <div class="flex items-center bg-gray-700 text-white rounded-md px-2 py-1 shadow-sm">
@@ -563,18 +568,13 @@
                     `;
                 }
                 part4HTML += `</div>`;
-
                 const modelCounts = bData.models.reduce((acc, curr) => {
                     const key = `${curr.brand}|${curr.model}`;
-                    if (!acc[key]) {
-                        acc[key] = { brand: curr.brand, model: curr.model, count: 0 };
-                    }
+                    if (!acc[key]) acc[key] = { brand: curr.brand, model: curr.model, count: 0 };
                     acc[key].count++;
                     return acc;
                 }, {});
-
                 const sortedModels = Object.values(modelCounts).sort((a, b) => b.count - a.count);
-
                 part4HTML += `
                     <div class="overflow-hidden border border-gray-200 rounded-lg shadow-sm">
                         <div class="max-h-60 overflow-y-auto custom-scrollbar">
@@ -603,15 +603,14 @@
                 }
                 part4HTML += `</tbody></table></div></div></div>`;
 
+                // ASSEMBLY
                 content.innerHTML = part1 + part2HTML + part3StatusHTML + part3SourceHTML + part4HTML;
                 card.appendChild(content);
-                
                 container.appendChild(card);
             });
         }
 
         init();
-
     </script>
 </body>
 </html>
