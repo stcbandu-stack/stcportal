@@ -349,7 +349,10 @@
                     isLoading.value = true;
                     error.value = null;
                     try {
-                        const response = await fetch(TSV_URL);
+                        // เพิ่ม Timestamp ต่อท้าย URL เพื่อป้องกัน Browser Cache (บังคับดึงข้อมูลใหม่เสมอ)
+                        const noCacheUrl = `${TSV_URL}&_t=${new Date().getTime()}`;
+                        const response = await fetch(noCacheUrl, { cache: 'no-store' });
+                        
                         if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบการตั้งค่าการแชร์ไฟล์ Google Sheets');
                         
                         const text = await response.text();
