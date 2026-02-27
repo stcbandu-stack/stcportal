@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องมือสร้างรหัสสำหรับ Facebook Ads</title>
+    
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons CDN -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        fb: {
+                            DEFAULT: '#1877F2',
+                            hover: '#166FE5',
+                            light: '#E7F3FF'
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-delayed': 'float 10s ease-in-out 4s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-30px) rotate(10deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen antialiased selection:bg-fb selection:text-white relative overflow-x-hidden">
+    
+    <!-- Decorative Animated Background -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden flex justify-between items-center">
+        <i class="ph-fill ph-facebook-logo absolute -bottom-20 -left-20 text-[400px] text-fb/5 animate-float-slow"></i>
+        <i class="ph-fill ph-meta-logo absolute top-10 -right-20 text-[300px] text-fb/5 animate-float-delayed"></i>
+    </div>
+
+    <div id="app" class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 relative z-10">
+        
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 pt-4">
+            <img src="https://www.isuzu-stc.com/STC-LOGO-RGB.svg" alt="Isuzu STC Logo" class="h-10 sm:h-12 object-contain">
+            <div class="text-center sm:text-right">
+                <h1 class="text-2xl font-semibold text-slate-900">เครื่องมือสร้างรหัส</h1>
+                <p class="text-fb font-medium">สำหรับ Facebook Ads</p>
+            </div>
+        </header>
+
+        <!-- Main Card -->
+        <main class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden relative">
+            
+            <!-- Loading Overlay -->
+            <div v-if="isLoading" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+                <i class="ph ph-spinner-gap animate-spin text-4xl text-fb mb-2"></i>
+                <p class="text-slate-500 font-medium animate-pulse">กำลังโหลดข้อมูลจากฐานข้อมูล...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div v-if="error" class="p-6 bg-red-50 border-b border-red-100 flex items-start gap-3 text-red-700">
+                <i class="ph-fill ph-warning-circle text-xl mt-0.5"></i>
+                <div>
+                    <h3 class="font-semibold">เกิดข้อผิดพลาดในการโหลดข้อมูล</h3>
+                    <p class="text-sm mt-1">{{ error }}</p>
+                    <button @click="fetchData" class="mt-3 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg text-sm font-medium transition-colors">
+                        ลองใหม่อีกครั้ง
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 sm:p-8">
+                <!-- Form Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Ads Option -->
+                    <div class="space-y-2 lg:col-span-3 bg-blue-50 p-4 sm:p-5 rounded-2xl border border-blue-200 shadow-sm">
+                        <label class="block text-base font-semibold text-fb flex items-center gap-2">
+                            <i class="ph-fill ph-target text-xl"></i>
+                            วัตถุประสงค์ ในการยิง Ads <span class="text-red-500">*</span>
+                        </label>
+                        <select v-model="selections.ads_option" class="w-full rounded-xl border-blue-300 shadow-sm focus:border-fb focus:ring-fb bg-white text-blue-900 font-medium hover:border-blue-400 transition-colors py-3 px-4 border-2 outline-none appearance-none cursor-pointer">
+                            <option value="">-- เลือกวัตถุประสงค์ --</option>
+                            <option v-for="opt in options.ads_option" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Page -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700">สาขา (Page)</label>
+                        <select v-model="selections.page" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
+                            <option value="">-- เลือกสาขา --</option>
+                            <option v-for="opt in options.page" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Car Type -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700">ประเภทรถ (Car Type)</label>
+                        <select v-model="selections.car_type" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
+                            <option value="">-- เลือกประเภทรถ --</option>
+                            <option v-for="opt in options.car_type" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Model -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700">รุ่นรถ (Model)</label>
+                        <select v-model="selections.model" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
+                            <option value="">-- เลือกรุ่นรถ --</option>
+                            <option v-for="opt in options.model" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Sub Model -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700">เครื่องยนต์ (Sub Model)</label>
+                        <select v-model="selections.sub_model" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
+                            <option value="">-- เลือกเครื่องยนต์ --</option>
+                            <option v-for="opt in options.sub_model" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Year -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700">ปี (Year)</label>
+                        <select v-model="selections.year" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
+                            <option value="">-- เลือกปี --</option>
+                            <option v-for="opt in options.year" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Sales (Autocomplete) -->
+                    <div class="space-y-1.5 relative" ref="salesDropdownRef">
+                        <label class="block text-sm font-medium text-slate-700">ชื่อเซลล์ (Sales)</label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                v-model="salesSearchText"
+                                @focus="isSalesDropdownOpen = true"
+                                @input="handleSalesInput"
+                                placeholder="พิมพ์ค้นหาชื่อเซลล์..."
+                                class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none pr-10"
+                            >
+                            <button v-if="salesSearchText" @click="clearSales" class="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <i class="ph-fill ph-x-circle"></i>
+                            </button>
+                            <i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        </div>
+                        
+                        <!-- Dropdown -->
+                        <transition name="fade">
+                            <ul v-if="isSalesDropdownOpen" class="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                <li v-if="filteredSalesOptions.length === 0" class="py-2.5 px-3 text-slate-500 text-sm text-center">ไม่พบข้อมูล</li>
+                                <li 
+                                    v-for="opt in filteredSalesOptions" 
+                                    :key="opt.value"
+                                    @mousedown.prevent="selectSales(opt)"
+                                    class="py-2.5 px-3 hover:bg-fb hover:text-white cursor-pointer transition-colors text-sm flex justify-between items-center group"
+                                >
+                                    <span>{{ opt.label }}</span>
+                                    <span class="text-xs text-slate-400 group-hover:text-blue-100">{{ opt.value }}</span>
+                                </li>
+                            </ul>
+                        </transition>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-slate-100">
+
+                <!-- Preview Section -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                        <h2 class="text-lg font-semibold flex items-center gap-2 text-slate-800">
+                            <i class="ph-fill ph-code text-fb text-xl"></i>
+                            ผลลัพธ์ Code สำหรับใช้งาน
+                        </h2>
+                        <button 
+                            @click="copyCode" 
+                            :class="[
+                                'flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-200 transform active:scale-95 text-sm w-full sm:w-auto justify-center',
+                                copySuccess 
+                                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/20' 
+                                    : 'bg-fb hover:bg-fb-hover text-white shadow-md shadow-fb/20'
+                            ]"
+                        >
+                            <i :class="copySuccess ? 'ph-fill ph-check-circle' : 'ph-bold ph-copy'"></i>
+                            {{ copySuccess ? 'คัดลอกสำเร็จแล้ว!' : 'คัดลอกโค้ด' }}
+                        </button>
+                    </div>
+                    
+                    <div class="bg-slate-900 rounded-2xl p-6 sm:p-10 font-mono text-2xl sm:text-4xl md:text-5xl text-emerald-400 font-bold break-all border-4 border-slate-800 shadow-inner relative group text-center leading-relaxed tracking-wider">
+                        <!-- Hint Placeholder -->
+                        <span v-if="!hasAnySelection" class="text-slate-500 text-lg sm:text-2xl select-none font-sans font-normal tracking-normal">
+                            กรุณาเลือกข้อมูลด้านบนเพื่อสร้างโค้ด...
+                        </span>
+                        
+                        <!-- Generated Code -->
+                        <span v-else>
+                            <template v-for="(part, index) in codeParts" :key="index">
+                                <span :class="part.value ? 'text-emerald-400' : 'text-slate-600'">{{ part.value || '___' }}</span>
+                                <span v-if="index < codeParts.length - 1" class="text-slate-500 mx-1 sm:mx-3">-</span>
+                            </template>
+                        </span>
+                    </div>
+                    
+                    <!-- Guide Note -->
+                    <p class="text-xs text-slate-500 mt-3 flex items-start gap-1.5">
+                        <i class="ph-fill ph-info text-slate-400 mt-0.5"></i>
+                        <span>รูปแบบ: วัตถุประสงค์ - สาขา - ประเภทรถ - รุ่นรถ - เครื่องยนต์ - ปี - รหัสเซลล์ (ระบบจะจดจำค่าที่คุณเลือกไว้ให้อัตโนมัติ)</span>
+                    </p>
+                </div>
+                
+                <div class="mt-6 flex justify-end">
+                     <button @click="resetForm" class="text-sm text-slate-500 hover:text-red-600 font-medium transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-red-50">
+                        <i class="ph ph-trash"></i>
+                        ล้างข้อมูลและแคช
+                     </button>
+                </div>
+
+            </div>
+        </main>
+        
+        <footer class="text-center mt-8 text-sm text-slate-400">
+            <p>Facebook Ads Code Generator &copy; {{ new Date().getFullYear() }}</p>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp, ref, reactive, computed, onMounted, watch, onUnmounted } = Vue;
+
+        createApp({
+            setup() {
+                const TSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmx2X77txNwjluwGB3Nu-2s62iKTJSWpUeQz-fdNje1HpxeJUJhojr7RSB08S--AYct2sixrOYO_bm/pub?gid=0&single=true&output=tsv';
+                const STORAGE_KEY = 'fb_ads_generator_cache';
+                
+                const isLoading = ref(true);
+                const error = ref(null);
+                const copySuccess = ref(false);
+
+                // Models for user selections
+                const selections = reactive({
+                    ads_option: '',
+                    page: '',
+                    car_type: '',
+                    model: '',
+                    sub_model: '',
+                    year: '',
+                    sales: ''
+                });
+
+                // Autocomplete state for Sales
+                const salesSearchText = ref('');
+                const isSalesDropdownOpen = ref(false);
+                const salesDropdownRef = ref(null);
+
+                // Load cached selections from Local Storage
+                const loadSelections = () => {
+                    const cached = localStorage.getItem(STORAGE_KEY);
+                    if (cached) {
+                        try {
+                            const parsed = JSON.parse(cached);
+                            Object.keys(selections).forEach(key => {
+                                if (parsed[key] !== undefined) {
+                                    selections[key] = parsed[key];
+                                }
+                            });
+                        } catch (e) {
+                            console.error('Failed to parse cached data', e);
+                        }
+                    }
+                };
+
+                // Watch for selection changes and save to Local Storage automatically
+                watch(selections, (newSelections) => {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSelections));
+                }, { deep: true });
+
+                // Extracted unique options for dropdowns
+                const options = reactive({
+                    ads_option: [],
+                    page: [],
+                    car_type: [],
+                    model: [],
+                    sub_model: [],
+                    year: [],
+                    sales: []
+                });
+
+                // Helper to extract unique Label & Value pairs from raw data
+                const extractUniquePairs = (data, labelKey, valueKey) => {
+                    const map = new Map();
+                    data.forEach(row => {
+                        const label = row[labelKey]?.trim();
+                        const value = row[valueKey]?.trim();
+                        // Only add if value exists and hasn't been added yet
+                        if (value && !map.has(value)) {
+                            map.set(value, label || value); // Fallback to value if label is empty
+                        }
+                    });
+                    return Array.from(map, ([value, label]) => ({ label, value }));
+                };
+
+                // Fetch and parse TSV
+                const fetchData = async () => {
+                    isLoading.value = true;
+                    error.value = null;
+                    try {
+                        const response = await fetch(TSV_URL);
+                        if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบการตั้งค่าการแชร์ไฟล์ Google Sheets');
+                        
+                        const text = await response.text();
+                        parseTSV(text);
+                    } catch (err) {
+                        console.error('Fetch Error:', err);
+                        error.value = err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล';
+                    } finally {
+                        isLoading.value = false;
+                    }
+                };
+
+                const parseTSV = (text) => {
+                    const lines = text.split('\n').filter(line => line.trim() !== '');
+                    if (lines.length < 2) {
+                        error.value = 'ไม่พบข้อมูลในไฟล์ หรือรูปแบบไฟล์ไม่ถูกต้อง';
+                        return;
+                    }
+
+                    // Extract headers (clean up carriage returns)
+                    const headers = lines[0].replace(/\r/g, '').split('\t').map(h => h.trim());
+                    
+                    // Parse rows into objects
+                    const rawData = lines.slice(1).map(line => {
+                        const values = line.replace(/\r/g, '').split('\t');
+                        const rowObj = {};
+                        headers.forEach((header, index) => {
+                            rowObj[header] = values[index] || '';
+                        });
+                        return rowObj;
+                    });
+
+                    // Populate options
+                    options.ads_option = extractUniquePairs(rawData, 'ads_option', 'ads_option_code');
+                    options.page = extractUniquePairs(rawData, 'page', 'page_code');
+                    options.car_type = extractUniquePairs(rawData, 'car_type', 'car_type_code');
+                    options.model = extractUniquePairs(rawData, 'model', 'model_code');
+                    options.sub_model = extractUniquePairs(rawData, 'sub_model', 'sub_model_code');
+                    options.year = extractUniquePairs(rawData, 'year', 'year_code');
+                    options.sales = extractUniquePairs(rawData, 'sales', 'sc_code');
+
+                    // Sync Sales search text if loaded from cache
+                    if (selections.sales) {
+                        const selectedOpt = options.sales.find(o => o.value === selections.sales);
+                        if (selectedOpt) salesSearchText.value = selectedOpt.label;
+                    }
+                };
+
+                // Autocomplete Logic
+                const filteredSalesOptions = computed(() => {
+                    if (!salesSearchText.value) return options.sales;
+                    const query = salesSearchText.value.toLowerCase();
+                    return options.sales.filter(opt => 
+                        opt.label.toLowerCase().includes(query) || 
+                        opt.value.toLowerCase().includes(query)
+                    );
+                });
+
+                const handleSalesInput = () => {
+                    isSalesDropdownOpen.value = true;
+                    selections.sales = ''; // Clear selection while typing
+                };
+
+                const selectSales = (opt) => {
+                    selections.sales = opt.value;
+                    salesSearchText.value = opt.label;
+                    isSalesDropdownOpen.value = false;
+                };
+
+                const clearSales = () => {
+                    salesSearchText.value = '';
+                    selections.sales = '';
+                    isSalesDropdownOpen.value = true;
+                };
+
+                const handleClickOutside = (event) => {
+                    if (salesDropdownRef.value && !salesDropdownRef.value.contains(event.target)) {
+                        isSalesDropdownOpen.value = false;
+                        if (!selections.sales) {
+                            salesSearchText.value = '';
+                        } else {
+                            const selectedOpt = options.sales.find(o => o.value === selections.sales);
+                            if (selectedOpt) salesSearchText.value = selectedOpt.label;
+                        }
+                    }
+                };
+
+                // Computed properties for code generation
+                const codeParts = computed(() => {
+                    return [
+                        { key: 'ads_option', value: selections.ads_option },
+                        { key: 'page', value: selections.page },
+                        { key: 'car_type', value: selections.car_type },
+                        { key: 'model', value: selections.model },
+                        { key: 'sub_model', value: selections.sub_model },
+                        { key: 'year', value: selections.year },
+                        { key: 'sales', value: selections.sales }
+                    ];
+                });
+
+                const generatedCodeString = computed(() => {
+                    return codeParts.value.map(p => p.value || '___').join('-');
+                });
+
+                const hasAnySelection = computed(() => {
+                    return Object.values(selections).some(val => val !== '');
+                });
+
+                // Actions
+                const copyCode = async () => {
+                    if (!hasAnySelection.value) return; // Prevent copying if nothing is selected
+                    
+                    const textToCopy = generatedCodeString.value;
+                    
+                    try {
+                        // Use modern clipboard API
+                        await navigator.clipboard.writeText(textToCopy);
+                        triggerCopySuccess();
+                    } catch (err) {
+                        // Fallback for older browsers / iframe restrictions
+                        const textArea = document.createElement("textarea");
+                        textArea.value = textToCopy;
+                        textArea.style.position = "fixed";
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            triggerCopySuccess();
+                        } catch (err) {
+                            console.error('Fallback: Oops, unable to copy', err);
+                            alert("ไม่สามารถคัดลอกได้อัตโนมัติ กรุณาคลุมดำและคัดลอกด้วยตนเอง");
+                        }
+                        document.body.removeChild(textArea);
+                    }
+                };
+
+                const triggerCopySuccess = () => {
+                    copySuccess.value = true;
+                    setTimeout(() => {
+                        copySuccess.value = false;
+                    }, 2000);
+                };
+
+                const resetForm = () => {
+                    Object.keys(selections).forEach(key => {
+                        selections[key] = '';
+                    });
+                    salesSearchText.value = ''; // Reset autocomplete text
+                    localStorage.removeItem(STORAGE_KEY);
+                };
+
+                // Lifecycle
+                onMounted(() => {
+                    loadSelections(); // Load cache first
+                    fetchData();      // Then fetch options
+                    document.addEventListener('mousedown', handleClickOutside);
+                });
+
+                onUnmounted(() => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                });
+
+                return {
+                    isLoading,
+                    error,
+                    options,
+                    selections,
+                    salesSearchText,
+                    isSalesDropdownOpen,
+                    salesDropdownRef,
+                    filteredSalesOptions,
+                    handleSalesInput,
+                    selectSales,
+                    clearSales,
+                    codeParts,
+                    generatedCodeString,
+                    hasAnySelection,
+                    copySuccess,
+                    copyCode,
+                    fetchData,
+                    resetForm
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
