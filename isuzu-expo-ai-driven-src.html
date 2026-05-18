@@ -71,6 +71,16 @@
 
   .hero-inner { position: relative; }
 
+  .hero-logo {
+    max-width: 280px;
+    width: 80%;
+    height: auto;
+    margin: 0 auto 24px;
+    display: block;
+    animation: fadeDown .5s ease both;
+    filter: drop-shadow(0 6px 16px rgba(7,21,43,0.3));
+  }
+
   .hero-badge {
     display: inline-flex;
     align-items: center;
@@ -105,14 +115,26 @@
 
   .brand-line i { color: var(--red); }
 
+  .hero-expo-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(20px, 4.5vw, 28px);
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 6px;
+    animation: fadeDown .7s ease .1s both;
+    letter-spacing: 0.5px;
+  }
+  
+  .hero-expo-title .red { color: var(--red); }
+
   .hero h1 {
     font-family: 'Kanit', sans-serif;
     font-weight: 900;
-    font-size: clamp(40px, 9.5vw, 66px);
-    line-height: 1.05;
+    font-size: clamp(46px, 11vw, 76px);
+    line-height: 1.1;
     color: var(--white);
-    margin-bottom: 12px;
-    animation: fadeDown .7s ease .1s both;
+    margin-bottom: 30px;
+    animation: fadeDown .7s ease .15s both;
     text-shadow: 0 4px 24px rgba(7,21,43,0.55);
   }
 
@@ -121,21 +143,6 @@
     -webkit-text-stroke: 2px rgba(255,255,255,0.5);
     color: transparent;
   }
-
-  .hero-tagline {
-    font-family: 'Kanit', sans-serif;
-    font-size: clamp(16px, 3.5vw, 22px);
-    font-weight: 600;
-    color: rgba(255,255,255,0.78);
-    margin-bottom: 30px;
-    animation: fadeDown .7s ease .15s both;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .hero-tagline i { color: var(--red); }
 
   /* Info Pills */
   .info-row {
@@ -661,6 +668,8 @@
 <section class="hero">
   <div class="hero-inner">
 
+    <img src="https://i.postimg.cc/cHpVkMK6/Asset-2.png" alt="EXPO Logo" class="hero-logo">
+
     <div class="hero-badge">
       <i class="fa-solid fa-circle-exclamation"></i>
       ลงทะเบียนฟรี &bull; จำนวนจำกัด 30 ท่านแรก
@@ -668,18 +677,17 @@
 
     <div class="brand-line">
       <i class="fa-solid fa-car"></i>
-      ISUZU SANGWON THAI CHIANGRAI
+      ISUZU SANGUANTHAI
+    </div>
+
+    <div class="hero-expo-title">
+      EXPO<span class="red"> คุ้มค่า</span> ฝ่าทุกวิกฤต
     </div>
 
     <h1>
-      EXPO<span class="red"> คุ้มค่า</span><br>
-      <span class="outline">ฝ่าทุกวิกฤต</span>
+      ติดปีกธุรกิจ<br>
+      <span class="outline">ด้วยพลัง</span> <span class="red">AI</span>
     </h1>
-
-    <div class="hero-tagline">
-      <i class="fa-solid fa-bolt"></i>
-      ติดปีกธุรกิจ ด้วยพลัง AI
-    </div>
 
     <div class="info-row">
       <div class="info-pill">
@@ -978,7 +986,7 @@
 
 <script>
 // ── CONFIG ──────────────────────────────────
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxck2KykclUKnxa-4dXq7F1qxk_CEQuaGBkp7Boe7JfiMQOjqBLoC3HT095nU4krXi9tA/exec';
 // ────────────────────────────────────────────
 
 // Phone filter
