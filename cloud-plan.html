@@ -12,13 +12,13 @@
 :root{
   --bg:#0C0C0C;--surface:#161616;--surface2:#131313;
   --border:#242424;--border2:#2E2E2E;
-  --text:#EDE8E2;--text2:#B8B0A6;--text3:#847A72;--text4:#5A524A;
+  --text:#EDE8E2;--text2:#B8B0A6;--text3:#908880;--text4:#6A6258;
   --accent:#C96A2E;--blue:#2E7DC9;--green:#2EC97A;--red:#E8472A;
   --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans Thai',sans-serif;
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:960px;margin:0 auto;padding:48px 24px 72px}
+.wrap{max-width:960px;margin:0 auto;padding:48px 24px 80px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:10px}
 .flex-row{display:flex;gap:10px;flex-wrap:wrap}
@@ -32,13 +32,27 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .slabel::after{content:'';flex:1;height:1px;background:var(--border2)}
 .slabel-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .slabel-row .slabel{margin-bottom:0;flex:1}
-.sub{font-size:11px;color:var(--text3);line-height:1.6}
+.sub{font-size:11px;color:var(--text3);line-height:1.7}
 .mono-sm{font-size:11px;color:var(--text3);font-family:var(--mono)}
 
-/* LOGO SIZES */
+/* LOGO */
 .logo-sm{width:22px;height:22px;object-fit:contain;display:block;flex-shrink:0}
 .logo-flow{width:28px;height:28px;object-fit:contain;display:block;margin:0 auto}
-.logo-row{width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:middle;flex-shrink:0}
+.logo-row{width:16px;height:16px;object-fit:contain;display:inline-block;vertical-align:middle;flex-shrink:0}
+
+/* TOOL CARD HEADER */
+.tool-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--border)}
+.tool-name{font-weight:600;font-size:14px;color:var(--text)}
+.tool-role{font-size:10px;font-family:var(--mono);color:var(--text4);margin-top:1px}
+
+/* DESC BLOCK */
+.desc-block{background:#0A0A0A;border:1px solid var(--border);border-radius:6px;padding:9px 12px;margin-top:10px}
+.desc-block ul{padding-left:14px;margin:0}
+.desc-block li{font-size:11px;color:var(--text3);line-height:1.9;list-style:disc}
+.desc-block li::marker{color:var(--text4)}
+
+/* FLOW TAG */
+.ftag{display:inline-block;font-size:9px;padding:1px 7px;border-radius:3px;font-family:var(--mono);white-space:nowrap;margin-top:6px}
 
 /* CARDS */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
@@ -57,10 +71,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 /* BADGES */
 .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor}
-.b-accent{color:var(--accent);background:#2A1A0812;border-color:#C96A2E40}
-.b-green{color:#4CAF50;background:#0C1C0C12;border-color:#4CAF5040}
-.b-blue{color:var(--blue);background:#0E1A2812;border-color:#2E7DC940}
-.b-orange{color:#F5A623;background:#2A1A0812;border-color:#F5A62340}
+.b-accent{color:var(--accent);border-color:#C96A2E44}
+.b-green{color:#4CAF50;border-color:#4CAF5044}
+.b-blue{color:var(--blue);border-color:#2E7DC944}
+.b-orange{color:#F5A623;border-color:#F5A62344}
 
 /* TOGGLE */
 .tpill{width:34px;height:18px;border-radius:9px;background:var(--border2);border:1.5px solid #2A2A2A;position:relative;cursor:pointer;transition:all .25s;flex-shrink:0}
@@ -69,11 +83,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .tpill.on::after{left:18px}
 
 /* FLOW */
-.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 20px}
-.fn{text-align:center;min-width:48px}
+.flow{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+.fn{text-align:center;min-width:52px}
 .fn .lbl{font-size:9px;color:var(--text4);margin-top:4px;white-space:nowrap;font-family:var(--mono)}
 .fn.hi .lbl{color:var(--accent)}
-.farr{color:var(--border2);font-size:14px;flex-shrink:0}
+.farr{color:var(--border2);font-size:14px;flex-shrink:0;margin-top:7px}
 
 /* SLIDER */
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;outline:none;cursor:pointer;border:none;padding:0;background:linear-gradient(to right,var(--blue) 0%,var(--blue) var(--pct,0%),#1E1E1E var(--pct,0%),#1E1E1E 100%)}
@@ -112,8 +126,6 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .acard.on{border-color:var(--pc,var(--accent));border-left-color:var(--pc,var(--accent));background:#111111;opacity:1}
 .ahead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .atogrow{display:flex;align-items:center;gap:9px;flex:1;cursor:pointer}
-
-/* ADDON STRIP */
 .astrip{margin-top:10px;padding:10px 14px;background:#0C100A;border:1px solid #1E2E14;border-radius:7px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 
 /* KP */
@@ -121,6 +133,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 .kpc{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 13px;display:flex;gap:10px;align-items:flex-start}
 .kp-t{font-size:12px;font-weight:600;color:#D0C8C0;margin-bottom:4px}
 .kp-d{font-size:11px;color:var(--text3);line-height:1.6}
+
+/* FLOW STEP NUMBER */
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--border2);font-size:9px;font-family:var(--mono);font-weight:600;color:var(--text3);flex-shrink:0}
 
 .section{margin-bottom:28px}
 .header-line{width:40px;height:3px;background:var(--accent);border-radius:2px;margin-bottom:16px}
@@ -130,7 +145,10 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
 .an{animation:fadeUp .5s ease both}
 .d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
 .d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
-@media(max-width:600px){.wrap{padding:28px 16px 48px}.page-title{font-size:20px}.grand{font-size:26px}.tfooter{flex-direction:column;align-items:flex-start;gap:10px}}
+@media(max-width:600px){.wrap{padding:28px 16px 48px}.page-title{font-size:20px}.grand{font-size:26px}.tfooter{flex-direction:column;gap:10px}}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:12px 0}
 </style>
 </head>
 <body>
@@ -146,75 +164,147 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
 
 <!-- FLOW -->
 <div class="section an d1" style="margin-top:28px">
+  <div class="slabel">ภาพรวมการทำงานของระบบ</div>
   <div class="flow">
-    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" alt="Google"/><div class="lbl">Google One</div></div>
+    <div class="fn">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" class="logo-flow" alt="google"/>
+      <div class="lbl">Google One</div>
+      <div style="font-size:8px;color:#4285F444;font-family:var(--mono);margin-top:2px">Drive</div>
+    </div>
     <span class="farr">→</span>
-    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" alt="n8n"/><div class="lbl">n8n</div></div>
+    <div class="fn">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" class="logo-flow" alt="n8n"/>
+      <div class="lbl">n8n</div>
+      <div style="font-size:8px;color:#EA4B0044;font-family:var(--mono);margin-top:2px">Trigger</div>
+    </div>
     <span class="farr">→</span>
-    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" alt="OpenRouter"/><div class="lbl">OpenRouter</div></div>
+    <div class="fn">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" class="logo-flow" alt="openrouter"/>
+      <div class="lbl">OpenRouter</div>
+      <div style="font-size:8px;color:#5B9CF644;font-family:var(--mono);margin-top:2px">AI Gateway</div>
+    </div>
     <span class="farr">→</span>
-    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" alt="Claude"/><div class="lbl">Claude AI</div></div>
+    <div class="fn">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" class="logo-flow" alt="claude"/>
+      <div class="lbl">Claude AI</div>
+      <div style="font-size:8px;color:#C96A2E44;font-family:var(--mono);margin-top:2px">Analyze</div>
+    </div>
     <span class="farr">→</span>
-    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" alt="Supabase"/><div class="lbl">Supabase</div></div>
+    <div class="fn">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" class="logo-flow" alt="supabase"/>
+      <div class="lbl">Supabase</div>
+      <div style="font-size:8px;color:#3ECF8E44;font-family:var(--mono);margin-top:2px">Vector DB</div>
+    </div>
     <span class="farr">→</span>
-    <div class="fn"><span style="font-size:26px;display:block;text-align:center">📊</span><div class="lbl">Report</div></div>
+    <div class="fn">
+      <span style="font-size:24px;display:block;text-align:center">📊</span>
+      <div class="lbl">Report</div>
+      <div style="font-size:8px;color:#88888844;font-family:var(--mono);margin-top:2px">Output</div>
+    </div>
     <span class="farr">→</span>
     <div class="fn hi">
-      <div style="display:flex;justify-content:center;gap:5px">
-        <img style="width:18px;height:18px;object-fit:contain" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA2Qzc1NSIvPjxyZWN0IHg9IjciIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48dGV4dCB4PSIxNiIgeT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwNkM3NTUiIGZvbnQtc2l6ZT0iOCIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkxJTkU8L3RleHQ+PC9zdmc+" data-real="https://i.postimg.cc/cCN60543/LINE-logo-svg.png" data-logo="line" alt="LINE"/>
-        <img style="width:18px;height:18px;object-fit:contain" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjEuNSIgeT0iMS41IiB3aWR0aD0iMjkiIGhlaWdodD0iMjkiIHJ4PSI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiI+UmVzZW5kPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/W4B1wfZ6/resend-wordmark-white.png" data-logo="resend" alt="Resend"/>
+      <div style="display:flex;justify-content:center;gap:4px">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA2Qzc1NSIvPjxyZWN0IHg9IjciIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48dGV4dCB4PSIxNiIgeT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwNkM3NTUiIGZvbnQtc2l6ZT0iOCIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkxJTkU8L3RleHQ+PC9zdmc+" data-real="https://i.postimg.cc/cCN60543/LINE-logo-svg.png" data-logo="line" style="width:18px;height:18px;object-fit:contain;flex-shrink:0" alt="line"/>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjEuNSIgeT0iMS41IiB3aWR0aD0iMjkiIGhlaWdodD0iMjkiIHJ4PSI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiI+UmVzZW5kPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/W4B1wfZ6/resend-wordmark-white.png" data-logo="resend" style="width:18px;height:18px;object-fit:contain;flex-shrink:0" alt="resend"/>
       </div>
       <div class="lbl" style="color:var(--accent)">แจ้งเตือน</div>
+      <div style="font-size:8px;color:#C96A2E66;font-family:var(--mono);margin-top:2px">Notify</div>
     </div>
   </div>
 </div>
 
-<!-- 1. CLAUDE -->
+<!-- ═══════════════════════════════════
+     1. CLAUDE
+════════════════════════════════════ -->
 <div class="section an d2">
   <div class="slabel-row">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" class="logo-sm" alt="Claude"/>
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" class="logo-sm" alt="claude"/>
     <div class="slabel">Claude — เลือกแผน</div>
   </div>
+
+  <!-- WHAT IS IT -->
+  <div class="card" style="margin-bottom:10px">
+    <div class="tool-head">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" style="width:28px;height:28px;object-fit:contain;flex-shrink:0" alt="claude"/>
+      <div>
+        <div class="tool-name">Anthropic Claude</div>
+        <div class="tool-role">สมองของระบบ · AI หลักสำหรับพัฒนาและวิเคราะห์</div>
+      </div>
+      <span class="badge b-accent" style="margin-left:auto">Core Tool</span>
+    </div>
+    <div class="sub">ใช้ Claude ในสองบทบาทหลักคือ <strong style="color:var(--text2)">พัฒนาระบบ</strong> (เขียนโค้ด n8n workflow, debug, ออกแบบสถาปัตยกรรม) และ <strong style="color:var(--text2)">วิเคราะห์เอกสาร</strong> ผ่าน OpenRouter ที่ n8n เรียกใช้</div>
+    <div class="desc-block">
+      <ul>
+        <li>เขียนและแก้โค้ด n8n Workflow, Supabase Function, Automation Script</li>
+        <li>วิเคราะห์เอกสาร PDF / Sheet / รายงานที่พนักงานอัพโหลด</li>
+        <li>ออกแบบ Prompt สำหรับงาน RAG และสรุปข้อมูล</li>
+        <li>Debug เมื่อระบบมีปัญหา หรือต้องการปรับ Workflow</li>
+      </ul>
+    </div>
+  </div>
+
   <div class="flex-row" id="claude-group">
     <div class="radio-card" data-group="claude" data-thb="710" data-label="Claude Pro ($20/เดือน)" style="--card-color:#9C9287">
       <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
         <div style="font-weight:600;font-size:14px;margin-bottom:2px">Claude Pro</div>
-        <div style="font-size:12px;font-weight:600;color:#9C9287;margin-bottom:4px">$20 / เดือน</div>
-        <div class="sub">ใช้งานทั่วไป เขียนโค้ดปานกลาง</div>
+        <div style="font-size:12px;font-weight:600;color:#9C9287;margin-bottom:6px">$20 / เดือน</div>
+        <div class="sub">สำหรับงานพัฒนาทั่วไป เขียนโค้ด debug ปริมาณปานกลาง ไม่ได้ใช้ Claude Code หนัก</div>
         <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border)" class="mono-sm">≈ ฿710 / เดือน</div>
       </div></div>
     </div>
     <div class="radio-card active" data-group="claude" data-thb="3550" data-label="Claude Max 5x ($100/เดือน)" style="--card-color:#C96A2E">
       <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
         <div style="display:flex;align-items:center;gap:7px;margin-bottom:2px"><span style="font-weight:600;font-size:14px">Claude Max 5x</span><span class="badge b-accent">แนะนำ</span></div>
-        <div style="font-size:12px;font-weight:600;color:#C96A2E;margin-bottom:4px">$100 / เดือน</div>
-        <div class="sub">ใช้งานหนัก โค้ดซับซ้อน</div>
+        <div style="font-size:12px;font-weight:600;color:#C96A2E;margin-bottom:6px">$100 / เดือน</div>
+        <div class="sub">Usage limit 5 เท่าของ Pro เหมาะกับการพัฒนาระบบจริง ใช้ Claude Code สร้าง Workflow ซับซ้อน</div>
         <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border)" class="mono-sm">≈ ฿3,550 / เดือน</div>
       </div></div>
     </div>
     <div class="radio-card" data-group="claude" data-thb="7100" data-label="Claude Max 20x ($200/เดือน)" style="--card-color:#E8472A">
       <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
         <div style="font-weight:600;font-size:14px;margin-bottom:2px">Claude Max 20x</div>
-        <div style="font-size:12px;font-weight:600;color:#E8472A;margin-bottom:4px">$200 / เดือน</div>
-        <div class="sub">ใช้งานหนักมาก full-time dev</div>
+        <div style="font-size:12px;font-weight:600;color:#E8472A;margin-bottom:6px">$200 / เดือน</div>
+        <div class="sub">เมื่อระบบเติบโต ต้องพัฒนาต่อเนื่อง หรือมีหลาย Project ที่ต้องดูแลพร้อมกัน</div>
         <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border)" class="mono-sm">≈ ฿7,100 / เดือน</div>
       </div></div>
     </div>
   </div>
-  <div class="note">💡 Pro รวม Claude Code + Web Search · Max 5x/20x เพิ่ม usage limit สำหรับงานโค้ดหนัก</div>
 </div>
 
-<!-- 2. OPENROUTER -->
+<!-- ═══════════════════════════════════
+     2. OPENROUTER
+════════════════════════════════════ -->
 <div class="section an d2">
   <div class="slabel-row">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" class="logo-sm" alt="OpenRouter"/>
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" class="logo-sm" alt="openrouter"/>
     <div class="slabel">OpenRouter — API Credits</div>
   </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="tool-head">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" style="width:28px;height:28px;object-fit:contain;flex-shrink:0" alt="openrouter"/>
+      <div>
+        <div class="tool-name">OpenRouter</div>
+        <div class="tool-role">AI API Gateway · ประตูเชื่อมต่อ AI หลายโมเดล</div>
+      </div>
+      <span class="badge b-blue" style="margin-left:auto">API Layer</span>
+    </div>
+    <div class="sub">n8n ไม่เรียก AI โดยตรงแต่ละเจ้า แต่ส่งทุก Request ผ่าน OpenRouter แทน ทำให้เปลี่ยนโมเดลได้ทันทีโดยไม่ต้องแก้โค้ด และเปรียบเทียบราคา/ประสิทธิภาพได้ง่าย</div>
+    <div class="desc-block">
+      <ul>
+        <li>n8n ส่ง Request มาที่ OpenRouter → OpenRouter ส่งต่อไปยัง OpenAI / Claude / DeepSeek ตามที่กำหนด</li>
+        <li>เปลี่ยนโมเดลได้ทันที เช่น ใช้ DeepSeek สำหรับงานถูก ใช้ Claude สำหรับงาน accuracy สูง</li>
+        <li>จ่ายเฉพาะ Token ที่ใช้จริง ไม่มีค่า subscription รายเดือน</li>
+        <li>ดู Dashboard การใช้งาน และ Cost ได้แบบ real-time</li>
+      </ul>
+    </div>
+  </div>
+
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px">
       <div>
         <div style="font-size:30px;font-weight:600;color:var(--blue);line-height:1">$<span id="or-usd">50</span><span style="font-size:13px;font-weight:400;color:var(--text3);margin-left:5px">/ เดือน</span></div>
-        <div class="mono-sm" style="margin-top:5px">≈ ฿<span id="or-thb">1,775</span> · ผ่าน n8n เรียก OpenAI / Claude / DeepSeek</div>
+        <div class="mono-sm" style="margin-top:5px">≈ ฿<span id="or-thb">1,775</span> · ค่า Token จริงที่ใช้วิเคราะห์เอกสาร</div>
       </div>
       <div class="mono-sm" style="text-align:right">Pay-as-you-go<br/>ไม่มี contract</div>
     </div>
@@ -231,95 +321,158 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
   </div>
 </div>
 
-<!-- 3. N8N -->
+<!-- ═══════════════════════════════════
+     3. N8N
+════════════════════════════════════ -->
 <div class="section an d3">
   <div class="slabel-row">
     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" class="logo-sm" alt="n8n"/>
     <div class="slabel">n8n Cloud Pro — คงที่</div>
   </div>
-  <div class="card" style="border-left:3px solid var(--green);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
-    <div style="flex:1">
-      <div style="font-weight:600;font-size:14px;margin-bottom:5px">n8n Cloud Pro</div>
-      <div class="sub" style="margin-bottom:5px">ตัว Automation หลัก · สร้าง Workflow · เชื่อมต่อระบบ · AI Orchestration</div>
-      <div style="font-size:11px;color:var(--green);font-family:var(--mono)">Unlimited workflows · 10,000 executions/เดือน</div>
+  <div class="card" style="border-left:3px solid var(--green)">
+    <div class="tool-head">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" style="width:28px;height:28px;object-fit:contain;flex-shrink:0" alt="n8n"/>
+      <div>
+        <div class="tool-name">n8n Cloud</div>
+        <div class="tool-role">Automation Engine · หัวใจของระบบทั้งหมด</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap">
+        <span class="badge b-green">Core Engine</span>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:600">€60/เดือน</div><div class="mono-sm">≈ ฿2,310</div></div>
+      </div>
     </div>
-    <div style="text-align:right;flex-shrink:0">
-      <div style="font-size:15px;font-weight:600">€60 / เดือน</div>
-      <div class="mono-sm">≈ ฿2,310</div>
+    <div class="sub">n8n คือตัวเชื่อมและควบคุมทุกอย่างในระบบ ทำหน้าที่เหมือน "ผู้จัดการงาน" ที่รู้ว่าเมื่อมีเหตุการณ์อะไรเกิดขึ้น จะต้องทำอะไรต่อ ในลำดับไหน</div>
+    <div class="desc-block">
+      <ul>
+        <li><strong style="color:var(--text2)">Monitor Google Drive</strong> — เมื่อมีไฟล์ใหม่เข้ามา trigger workflow อัตโนมัติ</li>
+        <li><strong style="color:var(--text2)">ส่งเอกสารให้ AI</strong> — เรียก OpenRouter เพื่อส่ง Document ไปให้ Claude วิเคราะห์</li>
+        <li><strong style="color:var(--text2)">เก็บผลลัพธ์</strong> — บันทึก Vector และ Summary ลง Supabase</li>
+        <li><strong style="color:var(--text2)">ดึง Google Sheets</strong> — สรุปยอดขาย / ข้อมูล Sheet ส่งเป็น Report</li>
+        <li><strong style="color:var(--text2)">แจ้งเตือน</strong> — ส่ง LINE / Email / Slack เมื่อทำงานเสร็จหรือมี Error</li>
+      </ul>
     </div>
+    <div style="font-size:11px;color:var(--green);font-family:var(--mono);margin-top:10px">Unlimited workflows · 10,000 executions/เดือน</div>
   </div>
 </div>
 
-<!-- 4. SUPABASE -->
+<!-- ═══════════════════════════════════
+     4. SUPABASE
+════════════════════════════════════ -->
 <div class="section an d3">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
     <div style="display:flex;align-items:center;gap:10px">
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" class="logo-sm" alt="Supabase"/>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" class="logo-sm" alt="supabase"/>
       <div class="slabel" style="margin-bottom:0">Supabase — Pro + Compute</div>
     </div>
     <span class="mono-sm">มีผลต่อความเร็ว ~10-30%</span>
   </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="tool-head">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" style="width:28px;height:28px;object-fit:contain;flex-shrink:0" alt="supabase"/>
+      <div>
+        <div class="tool-name">Supabase</div>
+        <div class="tool-role">Database + Vector Store · ฐานข้อมูลหลักของระบบ RAG</div>
+      </div>
+      <span class="badge b-green" style="margin-left:auto">Database</span>
+    </div>
+    <div class="sub">Supabase เป็นฐานข้อมูลกลางที่เก็บทุกอย่างของระบบ ทั้ง <strong style="color:var(--text2)">ข้อมูลดิบจากเอกสาร</strong> และ <strong style="color:var(--text2)">Vector Embedding</strong> ที่ใช้ให้ AI ค้นหาข้อมูลแบบ Semantic ได้</div>
+    <div class="desc-block">
+      <ul>
+        <li><strong style="color:var(--text2)">PostgreSQL + pgvector</strong> — เก็บ Vector ของเอกสารไว้ค้นหาด้วย AI (ไม่ต้องซื้อ Vector DB แยก)</li>
+        <li><strong style="color:var(--text2)">เก็บประวัติการวิเคราะห์</strong> — บันทึก Query / ผลลัพธ์ / Summary ทั้งหมด</li>
+        <li><strong style="color:var(--text2)">Semantic Search</strong> — เมื่อถามว่า "ยอดขาย ELF เดือนที่แล้วเป็นเท่าไร" ระบบค้นหา Vector ที่ใกล้เคียงได้</li>
+        <li><strong style="color:var(--text2)">REST API / Realtime</strong> — n8n เรียกข้อมูลผ่าน API ได้ทันที</li>
+      </ul>
+    </div>
+  </div>
+
   <div class="grid3" id="supa-group">
     <div class="tier-card active" data-group="supa" data-thb="888" data-label="Supabase Pro + Micro" style="--card-color:#3ECF8E">
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="rdot" style="margin-top:0"><div class="di"></div></div><span style="font-weight:600;font-size:13px">Micro</span><span class="badge b-green">ฟรี</span></div>
-      <div style="font-size:11px;color:#3ECF8E;font-family:var(--mono);margin-bottom:8px">shared CPU · 1 GB RAM</div>
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="sbar"><div class="sbar-f" style="width:22%;background:#3ECF8E"></div></div><span style="font-size:10px;color:#3ECF8E;font-family:var(--mono);white-space:nowrap;font-weight:500">ปกติ</span></div>
-      <div style="padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="sub" style="font-size:10px">Pro $25 included</span><span style="font-size:13px;font-weight:600">฿888</span></div>
-      <div class="sub" style="font-size:10px;margin-top:5px">รวมใน Pro แล้ว ไม่มีค่าเพิ่ม</div>
+      <div style="font-size:11px;color:#3ECF8E;font-family:var(--mono);margin-bottom:5px">shared CPU · 1 GB RAM</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="sbar"><div class="sbar-f" style="width:22%;background:#3ECF8E"></div></div><span style="font-size:10px;color:#3ECF8E;font-family:var(--mono);white-space:nowrap">ปกติ</span></div>
+      <div class="sub" style="font-size:10px;margin-bottom:8px">เหมาะกับช่วงเริ่มต้น ข้อมูลยังไม่มาก Query ไม่ถี่</div>
+      <div style="padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="mono-sm" style="font-size:10px">included ใน Pro</span><span style="font-size:13px;font-weight:600">฿888</span></div>
     </div>
     <div class="tier-card" data-group="supa" data-thb="1421" data-label="Supabase Pro + Small" style="--card-color:#F5A623">
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="rdot" style="margin-top:0"><div class="di"></div></div><span style="font-weight:600;font-size:13px">Small</span><span class="badge b-orange">แนะนำ</span></div>
-      <div style="font-size:11px;color:#F5A623;font-family:var(--mono);margin-bottom:8px">2-core ARM · 1 GB RAM</div>
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="sbar"><div class="sbar-f" style="width:50%;background:#F5A623"></div></div><span style="font-size:10px;color:#F5A623;font-family:var(--mono);white-space:nowrap;font-weight:500">+10-15%</span></div>
-      <div style="padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="sub" style="font-size:10px">Pro $25 + Compute $15</span><span style="font-size:13px;font-weight:600">฿1,421</span></div>
-      <div class="sub" style="font-size:10px;margin-top:5px">เร็วขึ้น ~10-15%</div>
+      <div style="font-size:11px;color:#F5A623;font-family:var(--mono);margin-bottom:5px">2-core ARM · 1 GB RAM</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="sbar"><div class="sbar-f" style="width:50%;background:#F5A623"></div></div><span style="font-size:10px;color:#F5A623;font-family:var(--mono);white-space:nowrap">+10-15%</span></div>
+      <div class="sub" style="font-size:10px;margin-bottom:8px">ระบบใช้งานจริงประจำวัน Query สม่ำเสมอ Vector Search เร็วขึ้น</div>
+      <div style="padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="mono-sm" style="font-size:10px">Pro $25 + $15</span><span style="font-size:13px;font-weight:600">฿1,421</span></div>
     </div>
     <div class="tier-card" data-group="supa" data-thb="2663" data-label="Supabase Pro + Medium" style="--card-color:#E8472A">
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="rdot" style="margin-top:0"><div class="di"></div></div><span style="font-weight:600;font-size:13px">Medium</span></div>
-      <div style="font-size:11px;color:#E8472A;font-family:var(--mono);margin-bottom:8px">2-core ARM · 4 GB RAM</div>
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="sbar"><div class="sbar-f" style="width:80%;background:#E8472A"></div></div><span style="font-size:10px;color:#E8472A;font-family:var(--mono);white-space:nowrap;font-weight:500">+20-30%</span></div>
-      <div style="padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="sub" style="font-size:10px">Pro $25 + Compute $50</span><span style="font-size:13px;font-weight:600">฿2,663</span></div>
-      <div class="sub" style="font-size:10px;margin-top:5px">เร็วขึ้น ~20-30%</div>
+      <div style="font-size:11px;color:#E8472A;font-family:var(--mono);margin-bottom:5px">2-core ARM · 4 GB RAM</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="sbar"><div class="sbar-f" style="width:80%;background:#E8472A"></div></div><span style="font-size:10px;color:#E8472A;font-family:var(--mono);white-space:nowrap">+20-30%</span></div>
+      <div class="sub" style="font-size:10px;margin-bottom:8px">ข้อมูลเยอะ Query หนัก หรือมี Web App ที่ User หลายคนใช้พร้อมกัน</div>
+      <div style="padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="mono-sm" style="font-size:10px">Pro $25 + $50</span><span style="font-size:13px;font-weight:600">฿2,663</span></div>
     </div>
   </div>
-  <div class="note">ℹ️ Micro เหมาะช่วงเริ่มต้น · Small/Medium อัปเกรดได้ทันที ไม่ต้อง migrate · Compute คิดรายชั่วโมง</div>
+  <div class="note">ℹ️ Micro เหมาะช่วงเริ่มต้น · อัปเกรดได้ทันทีไม่ต้อง migrate · Compute คิดรายชั่วโมง scale ได้อิสระ</div>
 </div>
 
-<!-- 5. GOOGLE ONE -->
+<!-- ═══════════════════════════════════
+     5. GOOGLE ONE
+════════════════════════════════════ -->
 <div class="section an d4">
   <div class="slabel-row">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" class="logo-sm" alt="Google"/>
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" class="logo-sm" alt="google"/>
     <div class="slabel">Google One — แบบส่วนตัว</div>
   </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="tool-head">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" style="width:28px;height:28px;object-fit:contain;flex-shrink:0" alt="google"/>
+      <div>
+        <div class="tool-name">Google One (Drive)</div>
+        <div class="tool-role">จุดรับเอกสาร · Source ข้อมูลเข้าระบบ</div>
+      </div>
+      <span class="badge b-blue" style="margin-left:auto">Input Source</span>
+    </div>
+    <div class="sub">พนักงานอัพโหลดเอกสารเข้า Google Drive โฟลเดอร์ที่แชร์ไว้ n8n จะ Monitor โฟลเดอร์นี้และ trigger วิเคราะห์อัตโนมัติทันที ไม่ต้องมีใครกดอะไร</div>
+    <div class="desc-block">
+      <ul>
+        <li>แชร์โฟลเดอร์เฉพาะให้ทีมอัพไฟล์ โดยไม่ต้องซื้อ Google Workspace ให้ทุกคน</li>
+        <li>รองรับ PDF / Word / Excel / Google Sheets ที่ n8n ดึงไปวิเคราะห์ได้</li>
+        <li>n8n ดึงข้อมูล Google Sheets ผ่าน Google Drive API ได้โดยตรงโดยไม่ต้องโค้ดเพิ่ม</li>
+        <li>ประหยัดกว่า Google Workspace Business ($8.40/user) มากหากทีมมีหลายคน</li>
+      </ul>
+    </div>
+  </div>
+
   <div class="savings">💡 <strong>ลดต้นทุนได้มาก</strong> — ใช้ Google One ส่วนตัว แชร์โฟลเดอร์ Drive ให้ทีมอัพไฟล์ได้เลย ไม่ต้องซื้อ Workspace Business ให้ทุกคน</div>
   <div class="flex-row" id="google-group">
     <div class="radio-card" data-group="google" data-thb="70" data-label="Google One 100 GB" style="--card-color:#4285F4">
       <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
         <div style="font-weight:600;font-size:14px;margin-bottom:2px">100 GB</div>
-        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:4px">฿70 / เดือน</div>
-        <div class="sub">แชร์โฟลเดอร์ทีมเล็ก 1-2 คน</div>
+        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:6px">฿70 / เดือน</div>
+        <div class="sub">พื้นที่เพียงพอสำหรับเอกสารทั่วไป ทีมเล็ก 1-2 คน ไฟล์ไม่หนัก</div>
       </div></div>
     </div>
     <div class="radio-card active" data-group="google" data-thb="99" data-label="Google One 200 GB" style="--card-color:#4285F4">
       <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
         <div style="display:flex;align-items:center;gap:7px;margin-bottom:2px"><span style="font-weight:600;font-size:14px">200 GB</span><span class="badge b-blue">แนะนำ</span></div>
-        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:4px">฿99 / เดือน</div>
-        <div class="sub">แชร์โฟลเดอร์ทีมกลาง 3-5 คน</div>
+        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:6px">฿99 / เดือน</div>
+        <div class="sub">รองรับทีมกลาง 3-5 คน มีเอกสารหลายประเภท PDF + Sheets + Word</div>
       </div></div>
     </div>
     <div class="radio-card" data-group="google" data-thb="350" data-label="Google One 2 TB" style="--card-color:#4285F4">
       <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
         <div style="font-weight:600;font-size:14px;margin-bottom:2px">2 TB</div>
-        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:4px">฿350 / เดือน</div>
-        <div class="sub">พื้นที่เยอะ รองรับไฟล์ขนาดใหญ่</div>
+        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:6px">฿350 / เดือน</div>
+        <div class="sub">พื้นที่เยอะมาก รองรับ Archive เอกสารระยะยาว ไฟล์ขนาดใหญ่</div>
       </div></div>
     </div>
   </div>
 </div>
 
-<!-- 6. ADDONS -->
+<!-- ═══════════════════════════════════
+     6. NOTIFICATION ADD-ONS
+════════════════════════════════════ -->
 <div class="section an d5">
-  <div class="slabel">🔔 Notification Add-ons — ออพชั่นเสริม</div>
+  <div class="slabel">🔔 Notification Add-ons — ออพชั่นเสริม (ควรมี)</div>
   <div class="grid2">
 
     <!-- LINE -->
@@ -328,7 +481,7 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         <div class="atogrow" onclick="toggleAddon('line')">
           <div class="tpill" id="pill-line" style="--pc:#06C755"></div>
           <div style="display:flex;align-items:center;gap:8px">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA2Qzc1NSIvPjxyZWN0IHg9IjciIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48dGV4dCB4PSIxNiIgeT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwNkM3NTUiIGZvbnQtc2l6ZT0iOCIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkxJTkU8L3RleHQ+PC9zdmc+" data-real="https://i.postimg.cc/cCN60543/LINE-logo-svg.png" data-logo="line" style="width:22px;height:22px;object-fit:contain" alt="LINE"/>
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA2Qzc1NSIvPjxyZWN0IHg9IjciIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48dGV4dCB4PSIxNiIgeT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwNkM3NTUiIGZvbnQtc2l6ZT0iOCIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkxJTkU8L3RleHQ+PC9zdmc+" data-real="https://i.postimg.cc/cCN60543/LINE-logo-svg.png" data-logo="line" style="width:22px;height:22px;object-fit:contain;flex-shrink:0" alt="line"/>
             <div>
               <div style="font-weight:600;font-size:13px">LINE Messaging API</div>
               <div style="font-size:9px;color:#06C755;font-family:var(--mono);margin-top:1px">LINE Official Account</div>
@@ -337,8 +490,12 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         </div>
         <div id="badge-line"></div>
       </div>
-      <div class="sub" style="margin-bottom:7px">ส่ง Notification แจ้งเตือนพนักงาน / ผู้บริหารผ่าน LINE โดยตรง</div>
-      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: แจ้งเมื่อมีเอกสารใหม่ · สรุปรายงานรายวัน · แจ้งเตือน Error</div>
+      <div class="sub" style="margin-bottom:7px">n8n ส่งข้อความผ่าน LINE ไปหา Admin หรือทีมที่เกี่ยวข้องได้โดยตรง เหมาะที่สุดสำหรับทีมไทยที่ใช้ LINE เป็นหลัก</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.8">
+        ✦ แจ้งเมื่อมีเอกสารใหม่เข้าระบบ<br/>
+        ✦ ส่งสรุป Report รายวัน/รายสัปดาห์<br/>
+        ✦ Alert เมื่อ Workflow มี Error
+      </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
         <button class="tbtn active" style="--bc:#06C755" onclick="setAddonTier('line',0,this,'500 msg/เดือน')">Free 🆓</button>
         <button class="tbtn" style="--bc:#06C755" onclick="setAddonTier('line',1775,this,'10,000 msg/เดือน')">Light $50</button>
@@ -357,7 +514,7 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         <div class="atogrow" onclick="toggleAddon('email')">
           <div class="tpill" id="pill-email" style="--pc:#FF6B6B"></div>
           <div style="display:flex;align-items:center;gap:8px">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjEuNSIgeT0iMS41IiB3aWR0aD0iMjkiIGhlaWdodD0iMjkiIHJ4PSI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiI+UmVzZW5kPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/W4B1wfZ6/resend-wordmark-white.png" data-logo="resend" style="width:22px;height:22px;object-fit:contain" alt="Resend"/>
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjEuNSIgeT0iMS41IiB3aWR0aD0iMjkiIGhlaWdodD0iMjkiIHJ4PSI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiI+UmVzZW5kPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/W4B1wfZ6/resend-wordmark-white.png" data-logo="resend" style="width:22px;height:22px;object-fit:contain;flex-shrink:0" alt="resend"/>
             <div>
               <div style="font-weight:600;font-size:13px">Resend</div>
               <div style="font-size:9px;color:#FF6B6B;font-family:var(--mono);margin-top:1px">Transactional Email API</div>
@@ -366,8 +523,12 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         </div>
         <div id="badge-email"></div>
       </div>
-      <div class="sub" style="margin-bottom:7px">ส่ง Email สรุปรายงาน · แจ้งเตือนผู้บริหาร · ส่ง Report อัตโนมัติ</div>
-      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: สรุปรายงานรายสัปดาห์ · แจ้งผล Analysis · Email Digest รายวัน</div>
+      <div class="sub" style="margin-bottom:7px">ส่ง Email HTML สวยงามออกจาก n8n โดยตรง เหมาะสำหรับ Report ที่ต้องส่งให้ผู้บริหารหรือหน่วยงานที่ไม่ได้ใช้ LINE</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.8">
+        ✦ ส่ง Report สรุปยอดขายรายสัปดาห์<br/>
+        ✦ แจ้งผลการวิเคราะห์เอกสาร<br/>
+        ✦ Email Digest สรุปงานประจำวัน
+      </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
         <button class="tbtn active" style="--bc:#FF6B6B" onclick="setAddonTier('email',0,this,'3,000 emails/เดือน')">Free 🆓</button>
         <button class="tbtn" style="--bc:#FF6B6B" onclick="setAddonTier('email',710,this,'50,000 emails/เดือน')">Pro $20</button>
@@ -376,7 +537,7 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         <span style="font-size:10px;color:var(--text3)" id="detail-email">3,000 emails/เดือน</span>
         <span class="badge b-green">เพียงพอสำหรับ Internal</span>
       </div>
-      <div style="font-size:10px;color:var(--text4);line-height:1.5">💡 Free plan เพียงพอสำหรับการแจ้งเตือนภายในองค์กรทั่วไป</div>
+      <div style="font-size:10px;color:var(--text4)">💡 Free plan เพียงพอสำหรับการแจ้งเตือนภายในองค์กรทั่วไป</div>
     </div>
 
     <!-- WEBHOOK -->
@@ -385,7 +546,7 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         <div class="atogrow" onclick="toggleAddon('webhook')">
           <div class="tpill" id="pill-webhook" style="--pc:#9B59B6"></div>
           <div style="display:flex;align-items:center;gap:8px">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" style="width:22px;height:22px;object-fit:contain" alt="n8n"/>
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" style="width:22px;height:22px;object-fit:contain;flex-shrink:0" alt="n8n"/>
             <div>
               <div style="font-weight:600;font-size:13px">Webhook</div>
               <div style="font-size:9px;color:#9B59B6;font-family:var(--mono);margin-top:1px">ฟรี · รวมใน n8n แล้ว</div>
@@ -394,15 +555,19 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         </div>
         <div id="badge-webhook"><span class="badge b-green">FREE</span></div>
       </div>
-      <div class="sub" style="margin-bottom:7px">รับ-ส่ง Event ระหว่างระบบ เชื่อมต่อ Service ภายนอกได้ทันที</div>
-      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: Google Drive trigger · Form submit · ระบบอื่น Push ข้อมูลเข้า n8n</div>
+      <div class="sub" style="margin-bottom:7px">ให้ระบบภายนอกส่งข้อมูลเข้า n8n ได้โดยตรงผ่าน URL เช่น Form สมัครงาน ระบบ POS หรือแอปอื่นๆ</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.8">
+        ✦ รับข้อมูลจาก Google Form / Typeform<br/>
+        ✦ ระบบ POS หรือ ERP Push ข้อมูลเข้า<br/>
+        ✦ Trigger Workflow แบบ Real-time
+      </div>
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:10px;color:var(--text3)">รวมใน n8n ทุก Plan</span>
         <span class="badge" style="color:#9B59B6;border-color:#9B59B644">ไม่มีค่าใช้จ่ายเพิ่ม</span>
       </div>
     </div>
 
-    <!-- SLACK -->
+    <!-- SLACK / GCHAT -->
     <div class="acard" id="addon-slack" style="--pc:#7C3AED">
       <div class="ahead">
         <div class="atogrow" onclick="toggleAddon('slack')">
@@ -417,8 +582,12 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
         </div>
         <div id="badge-slack"><span class="badge b-green">FREE</span></div>
       </div>
-      <div class="sub" style="margin-bottom:7px">ส่ง Alert เข้า Channel ทีม · แจ้งผู้ดูแลระบบเมื่อเกิด Error</div>
-      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: แจ้งทีม IT · Alert งานสำคัญ · Daily Digest ใน Chat</div>
+      <div class="sub" style="margin-bottom:7px">ส่ง Alert เข้า Channel ทีม IT หรือผู้ดูแลระบบ เหมาะกับองค์กรที่ใช้ Slack หรือ Google Workspace อยู่แล้ว</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.8">
+        ✦ แจ้ง IT ทีมเมื่อ Workflow Error<br/>
+        ✦ ส่ง Daily Summary เข้า Channel<br/>
+        ✦ Alert งานด่วนที่ต้องการคนดู
+      </div>
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:10px;color:var(--text3)">Incoming Webhook ฟรี</span>
         <span class="badge b-green">ฟรีไม่มีค่าใช้จ่าย</span>
@@ -432,43 +601,24 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
   </div>
 </div>
 
-<!-- GRAND TOTAL -->
+<!-- ═══════════════════════════════════
+     GRAND TOTAL
+════════════════════════════════════ -->
 <div class="section an d6">
   <div class="slabel">สรุปค่าใช้จ่ายประมาณการรายเดือน</div>
   <div class="tcard">
     <div class="thead"><span style="font-size:13px;font-weight:600">รายละเอียดค่าใช้จ่าย</span><span class="badge b-accent">ปรับได้ตามจริง</span></div>
     <div class="tbody">
-      <div class="trow">
-        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" class="logo-row" alt="Claude"/><span id="row-claude">Claude Max 5x ($100/เดือน)</span></span>
-        <span class="val">฿<span id="val-claude">3,550</span></span>
-      </div>
-      <div class="trow">
-        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" class="logo-row" alt="OR"/><span>OpenRouter (<span id="row-or">$50</span>/เดือน)</span></span>
-        <span class="val">฿<span id="val-or">1,775</span></span>
-      </div>
-      <div class="trow">
-        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" class="logo-row" alt="n8n"/>n8n Cloud Pro (€60)</span>
-        <span class="val">฿2,310</span>
-      </div>
-      <div class="trow">
-        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" class="logo-row" alt="Supabase"/><span id="row-supa">Supabase Pro + Micro</span></span>
-        <span class="val">฿<span id="val-supa">888</span></span>
-      </div>
-      <div class="trow">
-        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" class="logo-row" alt="Google"/><span id="row-goog">Google One 200 GB</span></span>
-        <span class="val">฿<span id="val-goog">99</span></span>
-      </div>
+      <div class="trow"><span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" style="width:16px;height:16px;object-fit:contain;flex-shrink:0" alt="claude"/><span id="row-claude">Claude Max 5x ($100/เดือน)</span></span><span class="val">฿<span id="val-claude">3,550</span></span></div>
+      <div class="trow"><span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" style="width:16px;height:16px;object-fit:contain;flex-shrink:0" alt="openrouter"/><span>OpenRouter (<span id="row-or">$50</span>/เดือน)</span></span><span class="val">฿<span id="val-or">1,775</span></span></div>
+      <div class="trow"><span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" style="width:16px;height:16px;object-fit:contain;flex-shrink:0" alt="n8n"/>n8n Cloud Pro (€60)</span><span class="val">฿2,310</span></div>
+      <div class="trow"><span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" style="width:16px;height:16px;object-fit:contain;flex-shrink:0" alt="supabase"/><span id="row-supa">Supabase Pro + Micro</span></span><span class="val">฿<span id="val-supa">888</span></span></div>
+      <div class="trow"><span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" style="width:16px;height:16px;object-fit:contain;flex-shrink:0" alt="google"/><span id="row-goog">Google One 200 GB</span></span><span class="val">฿<span id="val-goog">99</span></span></div>
       <div id="addon-rows"></div>
     </div>
     <div class="tfooter">
-      <div>
-        <div style="font-size:13px;color:var(--text2);font-weight:500">ค่าใช้จ่ายรวมโดยประมาณ / เดือน</div>
-        <div class="mono-sm" style="margin-top:4px">* OpenRouter เป็นค่าประมาณการ ปรับตามการใช้งานจริง</div>
-      </div>
-      <div style="text-align:right">
-        <div class="grand">฿<span id="grand-thb">0</span></div>
-        <div class="grand-usd">~$<span id="grand-usd">0</span> USD / เดือน</div>
-      </div>
+      <div><div style="font-size:13px;color:var(--text2);font-weight:500">ค่าใช้จ่ายรวมโดยประมาณ / เดือน</div><div class="mono-sm" style="margin-top:4px">* OpenRouter เป็นค่าประมาณการ ปรับตามการใช้งานจริง</div></div>
+      <div style="text-align:right"><div class="grand">฿<span id="grand-thb">0</span></div><div class="grand-usd">~$<span id="grand-usd">0</span> USD / เดือน</div></div>
     </div>
   </div>
 </div>
@@ -477,10 +627,10 @@ footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
 <div class="section an d6">
   <div class="slabel">ประเด็นสำคัญ</div>
   <div class="kpgrid">
-    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">✅</span><div><div class="kp-t">ดูแลระบบคนเดียวได้</div><div class="kp-d">Managed Cloud ทุก service ไม่ต้องมี IT Team ดูแล Server</div></div></div>
-    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">💰</span><div><div class="kp-t">ประหยัดด้วย Google One</div><div class="kp-d">แชร์โฟลเดอร์แทน Workspace ลดต้นทุนได้กว่า ฿1,000/เดือน</div></div></div>
-    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">⚡</span><div><div class="kp-t">Supabase Compute ยืดหยุ่น</div><div class="kp-d">Scale up/down ทันที ไม่ต้อง migrate ข้อมูล</div></div></div>
-    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">📈</span><div><div class="kp-t">Scale ตามการใช้งาน</div><div class="kp-d">ปรับ Claude Plan · OpenRouter · Compute ได้ทุกเดือน</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0">✅</span><div><div class="kp-t">ดูแลระบบคนเดียวได้</div><div class="kp-d">Managed Cloud ทุก service ไม่ต้องมี IT Team ดูแล Server</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0">💰</span><div><div class="kp-t">ประหยัดด้วย Google One</div><div class="kp-d">แชร์โฟลเดอร์แทน Workspace ลดต้นทุนได้กว่า ฿1,000/เดือน</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0">⚡</span><div><div class="kp-t">Supabase Compute ยืดหยุ่น</div><div class="kp-d">Scale up/down ทันที ไม่ต้อง migrate ข้อมูล</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0">📈</span><div><div class="kp-t">Scale ตามการใช้งาน</div><div class="kp-d">ปรับ Claude Plan · OpenRouter · Compute ได้ทุกเดือน</div></div></div>
   </div>
 </div>
 
@@ -495,18 +645,9 @@ const USD=35.5;
 const OR=[50,75,100,150,200,300];
 const HINTS=['💡 $50 · ช่วงเริ่มต้น ทดสอบระบบ ปริมาณ query ไม่สูง','⚙️ $75 · เริ่มใช้งานจริง query เบาๆ สม่ำเสมอ','⚙️ $100 · ใช้งานประจำวันระดับกลาง','🚀 $150 · ระบบทำงานหนัก วิเคราะห์เอกสารปริมาณมาก','🚀 $200 · ใช้งานหนักต่อเนื่อง หลาย workflow','⚡ $300 · Full Automation ทำงานตลอดทั้งวัน'];
 let state={claude:{thb:3550,label:'Claude Max 5x ($100/เดือน)'},or:{idx:0},supa:{thb:888,label:'Supabase Pro + Micro'},google:{thb:99,label:'Google One 200 GB'},addons:{line:{on:false,thb:0,name:'LINE Messaging API'},email:{on:false,thb:0,name:'Resend'},webhook:{on:false,thb:0,name:'Webhook'},slack:{on:false,thb:0,name:'Slack / Google Chat'}}};
-
-/* Try loading real logos on GitHub Pages */
-document.querySelectorAll('img[data-real]').forEach(img=>{
-  const real=img.dataset.real;
-  const t=new Image();
-  t.onload=()=>{img.src=real;};
-  t.src=real;
-});
-
-/* Radio cards */
+document.querySelectorAll('img[data-real]').forEach(img=>{const t=new Image();t.onload=()=>{img.src=img.dataset.real;};t.src=img.dataset.real;});
 document.querySelectorAll('[data-group]').forEach(card=>{
-  if(!card.dataset.thb) return;
+  if(!card.dataset.thb)return;
   card.addEventListener('click',()=>{
     const g=card.dataset.group,thb=+card.dataset.thb,label=card.dataset.label;
     document.querySelectorAll(`[data-group="${g}"]`).forEach(c=>c.classList.remove('active'));
@@ -517,65 +658,17 @@ document.querySelectorAll('[data-group]').forEach(card=>{
     calc();
   });
 });
-
-/* Slider */
 const slider=document.getElementById('or-slider');
-function updSlider(i){
-  const usd=OR[i],thb=Math.round(usd*USD);state.or.idx=i;
-  document.getElementById('or-usd').textContent=usd;
-  document.getElementById('or-thb').textContent=thb.toLocaleString();
-  document.getElementById('or-hint').textContent=HINTS[i];
-  document.getElementById('row-or').textContent='$'+usd;
-  document.getElementById('val-or').textContent=thb.toLocaleString();
-  slider.style.setProperty('--pct',(i/(OR.length-1))*100+'%');
-  document.querySelectorAll('.or-step').forEach((s,j)=>s.style.color=j===i?'var(--blue)':'var(--text4)');
-  calc();
-}
+function updSlider(i){const usd=OR[i],thb=Math.round(usd*USD);state.or.idx=i;document.getElementById('or-usd').textContent=usd;document.getElementById('or-thb').textContent=thb.toLocaleString();document.getElementById('or-hint').textContent=HINTS[i];document.getElementById('row-or').textContent='$'+usd;document.getElementById('val-or').textContent=thb.toLocaleString();slider.style.setProperty('--pct',(i/(OR.length-1))*100+'%');document.querySelectorAll('.or-step').forEach((s,j)=>s.style.color=j===i?'var(--blue)':'var(--text4)');calc();}
 slider.addEventListener('input',e=>updSlider(+e.target.value));
 document.querySelectorAll('.or-step').forEach(s=>s.addEventListener('click',()=>{slider.value=+s.dataset.i;updSlider(+s.dataset.i);}));
-
-/* Addons */
-function toggleAddon(id){
-  const a=state.addons[id];a.on=!a.on;
-  document.getElementById('pill-'+id).classList.toggle('on',a.on);
-  document.getElementById('addon-'+id).classList.toggle('on',a.on);
-  updBadge(id);updStrip();calc();
-}
+function toggleAddon(id){const a=state.addons[id];a.on=!a.on;document.getElementById('pill-'+id).classList.toggle('on',a.on);document.getElementById('addon-'+id).classList.toggle('on',a.on);updBadge(id);updStrip();calc();}
 window.toggleAddon=toggleAddon;
-
-function setAddonTier(id,thb,btn,detail){
-  const a=state.addons[id];a.thb=thb;
-  btn.closest('.acard').querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const d=document.getElementById('detail-'+id);if(d)d.textContent=detail;
-  if(!a.on)toggleAddon(id);else{updBadge(id);updStrip();calc();}
-}
+function setAddonTier(id,thb,btn,detail){const a=state.addons[id];a.thb=thb;btn.closest('.acard').querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const d=document.getElementById('detail-'+id);if(d)d.textContent=detail;if(!a.on)toggleAddon(id);else{updBadge(id);updStrip();calc();}}
 window.setAddonTier=setAddonTier;
-
-function updBadge(id){
-  const a=state.addons[id],el=document.getElementById('badge-'+id);if(!el)return;
-  if(id==='webhook'||id==='slack'){el.innerHTML='<span class="badge b-green">FREE</span>';return;}
-  if(a.on)el.innerHTML=a.thb===0?'<span class="badge b-green">FREE</span>':`<div style="text-align:right"><div style="font-size:13px;font-weight:600">฿${a.thb.toLocaleString()}</div><div style="font-size:10px;color:var(--text3)">/เดือน</div></div>`;
-  else el.innerHTML='';
-}
-function updStrip(){
-  const strip=document.getElementById('addon-strip'),active=Object.values(state.addons).filter(a=>a.on);
-  if(!active.length){strip.style.display='none';return;}
-  strip.style.display='flex';
-  document.getElementById('addon-names').textContent=active.map(a=>a.name).join(' · ');
-  const tot=active.reduce((s,a)=>s+a.thb,0);
-  document.getElementById('addon-cost').textContent=tot===0?'+฿0 (ฟรี 🎉)':`+฿${tot.toLocaleString()}`;
-}
-function calc(){
-  const core=state.claude.thb+Math.round(OR[state.or.idx]*USD)+2310+state.supa.thb+state.google.thb;
-  const aSum=Object.values(state.addons).reduce((s,a)=>a.on?s+a.thb:s,0);
-  const grand=core+aSum;
-  const rows=document.getElementById('addon-rows');
-  const actA=Object.values(state.addons).filter(a=>a.on);
-  rows.innerHTML=!actA.length?'':'<div style="padding:6px 0 2px;font-size:9px;color:#3A4020;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase">Notification Add-ons</div>'+actA.map(a=>`<div class="trow"><span class="lbl" style="color:#5E7040">${a.name}</span><span class="val" style="color:${a.thb===0?'#4CAF50':'#88AA48'}">${a.thb===0?'ฟรี':'฿'+a.thb.toLocaleString()}</span></div>`).join('');
-  document.getElementById('grand-thb').textContent=grand.toLocaleString();
-  document.getElementById('grand-usd').textContent=Math.round(grand/USD).toLocaleString();
-}
+function updBadge(id){const a=state.addons[id],el=document.getElementById('badge-'+id);if(!el)return;if(id==='webhook'||id==='slack'){el.innerHTML='<span class="badge b-green">FREE</span>';return;}if(a.on)el.innerHTML=a.thb===0?'<span class="badge b-green">FREE</span>':`<div style="text-align:right"><div style="font-size:13px;font-weight:600">฿${a.thb.toLocaleString()}</div><div style="font-size:10px;color:var(--text3)">/เดือน</div></div>`;else el.innerHTML='';}
+function updStrip(){const strip=document.getElementById('addon-strip'),active=Object.values(state.addons).filter(a=>a.on);if(!active.length){strip.style.display='none';return;}strip.style.display='flex';document.getElementById('addon-names').textContent=active.map(a=>a.name).join(' · ');const tot=active.reduce((s,a)=>s+a.thb,0);document.getElementById('addon-cost').textContent=tot===0?'+฿0 (ฟรี 🎉)':`+฿${tot.toLocaleString()}`;}
+function calc(){const core=state.claude.thb+Math.round(OR[state.or.idx]*USD)+2310+state.supa.thb+state.google.thb;const aSum=Object.values(state.addons).reduce((s,a)=>a.on?s+a.thb:s,0);const grand=core+aSum;const rows=document.getElementById('addon-rows');const actA=Object.values(state.addons).filter(a=>a.on);rows.innerHTML=!actA.length?'':'<div style="padding:6px 0 2px;font-size:9px;color:#3A4020;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase">Notification Add-ons</div>'+actA.map(a=>`<div class="trow"><span class="lbl" style="color:#5E7040">${a.name}</span><span class="val" style="color:${a.thb===0?'#4CAF50':'#88AA48'}">${a.thb===0?'ฟรี':'฿'+a.thb.toLocaleString()}</span></div>`).join('');document.getElementById('grand-thb').textContent=grand.toLocaleString();document.getElementById('grand-usd').textContent=Math.round(grand/USD).toLocaleString();}
 calc();
 </script>
 </body>
