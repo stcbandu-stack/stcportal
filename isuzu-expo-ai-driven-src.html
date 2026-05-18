@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ลงทะเบียน EXPO คุ้มค่า ฝ่าทุกวิกฤต | อีซูซุสงวนไทยเชียงราย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Kanit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  :root {
+    --navy-dark:  #07152b;
+    --navy:       #0b1e3d;
+    --navy-mid:   #0f2a52;
+    --blue:       #1a3e7a;
+    --blue-light: #2d5faa;
+    --red:        #c41010;
+    --red-hover:  #e01a1a;
+    --white:      #ffffff;
+    --gray-bg:    #f0f4f9;
+    --gray-line:  #d6dde8;
+    --gray-text:  #6b7a99;
+    --card-bg:    #ffffff;
+    --shadow-sm:  0 2px 12px rgba(7,21,43,0.10);
+    --shadow-md:  0 6px 28px rgba(7,21,43,0.16);
+    --shadow-lg:  0 12px 48px rgba(7,21,43,0.22);
+    --radius:     14px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--navy-dark);
+    color: var(--navy);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ══ HERO ══ */
+  .hero {
+    background:
+      radial-gradient(ellipse at 15% 65%, rgba(196,16,16,0.16) 0%, transparent 52%),
+      radial-gradient(ellipse at 88% 18%, rgba(26,62,122,0.42) 0%, transparent 52%),
+      linear-gradient(155deg, #07152b 0%, #0f2a52 52%, #1a3e7a 100%);
+    padding: 48px 20px 68px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 340px; height: 340px;
+    background: rgba(196,16,16,0.07);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Kanit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 7px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.4px;
+    animation: fadeDown .6s ease both;
+    box-shadow: 0 4px 18px rgba(196,16,16,0.38);
+  }
+
+  .brand-line {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    font-size: clamp(14px, 3vw, 18px);
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    animation: fadeDown .65s ease .05s both;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .brand-line i { color: var(--red); }
+
+  .hero h1 {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 9.5vw, 66px);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 12px;
+    animation: fadeDown .7s ease .1s both;
+    text-shadow: 0 4px 24px rgba(7,21,43,0.55);
+  }
+
+  .hero h1 .red { color: var(--red); }
+  .hero h1 .outline {
+    -webkit-text-stroke: 2px rgba(255,255,255,0.5);
+    color: transparent;
+  }
+
+  .hero-tagline {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(16px, 3.5vw, 22px);
+    font-weight: 600;
+    color: rgba(255,255,255,0.78);
+    margin-bottom: 30px;
+    animation: fadeDown .7s ease .15s both;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .hero-tagline i { color: var(--red); }
+
+  /* Info Pills */
+  .info-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    animation: fadeDown .7s ease .2s both;
+  }
+
+  .info-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 50px;
+    padding: 9px 18px;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(6px);
+    transition: background .2s;
+  }
+
+  .info-pill:hover { background: rgba(255,255,255,0.13); }
+  .info-pill i { color: var(--red); font-size: 13px; }
+
+  .hero-divider {
+    width: 52px;
+    height: 4px;
+    background: var(--red);
+    margin: 0 auto 30px;
+    border-radius: 2px;
+    animation: fadeDown .7s ease .25s both;
+  }
+
+  /* Topics */
+  .topics-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    animation: fadeDown .7s ease .3s both;
+    margin-bottom: 38px;
+  }
+
+  .topic-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.11);
+    border-radius: 12px;
+    padding: 11px 18px;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+    transition: all .25s;
+    cursor: default;
+  }
+
+  .topic-card:hover {
+    background: rgba(196,16,16,0.18);
+    border-color: rgba(196,16,16,0.40);
+    transform: translateY(-2px);
+  }
+
+  .topic-num {
+    width: 24px; height: 24px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    font-family: 'Kanit', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .topic-card i { color: rgba(255,255,255,0.65); font-size: 14px; }
+
+  .scroll-hint { animation: fadeDown .7s ease .35s both; }
+  .scroll-hint p { color: rgba(255,255,255,0.38); font-size: 13px; margin-bottom: 6px; }
+  .scroll-arrow { color: var(--red); font-size: 20px; animation: bounce 1.6s infinite; display: inline-block; }
+
+  /* ══ FORM SECTION ══ */
+  .form-section {
+    background: var(--gray-bg);
+    padding: 52px 16px 72px;
+    position: relative;
+  }
+
+  .form-section::before {
+    content: '';
+    position: absolute;
+    top: -36px; left: 0; right: 0;
+    height: 36px;
+    background: var(--gray-bg);
+    clip-path: ellipse(52% 100% at 50% 100%);
+  }
+
+  .form-wrapper { max-width: 680px; margin: 0 auto; }
+
+  .form-title { text-align: center; margin-bottom: 32px; }
+
+  .form-title .sec-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Kanit', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: .5px;
+  }
+
+  .form-title h2 {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    font-size: clamp(20px, 5vw, 26px);
+    color: var(--navy);
+    margin-bottom: 5px;
+  }
+
+  .form-title p { color: var(--gray-text); font-size: 14px; }
+
+  /* Form Cards */
+  .form-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 26px 28px 24px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(26,62,122,0.07);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp .45s ease both;
+  }
+
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--red);
+  }
+
+  .form-card:nth-child(1) { animation-delay: .05s; }
+  .form-card:nth-child(2) { animation-delay: .10s; }
+  .form-card:nth-child(3) { animation-delay: .15s; }
+  .form-card:nth-child(4) { animation-delay: .20s; }
+
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gray-line);
+  }
+
+  .sec-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 3px 12px rgba(26,62,122,0.22);
+  }
+
+  .sec-icon i { color: var(--white); font-size: 16px; }
+
+  .sec-header h3 {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--navy);
+  }
+
+  /* Grids */
+  .fg { display: grid; gap: 16px; }
+  .fg-2 { grid-template-columns: 1fr 1fr; }
+  .fg-1 { grid-template-columns: 1fr; }
+  .span2 { grid-column: span 2; }
+
+  @media (max-width: 520px) {
+    .fg-2 { grid-template-columns: 1fr; }
+    .span2 { grid-column: span 1; }
+    .form-card { padding: 18px 16px; }
+  }
+
+  /* Field */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy-mid);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  label i.lbl { color: var(--blue); font-size: 12px; width: 13px; text-align: center; }
+  .req { color: var(--red); font-size: 14px; line-height: 1; }
+
+  input[type="text"],
+  input[type="tel"],
+  textarea,
+  select {
+    border: 1.5px solid var(--gray-line);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    color: var(--navy);
+    background: #fff;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M0 0l5.5 7L11 0z' fill='%236b7a99'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,62,122,0.09);
+  }
+
+  input.err-field, textarea.err-field, select.err-field {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(196,16,16,0.09);
+  }
+
+  textarea { resize: vertical; min-height: 88px; line-height: 1.65; }
+
+  .err-msg {
+    font-size: 12px;
+    color: var(--red);
+    display: none;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+  }
+
+  .err-msg.show { display: flex; }
+  .err-msg i { font-size: 11px; }
+
+  /* Checkboxes */
+  .cb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 400px) { .cb-grid { grid-template-columns: 1fr; } }
+
+  .cb-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--gray-line);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+  }
+
+  .cb-item:hover { border-color: var(--blue); background: rgba(26,62,122,0.04); }
+
+  .cb-item input[type="checkbox"] {
+    width: 17px; height: 17px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--blue);
+    -webkit-appearance: auto;
+    appearance: auto;
+    padding: 0; box-shadow: none;
+  }
+
+  .cb-item:has(input:checked) { border-color: var(--blue); background: rgba(26,62,122,0.06); }
+  .cb-item:has(input:checked) .cb-text { color: var(--blue); font-weight: 600; }
+
+  .cb-body { display: flex; flex-direction: column; gap: 3px; }
+  .cb-body i { color: var(--blue); font-size: 15px; }
+  .cb-text { font-size: 14px; color: var(--navy); line-height: 1.35; }
+
+  /* Submit */
+  .submit-area { margin-top: 6px; text-align: center; }
+
+  .btn-submit {
+    width: 100%; max-width: 440px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+    box-shadow: 0 6px 24px rgba(7,21,43,0.30);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-submit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(196,16,16,0.25), transparent 55%);
+    opacity: 0;
+    transition: opacity .3s;
+  }
+
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(7,21,43,0.38); }
+  .btn-submit:hover::after { opacity: 1; }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+  .btn-submit i, .btn-submit span { position: relative; }
+
+  .note-text {
+    font-size: 12px;
+    color: var(--gray-text);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .note-text i { color: var(--blue); font-size: 12px; }
+
+  .spinner {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+
+  /* ══ SUCCESS ══ */
+  #success-screen {
+    display: none;
+    padding: 60px 20px;
+    background: var(--gray-bg);
+    min-height: 60vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  #success-screen.show { display: flex; }
+
+  .success-card {
+    background: var(--card-bg);
+    border-radius: 22px;
+    box-shadow: var(--shadow-lg);
+    padding: 48px 32px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .success-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--blue), var(--red));
+  }
+
+  .s-icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 28px rgba(26,62,122,0.28);
+    animation: popIn .5s cubic-bezier(.34,1.56,.64,1) .2s both;
+  }
+
+  .s-icon i { color: var(--white); font-size: 32px; }
+
+  .success-card h2 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .success-name {
+    font-family: 'Kanit', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 14px;
+  }
+
+  .success-card > p {
+    color: var(--gray-text);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+  }
+
+  .event-info {
+    background: var(--gray-bg);
+    border-radius: 12px;
+    padding: 18px 20px;
+    text-align: left;
+    margin-bottom: 18px;
+    border: 1px solid var(--gray-line);
+  }
+
+  .ev-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--navy);
+    font-weight: 500;
+    padding: 5px 0;
+  }
+
+  .ev-row i { color: var(--blue); width: 16px; text-align: center; font-size: 14px; }
+
+  .welcome-box {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    border-radius: 14px;
+    padding: 22px 24px;
+    color: var(--white);
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .wm-title {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .wm-title i { color: var(--red); }
+  .welcome-box strong { color: rgba(255,255,255,0.95); }
+
+  .line-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.70);
+  }
+
+  .line-row i { font-size: 13px; }
+
+  /* ══ FOOTER ══ */
+  footer {
+    background: var(--navy-dark);
+    color: rgba(255,255,255,0.42);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  footer strong { color: rgba(255,255,255,0.78); }
+  footer i { color: var(--red); }
+
+  /* ══ ANIMATIONS ══ */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(8px); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.82); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-badge">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      ลงทะเบียนฟรี &bull; จำนวนจำกัด 30 ท่านแรก
+    </div>
+
+    <div class="brand-line">
+      <i class="fa-solid fa-car"></i>
+      ISUZU SANGWON THAI CHIANGRAI
+    </div>
+
+    <h1>
+      EXPO<span class="red"> คุ้มค่า</span><br>
+      <span class="outline">ฝ่าทุกวิกฤต</span>
+    </h1>
+
+    <div class="hero-tagline">
+      <i class="fa-solid fa-bolt"></i>
+      ติดปีกธุรกิจ ด้วยพลัง AI
+    </div>
+
+    <div class="info-row">
+      <div class="info-pill">
+        <i class="fa-regular fa-calendar-days"></i>
+        วันเสาร์ที่ 30 พฤษภาคม 2569
+      </div>
+      <div class="info-pill">
+        <i class="fa-regular fa-clock"></i>
+        10.00 – 14.00 น.
+      </div>
+      <div class="info-pill">
+        <i class="fa-solid fa-location-dot"></i>
+        โชว์รูมอีซูซุสงวนไทยเชียงราย
+      </div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <div class="topics-row">
+      <div class="topic-card">
+        <span class="topic-num">1</span>
+        <i class="fa-solid fa-robot"></i>
+        ให้ AI ทำงานแทน สร้างคอนเทนต์อัตโนมัติ
+      </div>
+      <div class="topic-card">
+        <span class="topic-num">2</span>
+        <i class="fa-solid fa-camera"></i>
+        ถ่ายรูปสินค้าด้วยมือถือ ไม่ต้องง้อช่างกล้อง
+      </div>
+      <div class="topic-card">
+        <span class="topic-num">3</span>
+        <i class="fa-solid fa-clapperboard"></i>
+        วิดีโอสั้นปั้นยอดขาย ง่าย เร็ว พร้อมโพสต์
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <p>กรอกข้อมูลด้านล่างเพื่อสำรองที่นั่ง</p>
+      <i class="fa-solid fa-angles-down scroll-arrow"></i>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FORM SECTION ══ -->
+<section class="form-section" id="form-section">
+  <div class="form-wrapper">
+
+    <div class="form-title">
+      <div class="sec-label">
+        <i class="fa-solid fa-pen-to-square"></i>
+        กรอกข้อมูลลงทะเบียน
+      </div>
+      <h2>ยืนยันสิทธิ์เข้าร่วมงาน</h2>
+      <p>กรุณากรอกข้อมูลให้ครบถ้วน เพื่อสำรองที่นั่งของท่าน</p>
+    </div>
+
+    <form id="reg-form" novalidate>
+
+      <!-- Card 1: Personal -->
+      <div class="form-card">
+        <div class="sec-header">
+          <div class="sec-icon"><i class="fa-solid fa-user"></i></div>
+          <h3>ข้อมูลส่วนตัว</h3>
+        </div>
+        <div class="fg fg-2">
+          <div class="field span2">
+            <label>
+              <i class="fa-solid fa-id-card lbl"></i>
+              ชื่อ-นามสกุล <span class="req">*</span>
+            </label>
+            <input type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุลของท่าน">
+            <span class="err-msg" id="err-fullname">
+              <i class="fa-solid fa-circle-exclamation"></i>&nbsp;กรุณากรอกชื่อ-นามสกุล
+            </span>
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-phone lbl"></i>
+              เบอร์โทรศัพท์ <span class="req">*</span>
+            </label>
+            <input type="tel" id="phone" placeholder="08X-XXX-XXXX" maxlength="12">
+            <span class="err-msg" id="err-phone">
+              <i class="fa-solid fa-circle-exclamation"></i>&nbsp;กรุณากรอกเบอร์โทรที่ถูกต้อง
+            </span>
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-location-dot lbl"></i>
+              จังหวัด / อำเภอที่อยู่
+            </label>
+            <input type="text" id="address" placeholder="เช่น เชียงราย / เมือง">
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Business -->
+      <div class="form-card">
+        <div class="sec-header">
+          <div class="sec-icon"><i class="fa-solid fa-briefcase"></i></div>
+          <h3>ข้อมูลธุรกิจ</h3>
+        </div>
+        <div class="fg fg-2">
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-store lbl"></i>
+              ประเภทธุรกิจ
+            </label>
+            <select id="biz-type">
+              <option value="">— เลือกประเภทธุรกิจ —</option>
+              <option>ร้านค้าปลีก</option>
+              <option>ขายออนไลน์ (Online Only)</option>
+              <option>ผู้ผลิต / แปรรูป</option>
+              <option>เกษตรกร</option>
+              <option>ธุรกิจบริการ</option>
+              <option>ร้านอาหาร / เบเกอรี</option>
+              <option>รับเหมา / ขนส่ง</option>
+              <option>อื่นๆ</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-box-open lbl"></i>
+              สินค้าหรือบริการที่จำหน่าย
+            </label>
+            <input type="text" id="products" placeholder="เช่น ผลไม้, เสื้อผ้า, งานเกษตร">
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Motivation -->
+      <div class="form-card">
+        <div class="sec-header">
+          <div class="sec-icon"><i class="fa-solid fa-comment-dots"></i></div>
+          <h3>ความต้องการในการอบรม</h3>
+        </div>
+        <div class="fg fg-1">
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-bullseye lbl"></i>
+              เหตุผลที่ลงทะเบียนเรียน
+            </label>
+            <textarea id="reason" placeholder="บอกเล่าเหตุผลที่สนใจเข้าร่วมงานนี้..."></textarea>
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-list-check lbl"></i>
+              อยากเรียนรู้เรื่องอะไรบ้าง?
+              <span style="font-weight:400;color:var(--gray-text);font-size:12px;">&nbsp;เลือกได้หลายข้อ</span>
+            </label>
+            <div class="cb-grid">
+              <label class="cb-item">
+                <input type="checkbox" name="learn" value="AI สร้างคอนเทนต์อัตโนมัติ">
+                <div class="cb-body">
+                  <i class="fa-solid fa-robot"></i>
+                  <span class="cb-text">AI สร้างคอนเทนต์อัตโนมัติ</span>
+                </div>
+              </label>
+              <label class="cb-item">
+                <input type="checkbox" name="learn" value="เขียนแคปชั่นขายดี">
+                <div class="cb-body">
+                  <i class="fa-solid fa-pen-nib"></i>
+                  <span class="cb-text">เขียนแคปชั่นขายดี</span>
+                </div>
+              </label>
+              <label class="cb-item">
+                <input type="checkbox" name="learn" value="ถ่ายรูปสินค้าด้วยมือถือ">
+                <div class="cb-body">
+                  <i class="fa-solid fa-camera"></i>
+                  <span class="cb-text">ถ่ายรูปสินค้าด้วยมือถือ</span>
+                </div>
+              </label>
+              <label class="cb-item">
+                <input type="checkbox" name="learn" value="ตัดต่อวิดีโอสั้นปั้นยอดขาย">
+                <div class="cb-body">
+                  <i class="fa-solid fa-clapperboard"></i>
+                  <span class="cb-text">ตัดต่อวิดีโอสั้นปั้นยอดขาย</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Isuzu Data (Always visible) -->
+      <div class="form-card">
+        <div class="sec-header">
+          <div class="sec-icon"><i class="fa-solid fa-car-side"></i></div>
+          <h3>ข้อมูลรถอีซูซุของท่าน</h3>
+        </div>
+        
+        <div class="fg fg-2">
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-car lbl"></i>
+              รุ่นรถ
+            </label>
+            <select id="car-model">
+              <option value="">— เลือกรุ่นรถ —</option>
+              <option>D-MAX 1.9 Single Cab</option>
+              <option>D-MAX 1.9 Space Cab</option>
+              <option>D-MAX 1.9 4-Door</option>
+              <option>D-MAX 3.0 Hi-Lander</option>
+              <option>MU-X</option>
+              <option>D-MAX Blue Power</option>
+              <option>รุ่นอื่นๆ</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-hashtag lbl"></i>
+              เลขทะเบียนรถ
+            </label>
+            <input type="text" id="car-plate" placeholder="เช่น กข-1234 เชียงราย">
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-building lbl"></i>
+              ซื้อจากสาขา
+            </label>
+            <select id="branch">
+              <option value="">— เลือกสาขา —</option>
+              <option>สาขาใหญ่บ้านดู่</option>
+              <option>สาขาแม่สาย</option>
+              <option>สาขาเชียงของ</option>
+              <option>สาขาพะเยา</option>
+              <option>ไม่แน่ใจ</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>
+              <i class="fa-solid fa-user-tie lbl"></i>
+              ชื่อฝ่ายขายที่ดูแล
+            </label>
+            <input type="text" id="salesperson" placeholder="กรอกชื่อฝ่ายขาย">
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-area">
+        <button type="submit" class="btn-submit" id="btn-submit">
+          <i class="fa-solid fa-ticket"></i>
+          <span>ยืนยันลงทะเบียนเลย</span>
+        </button>
+        <p class="note-text">
+          <i class="fa-solid fa-shield-halved"></i>
+          ข้อมูลของท่านถูกเก็บเป็นความลับ ใช้เพื่อการจัดงานเท่านั้น
+        </p>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<!-- ══ SUCCESS ══ -->
+<section id="success-screen">
+  <div class="success-card">
+    <div class="s-icon">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h2>ลงทะเบียนสำเร็จ!</h2>
+    <div class="success-name" id="success-name"></div>
+    <p>ขอบคุณที่ลงทะเบียนเข้าร่วมงาน<br>เราได้รับข้อมูลของท่านเรียบร้อยแล้ว</p>
+
+    <div class="event-info">
+      <div class="ev-row"><i class="fa-regular fa-calendar-days"></i> วันเสาร์ที่ 30 พฤษภาคม 2569</div>
+      <div class="ev-row"><i class="fa-regular fa-clock"></i> เวลา 10.00 – 14.00 น.</div>
+      <div class="ev-row"><i class="fa-solid fa-location-dot"></i> โชว์รูมอีซูซุสงวนไทยเชียงราย สาขาใหญ่บ้านดู่</div>
+      <div class="ev-row"><i class="fa-solid fa-phone"></i> 053-702-666 | 086-429-5060</div>
+    </div>
+
+    <div class="welcome-box">
+      <div class="wm-title">
+        <i class="fa-solid fa-star"></i>
+        ยินดีต้อนรับสู่งาน EXPO คุ้มค่า ฝ่าทุกวิกฤต!
+      </div>
+      พบกันวันเสาร์นี้ครับ/ค่ะ<br>
+      เตรียมพร้อมเรียนรู้เทคนิค <strong>AI สร้างคอนเทนต์</strong>, <strong>ถ่ายรูปสินค้า</strong> และ <strong>วิดีโอสั้นปั้นยอดขาย</strong> ที่จะช่วยให้ธุรกิจของท่านเติบโตได้จริง
+      <div class="line-row">
+        <i class="fa-solid fa-comment"></i>
+        ติดตามข่าวสารเพิ่มเติมได้ที่ LINE: <strong>@STCCR</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <i class="fa-solid fa-car"></i>
+    <strong>อีซูซุสงวนไทยเชียงราย</strong> — อีซูซุเคียงข้างคุณ เคียงคู่ไทย
+  </p>
+  <p style="margin-top:6px;">LINE: @STCCR &nbsp;|&nbsp; Tel: 053-702-666 &nbsp;|&nbsp; 086-429-5060</p>
+</footer>
+
+<script>
+// ── CONFIG ──────────────────────────────────
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+// ────────────────────────────────────────────
+
+// Phone filter
+document.getElementById('phone').addEventListener('input', function() {
+  this.value = this.value.replace(/[^0-9\-]/g, '');
+});
+
+// Validate
+function validate() {
+  let ok = true;
+  const name  = document.getElementById('fullname');
+  const phone = document.getElementById('phone');
+
+  [name, phone].forEach(el => el.classList.remove('err-field'));
+  ['err-fullname','err-phone'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  if (!name.value.trim()) {
+    name.classList.add('err-field');
+    document.getElementById('err-fullname').classList.add('show');
+    ok = false;
+  }
+  if (phone.value.replace(/\D/g,'').length < 9) {
+    phone.classList.add('err-field');
+    document.getElementById('err-phone').classList.add('show');
+    ok = false;
+  }
+  return ok;
+}
+
+// Collect
+function collect() {
+  const learns = [...document.querySelectorAll('input[name="learn"]:checked')].map(c => c.value).join(', ');
+  return {
+    timestamp:   new Date().toLocaleString('th-TH'),
+    fullname:    document.getElementById('fullname').value.trim(),
+    phone:       document.getElementById('phone').value.trim(),
+    address:     document.getElementById('address').value.trim(),
+    bizType:     document.getElementById('biz-type').value,
+    products:    document.getElementById('products').value.trim(),
+    reason:      document.getElementById('reason').value.trim(),
+    wantToLearn: learns,
+    carModel:    document.getElementById('car-model').value,
+    carPlate:    document.getElementById('car-plate').value.trim(),
+    branch:      document.getElementById('branch').value,
+    salesperson: document.getElementById('salesperson').value.trim(),
+  };
+}
+
+// Submit
+document.getElementById('reg-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!validate()) {
+    document.querySelector('.err-field')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span><span>กำลังบันทึกข้อมูล...</span>';
+
+  const data = collect();
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.warn(e); }
+
+  document.getElementById('success-name').textContent = 'สวัสดีคุณ ' + data.fullname;
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('success-screen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>
