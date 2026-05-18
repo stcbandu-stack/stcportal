@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ประมาณการงบ RAG Automation — อีซูซุสงวนไทย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0C0C;--surface:#161616;--surface2:#131313;
+  --border:#242424;--border2:#2E2E2E;
+  --text:#EDE8E2;--text2:#B8B0A6;--text3:#847A72;--text4:#5A524A;
+  --accent:#C96A2E;--blue:#2E7DC9;--green:#2EC97A;--red:#E8472A;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans Thai',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:48px 24px 72px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:10px}
+.flex-row{display:flex;gap:10px;flex-wrap:wrap}
+.flex-row>*{flex:1 1 160px}
+
+/* TYPE */
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:10px}
+.page-title{font-size:clamp(20px,4vw,28px);font-weight:600;line-height:1.35;color:#F5EFE8}
+.page-title span{color:var(--accent)}
+.slabel{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border2)}
+.slabel-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.slabel-row .slabel{margin-bottom:0;flex:1}
+.sub{font-size:11px;color:var(--text3);line-height:1.6}
+.mono-sm{font-size:11px;color:var(--text3);font-family:var(--mono)}
+
+/* LOGO SIZES */
+.logo-sm{width:22px;height:22px;object-fit:contain;display:block;flex-shrink:0}
+.logo-flow{width:28px;height:28px;object-fit:contain;display:block;margin:0 auto}
+.logo-row{width:18px;height:18px;object-fit:contain;display:inline-block;vertical-align:middle;flex-shrink:0}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.radio-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.radio-card:hover{border-color:var(--border2);background:var(--surface)}
+.radio-card.active{background:#171210;border-color:var(--card-color,var(--accent))}
+.tier-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:13px;cursor:pointer;transition:all .2s}
+.tier-card:hover{border-color:var(--border2)}
+.tier-card.active{background:#131210;border-color:var(--card-color,var(--accent))}
+
+/* RADIO DOT */
+.rdot{width:15px;height:15px;border-radius:50%;flex-shrink:0;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px}
+.rdot .di{width:6px;height:6px;border-radius:50%;background:var(--card-color,var(--accent));opacity:0;transform:scale(0);transition:all .2s}
+.radio-card.active .rdot,.tier-card.active .rdot{border-color:var(--card-color,var(--accent))}
+.radio-card.active .di,.tier-card.active .di{opacity:1;transform:scale(1)}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor}
+.b-accent{color:var(--accent);background:#2A1A0812;border-color:#C96A2E40}
+.b-green{color:#4CAF50;background:#0C1C0C12;border-color:#4CAF5040}
+.b-blue{color:var(--blue);background:#0E1A2812;border-color:#2E7DC940}
+.b-orange{color:#F5A623;background:#2A1A0812;border-color:#F5A62340}
+
+/* TOGGLE */
+.tpill{width:34px;height:18px;border-radius:9px;background:var(--border2);border:1.5px solid #2A2A2A;position:relative;cursor:pointer;transition:all .25s;flex-shrink:0}
+.tpill.on{background:var(--pc,var(--accent));border-color:var(--pc,var(--accent))}
+.tpill::after{content:'';position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:#fff;transition:left .25s}
+.tpill.on::after{left:18px}
+
+/* FLOW */
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 20px}
+.fn{text-align:center;min-width:48px}
+.fn .lbl{font-size:9px;color:var(--text4);margin-top:4px;white-space:nowrap;font-family:var(--mono)}
+.fn.hi .lbl{color:var(--accent)}
+.farr{color:var(--border2);font-size:14px;flex-shrink:0}
+
+/* SLIDER */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;outline:none;cursor:pointer;border:none;padding:0;background:linear-gradient(to right,var(--blue) 0%,var(--blue) var(--pct,0%),#1E1E1E var(--pct,0%),#1E1E1E 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--blue);cursor:pointer;border:2px solid var(--bg);box-shadow:0 0 0 2px #2E7DC944}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--blue);cursor:pointer;border:2px solid var(--bg)}
+
+/* SPEED BAR */
+.sbar{height:4px;background:#1E1E1E;border-radius:2px;overflow:hidden;flex:1}
+.sbar-f{height:100%;border-radius:2px;transition:width .3s}
+
+/* TIER BTNS */
+.tbtn{padding:3px 10px;border-radius:5px;font-size:10px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text3);font-family:var(--sans);transition:all .15s}
+.tbtn.active{background:color-mix(in srgb,var(--bc,var(--accent)) 14%,transparent);color:var(--bc,var(--accent));border-color:color-mix(in srgb,var(--bc,var(--accent)) 35%,transparent);font-weight:600}
+.tbtn:hover:not(.active){border-color:var(--border2);color:var(--text2)}
+
+/* NOTE */
+.note{margin-top:8px;padding:7px 11px;background:#0A0A0A;border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);line-height:1.6;font-family:var(--mono)}
+
+/* SAVINGS */
+.savings{background:#0C180C;border:1px solid #243020;border-radius:8px;padding:10px 14px;font-size:11px;color:#7AA060;line-height:1.7;margin-bottom:10px}
+.savings strong{color:#90C070}
+
+/* TOTAL */
+.tcard{background:var(--surface2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.thead{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.tbody{padding:0 20px}
+.trow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #1C1C1C;gap:8px}
+.trow .lbl{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.trow .val{font-size:13px;font-weight:500;color:#E0DAD4;flex-shrink:0}
+.tfooter{padding:16px 20px;background:#090909;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.grand{font-size:34px;font-weight:600;color:var(--accent);line-height:1}
+.grand-usd{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono)}
+
+/* ADDON */
+.acard{border-radius:12px;padding:14px;border:1px solid var(--border);border-left:3px solid var(--border2);background:var(--surface2);transition:all .25s;opacity:.5}
+.acard.on{border-color:var(--pc,var(--accent));border-left-color:var(--pc,var(--accent));background:#111111;opacity:1}
+.ahead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.atogrow{display:flex;align-items:center;gap:9px;flex:1;cursor:pointer}
+
+/* ADDON STRIP */
+.astrip{margin-top:10px;padding:10px 14px;background:#0C100A;border:1px solid #1E2E14;border-radius:7px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+
+/* KP */
+.kpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.kpc{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 13px;display:flex;gap:10px;align-items:flex-start}
+.kp-t{font-size:12px;font-weight:600;color:#D0C8C0;margin-bottom:4px}
+.kp-d{font-size:11px;color:var(--text3);line-height:1.6}
+
+.section{margin-bottom:28px}
+.header-line{width:40px;height:3px;background:var(--accent);border-radius:2px;margin-bottom:16px}
+footer{margin-top:20px;padding-top:14px;border-top:1px solid #1C1C1C;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+footer span{font-size:10px;color:var(--text4);font-family:var(--mono)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.an{animation:fadeUp .5s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
+@media(max-width:600px){.wrap{padding:28px 16px 48px}.page-title{font-size:20px}.grand{font-size:26px}.tfooter{flex-direction:column;align-items:flex-start;gap:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<header class="an">
+  <div class="header-line"></div>
+  <div class="eyebrow">บริษัท อีซูซุสงวนไทยเชียงราย &nbsp;·&nbsp; เอกสารงบประมาณ</div>
+  <h1 class="page-title">ประมาณการงบ ทำระบบ RAG Automation<br/><span>ผ่านระบบ Cloud</span> บริษัทอีซูซุสงวนไทย</h1>
+  <div style="margin-top:10px"><span class="mono-sm">USD = ฿35.5 &nbsp;·&nbsp; EUR = ฿38.5 &nbsp;·&nbsp; ข้อมูล ณ พฤษภาคม 2568</span></div>
+</header>
+
+<!-- FLOW -->
+<div class="section an d1" style="margin-top:28px">
+  <div class="flow">
+    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" alt="Google"/><div class="lbl">Google One</div></div>
+    <span class="farr">→</span>
+    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" alt="n8n"/><div class="lbl">n8n</div></div>
+    <span class="farr">→</span>
+    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" alt="OpenRouter"/><div class="lbl">OpenRouter</div></div>
+    <span class="farr">→</span>
+    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" alt="Claude"/><div class="lbl">Claude AI</div></div>
+    <span class="farr">→</span>
+    <div class="fn"><img class="logo-flow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" alt="Supabase"/><div class="lbl">Supabase</div></div>
+    <span class="farr">→</span>
+    <div class="fn"><span style="font-size:26px;display:block;text-align:center">📊</span><div class="lbl">Report</div></div>
+    <span class="farr">→</span>
+    <div class="fn hi">
+      <div style="display:flex;justify-content:center;gap:5px">
+        <img style="width:18px;height:18px;object-fit:contain" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA2Qzc1NSIvPjxyZWN0IHg9IjciIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48dGV4dCB4PSIxNiIgeT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwNkM3NTUiIGZvbnQtc2l6ZT0iOCIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkxJTkU8L3RleHQ+PC9zdmc+" data-real="https://i.postimg.cc/cCN60543/LINE-logo-svg.png" data-logo="line" alt="LINE"/>
+        <img style="width:18px;height:18px;object-fit:contain" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjEuNSIgeT0iMS41IiB3aWR0aD0iMjkiIGhlaWdodD0iMjkiIHJ4PSI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiI+UmVzZW5kPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/W4B1wfZ6/resend-wordmark-white.png" data-logo="resend" alt="Resend"/>
+      </div>
+      <div class="lbl" style="color:var(--accent)">แจ้งเตือน</div>
+    </div>
+  </div>
+</div>
+
+<!-- 1. CLAUDE -->
+<div class="section an d2">
+  <div class="slabel-row">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" class="logo-sm" alt="Claude"/>
+    <div class="slabel">Claude — เลือกแผน</div>
+  </div>
+  <div class="flex-row" id="claude-group">
+    <div class="radio-card" data-group="claude" data-thb="710" data-label="Claude Pro ($20/เดือน)" style="--card-color:#9C9287">
+      <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px">Claude Pro</div>
+        <div style="font-size:12px;font-weight:600;color:#9C9287;margin-bottom:4px">$20 / เดือน</div>
+        <div class="sub">ใช้งานทั่วไป เขียนโค้ดปานกลาง</div>
+        <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border)" class="mono-sm">≈ ฿710 / เดือน</div>
+      </div></div>
+    </div>
+    <div class="radio-card active" data-group="claude" data-thb="3550" data-label="Claude Max 5x ($100/เดือน)" style="--card-color:#C96A2E">
+      <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:2px"><span style="font-weight:600;font-size:14px">Claude Max 5x</span><span class="badge b-accent">แนะนำ</span></div>
+        <div style="font-size:12px;font-weight:600;color:#C96A2E;margin-bottom:4px">$100 / เดือน</div>
+        <div class="sub">ใช้งานหนัก โค้ดซับซ้อน</div>
+        <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border)" class="mono-sm">≈ ฿3,550 / เดือน</div>
+      </div></div>
+    </div>
+    <div class="radio-card" data-group="claude" data-thb="7100" data-label="Claude Max 20x ($200/เดือน)" style="--card-color:#E8472A">
+      <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px">Claude Max 20x</div>
+        <div style="font-size:12px;font-weight:600;color:#E8472A;margin-bottom:4px">$200 / เดือน</div>
+        <div class="sub">ใช้งานหนักมาก full-time dev</div>
+        <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border)" class="mono-sm">≈ ฿7,100 / เดือน</div>
+      </div></div>
+    </div>
+  </div>
+  <div class="note">💡 Pro รวม Claude Code + Web Search · Max 5x/20x เพิ่ม usage limit สำหรับงานโค้ดหนัก</div>
+</div>
+
+<!-- 2. OPENROUTER -->
+<div class="section an d2">
+  <div class="slabel-row">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" class="logo-sm" alt="OpenRouter"/>
+    <div class="slabel">OpenRouter — API Credits</div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:30px;font-weight:600;color:var(--blue);line-height:1">$<span id="or-usd">50</span><span style="font-size:13px;font-weight:400;color:var(--text3);margin-left:5px">/ เดือน</span></div>
+        <div class="mono-sm" style="margin-top:5px">≈ ฿<span id="or-thb">1,775</span> · ผ่าน n8n เรียก OpenAI / Claude / DeepSeek</div>
+      </div>
+      <div class="mono-sm" style="text-align:right">Pay-as-you-go<br/>ไม่มี contract</div>
+    </div>
+    <input type="range" id="or-slider" min="0" max="5" step="1" value="0"/>
+    <div style="display:flex;justify-content:space-between;margin-top:7px">
+      <span class="or-step" data-i="0" style="font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--blue)">$50</span>
+      <span class="or-step" data-i="1" style="font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--text4)">$75</span>
+      <span class="or-step" data-i="2" style="font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--text4)">$100</span>
+      <span class="or-step" data-i="3" style="font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--text4)">$150</span>
+      <span class="or-step" data-i="4" style="font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--text4)">$200</span>
+      <span class="or-step" data-i="5" style="font-family:var(--mono);font-size:10px;cursor:pointer;color:var(--text4)">$300</span>
+    </div>
+    <div class="note" id="or-hint">💡 $50 · ช่วงเริ่มต้น ทดสอบระบบ ปริมาณ query ไม่สูง</div>
+  </div>
+</div>
+
+<!-- 3. N8N -->
+<div class="section an d3">
+  <div class="slabel-row">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" class="logo-sm" alt="n8n"/>
+    <div class="slabel">n8n Cloud Pro — คงที่</div>
+  </div>
+  <div class="card" style="border-left:3px solid var(--green);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+    <div style="flex:1">
+      <div style="font-weight:600;font-size:14px;margin-bottom:5px">n8n Cloud Pro</div>
+      <div class="sub" style="margin-bottom:5px">ตัว Automation หลัก · สร้าง Workflow · เชื่อมต่อระบบ · AI Orchestration</div>
+      <div style="font-size:11px;color:var(--green);font-family:var(--mono)">Unlimited workflows · 10,000 executions/เดือน</div>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div style="font-size:15px;font-weight:600">€60 / เดือน</div>
+      <div class="mono-sm">≈ ฿2,310</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. SUPABASE -->
+<div class="section an d3">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" class="logo-sm" alt="Supabase"/>
+      <div class="slabel" style="margin-bottom:0">Supabase — Pro + Compute</div>
+    </div>
+    <span class="mono-sm">มีผลต่อความเร็ว ~10-30%</span>
+  </div>
+  <div class="grid3" id="supa-group">
+    <div class="tier-card active" data-group="supa" data-thb="888" data-label="Supabase Pro + Micro" style="--card-color:#3ECF8E">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="rdot" style="margin-top:0"><div class="di"></div></div><span style="font-weight:600;font-size:13px">Micro</span><span class="badge b-green">ฟรี</span></div>
+      <div style="font-size:11px;color:#3ECF8E;font-family:var(--mono);margin-bottom:8px">shared CPU · 1 GB RAM</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="sbar"><div class="sbar-f" style="width:22%;background:#3ECF8E"></div></div><span style="font-size:10px;color:#3ECF8E;font-family:var(--mono);white-space:nowrap;font-weight:500">ปกติ</span></div>
+      <div style="padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="sub" style="font-size:10px">Pro $25 included</span><span style="font-size:13px;font-weight:600">฿888</span></div>
+      <div class="sub" style="font-size:10px;margin-top:5px">รวมใน Pro แล้ว ไม่มีค่าเพิ่ม</div>
+    </div>
+    <div class="tier-card" data-group="supa" data-thb="1421" data-label="Supabase Pro + Small" style="--card-color:#F5A623">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="rdot" style="margin-top:0"><div class="di"></div></div><span style="font-weight:600;font-size:13px">Small</span><span class="badge b-orange">แนะนำ</span></div>
+      <div style="font-size:11px;color:#F5A623;font-family:var(--mono);margin-bottom:8px">2-core ARM · 1 GB RAM</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="sbar"><div class="sbar-f" style="width:50%;background:#F5A623"></div></div><span style="font-size:10px;color:#F5A623;font-family:var(--mono);white-space:nowrap;font-weight:500">+10-15%</span></div>
+      <div style="padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="sub" style="font-size:10px">Pro $25 + Compute $15</span><span style="font-size:13px;font-weight:600">฿1,421</span></div>
+      <div class="sub" style="font-size:10px;margin-top:5px">เร็วขึ้น ~10-15%</div>
+    </div>
+    <div class="tier-card" data-group="supa" data-thb="2663" data-label="Supabase Pro + Medium" style="--card-color:#E8472A">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="rdot" style="margin-top:0"><div class="di"></div></div><span style="font-weight:600;font-size:13px">Medium</span></div>
+      <div style="font-size:11px;color:#E8472A;font-family:var(--mono);margin-bottom:8px">2-core ARM · 4 GB RAM</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="sbar"><div class="sbar-f" style="width:80%;background:#E8472A"></div></div><span style="font-size:10px;color:#E8472A;font-family:var(--mono);white-space:nowrap;font-weight:500">+20-30%</span></div>
+      <div style="padding-top:9px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline"><span class="sub" style="font-size:10px">Pro $25 + Compute $50</span><span style="font-size:13px;font-weight:600">฿2,663</span></div>
+      <div class="sub" style="font-size:10px;margin-top:5px">เร็วขึ้น ~20-30%</div>
+    </div>
+  </div>
+  <div class="note">ℹ️ Micro เหมาะช่วงเริ่มต้น · Small/Medium อัปเกรดได้ทันที ไม่ต้อง migrate · Compute คิดรายชั่วโมง</div>
+</div>
+
+<!-- 5. GOOGLE ONE -->
+<div class="section an d4">
+  <div class="slabel-row">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" class="logo-sm" alt="Google"/>
+    <div class="slabel">Google One — แบบส่วนตัว</div>
+  </div>
+  <div class="savings">💡 <strong>ลดต้นทุนได้มาก</strong> — ใช้ Google One ส่วนตัว แชร์โฟลเดอร์ Drive ให้ทีมอัพไฟล์ได้เลย ไม่ต้องซื้อ Workspace Business ให้ทุกคน</div>
+  <div class="flex-row" id="google-group">
+    <div class="radio-card" data-group="google" data-thb="70" data-label="Google One 100 GB" style="--card-color:#4285F4">
+      <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px">100 GB</div>
+        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:4px">฿70 / เดือน</div>
+        <div class="sub">แชร์โฟลเดอร์ทีมเล็ก 1-2 คน</div>
+      </div></div>
+    </div>
+    <div class="radio-card active" data-group="google" data-thb="99" data-label="Google One 200 GB" style="--card-color:#4285F4">
+      <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:2px"><span style="font-weight:600;font-size:14px">200 GB</span><span class="badge b-blue">แนะนำ</span></div>
+        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:4px">฿99 / เดือน</div>
+        <div class="sub">แชร์โฟลเดอร์ทีมกลาง 3-5 คน</div>
+      </div></div>
+    </div>
+    <div class="radio-card" data-group="google" data-thb="350" data-label="Google One 2 TB" style="--card-color:#4285F4">
+      <div style="display:flex;align-items:flex-start;gap:9px"><div class="rdot" style="margin-top:3px"><div class="di"></div></div><div style="flex:1">
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px">2 TB</div>
+        <div style="font-size:12px;font-weight:600;color:#4285F4;margin-bottom:4px">฿350 / เดือน</div>
+        <div class="sub">พื้นที่เยอะ รองรับไฟล์ขนาดใหญ่</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. ADDONS -->
+<div class="section an d5">
+  <div class="slabel">🔔 Notification Add-ons — ออพชั่นเสริม</div>
+  <div class="grid2">
+
+    <!-- LINE -->
+    <div class="acard" id="addon-line" style="--pc:#06C755">
+      <div class="ahead">
+        <div class="atogrow" onclick="toggleAddon('line')">
+          <div class="tpill" id="pill-line" style="--pc:#06C755"></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzA2Qzc1NSIvPjxyZWN0IHg9IjciIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48dGV4dCB4PSIxNiIgeT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwNkM3NTUiIGZvbnQtc2l6ZT0iOCIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkxJTkU8L3RleHQ+PC9zdmc+" data-real="https://i.postimg.cc/cCN60543/LINE-logo-svg.png" data-logo="line" style="width:22px;height:22px;object-fit:contain" alt="LINE"/>
+            <div>
+              <div style="font-weight:600;font-size:13px">LINE Messaging API</div>
+              <div style="font-size:9px;color:#06C755;font-family:var(--mono);margin-top:1px">LINE Official Account</div>
+            </div>
+          </div>
+        </div>
+        <div id="badge-line"></div>
+      </div>
+      <div class="sub" style="margin-bottom:7px">ส่ง Notification แจ้งเตือนพนักงาน / ผู้บริหารผ่าน LINE โดยตรง</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: แจ้งเมื่อมีเอกสารใหม่ · สรุปรายงานรายวัน · แจ้งเตือน Error</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+        <button class="tbtn active" style="--bc:#06C755" onclick="setAddonTier('line',0,this,'500 msg/เดือน')">Free 🆓</button>
+        <button class="tbtn" style="--bc:#06C755" onclick="setAddonTier('line',1775,this,'10,000 msg/เดือน')">Light $50</button>
+        <button class="tbtn" style="--bc:#06C755" onclick="setAddonTier('line',5325,this,'40,000 msg/เดือน')">Standard $150</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <span style="font-size:10px;color:var(--text3)" id="detail-line">500 msg/เดือน</span>
+        <span class="badge b-green">เหมาะ Internal ทีมเล็ก</span>
+      </div>
+      <div style="font-size:10px;color:var(--text4);line-height:1.5">⚠️ LINE Notify ปิดบริการแล้ว (เม.ย. 2568) ต้องใช้ Messaging API แทน</div>
+    </div>
+
+    <!-- RESEND -->
+    <div class="acard" id="addon-email" style="--pc:#FF6B6B">
+      <div class="ahead">
+        <div class="atogrow" onclick="toggleAddon('email')">
+          <div class="tpill" id="pill-email" style="--pc:#FF6B6B"></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjEuNSIgeT0iMS41IiB3aWR0aD0iMjkiIGhlaWdodD0iMjkiIHJ4PSI3IiBmaWxsPSJub25lIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE2IiB5PSIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNy41IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiI+UmVzZW5kPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/W4B1wfZ6/resend-wordmark-white.png" data-logo="resend" style="width:22px;height:22px;object-fit:contain" alt="Resend"/>
+            <div>
+              <div style="font-weight:600;font-size:13px">Resend</div>
+              <div style="font-size:9px;color:#FF6B6B;font-family:var(--mono);margin-top:1px">Transactional Email API</div>
+            </div>
+          </div>
+        </div>
+        <div id="badge-email"></div>
+      </div>
+      <div class="sub" style="margin-bottom:7px">ส่ง Email สรุปรายงาน · แจ้งเตือนผู้บริหาร · ส่ง Report อัตโนมัติ</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: สรุปรายงานรายสัปดาห์ · แจ้งผล Analysis · Email Digest รายวัน</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+        <button class="tbtn active" style="--bc:#FF6B6B" onclick="setAddonTier('email',0,this,'3,000 emails/เดือน')">Free 🆓</button>
+        <button class="tbtn" style="--bc:#FF6B6B" onclick="setAddonTier('email',710,this,'50,000 emails/เดือน')">Pro $20</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <span style="font-size:10px;color:var(--text3)" id="detail-email">3,000 emails/เดือน</span>
+        <span class="badge b-green">เพียงพอสำหรับ Internal</span>
+      </div>
+      <div style="font-size:10px;color:var(--text4);line-height:1.5">💡 Free plan เพียงพอสำหรับการแจ้งเตือนภายในองค์กรทั่วไป</div>
+    </div>
+
+    <!-- WEBHOOK -->
+    <div class="acard" id="addon-webhook" style="--pc:#9B59B6">
+      <div class="ahead">
+        <div class="atogrow" onclick="toggleAddon('webhook')">
+          <div class="tpill" id="pill-webhook" style="--pc:#9B59B6"></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" style="width:22px;height:22px;object-fit:contain" alt="n8n"/>
+            <div>
+              <div style="font-weight:600;font-size:13px">Webhook</div>
+              <div style="font-size:9px;color:#9B59B6;font-family:var(--mono);margin-top:1px">ฟรี · รวมใน n8n แล้ว</div>
+            </div>
+          </div>
+        </div>
+        <div id="badge-webhook"><span class="badge b-green">FREE</span></div>
+      </div>
+      <div class="sub" style="margin-bottom:7px">รับ-ส่ง Event ระหว่างระบบ เชื่อมต่อ Service ภายนอกได้ทันที</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: Google Drive trigger · Form submit · ระบบอื่น Push ข้อมูลเข้า n8n</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;color:var(--text3)">รวมใน n8n ทุก Plan</span>
+        <span class="badge" style="color:#9B59B6;border-color:#9B59B644">ไม่มีค่าใช้จ่ายเพิ่ม</span>
+      </div>
+    </div>
+
+    <!-- SLACK -->
+    <div class="acard" id="addon-slack" style="--pc:#7C3AED">
+      <div class="ahead">
+        <div class="atogrow" onclick="toggleAddon('slack')">
+          <div class="tpill" id="pill-slack" style="--pc:#7C3AED"></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:22px">💼</span>
+            <div>
+              <div style="font-weight:600;font-size:13px">Slack / Google Chat</div>
+              <div style="font-size:9px;color:#7C3AED;font-family:var(--mono);margin-top:1px">Incoming Webhook (ฟรี)</div>
+            </div>
+          </div>
+        </div>
+        <div id="badge-slack"><span class="badge b-green">FREE</span></div>
+      </div>
+      <div class="sub" style="margin-bottom:7px">ส่ง Alert เข้า Channel ทีม · แจ้งผู้ดูแลระบบเมื่อเกิด Error</div>
+      <div style="font-size:10px;color:var(--text3);padding:5px 8px;background:#0A0A0A;border-radius:4px;margin-bottom:9px;line-height:1.6">ใช้กับ: แจ้งทีม IT · Alert งานสำคัญ · Daily Digest ใน Chat</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;color:var(--text3)">Incoming Webhook ฟรี</span>
+        <span class="badge b-green">ฟรีไม่มีค่าใช้จ่าย</span>
+      </div>
+    </div>
+
+  </div>
+  <div class="astrip" id="addon-strip" style="display:none">
+    <span style="font-size:11px;color:#5E7030" id="addon-names">—</span>
+    <span style="font-size:13px;font-weight:600;color:#88AA40;font-family:var(--mono)" id="addon-cost">+฿0</span>
+  </div>
+</div>
+
+<!-- GRAND TOTAL -->
+<div class="section an d6">
+  <div class="slabel">สรุปค่าใช้จ่ายประมาณการรายเดือน</div>
+  <div class="tcard">
+    <div class="thead"><span style="font-size:13px;font-weight:600">รายละเอียดค่าใช้จ่าย</span><span class="badge b-accent">ปรับได้ตามจริง</span></div>
+    <div class="tbody">
+      <div class="trow">
+        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiMxRTE0MTAiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzk2QTJFIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxsaW5lIHgxPSIxNiIgeTE9IjUiIHgyPSIxNiIgeTI9IjExIiBzdHJva2U9IiNDOTZBMkUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48dGV4dCB4PSIxNiIgeT0iMjEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNDOTZBMkUiIGZvbnQtc2l6ZT0iMTEiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhIj5DPC90ZXh0Pjwvc3ZnPg==" data-real="https://i.postimg.cc/gJ7rQk1V/image.png" data-logo="claude" class="logo-row" alt="Claude"/><span id="row-claude">Claude Max 5x ($100/เดือน)</span></span>
+        <span class="val">฿<span id="val-claude">3,550</span></span>
+      </div>
+      <div class="trow">
+        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBEMTExNyIvPjxjaXJjbGUgY3g9IjkiIGN5PSIxMCIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIyMiIgcj0iMy41IiBmaWxsPSIjNUI5Q0Y2Ii8+PGxpbmUgeDE9IjEyIiB5MT0iMTAiIHgyPSIyMCIgeTI9IjIyIiBzdHJva2U9IiM1QjlDRjYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC43Ii8+PGNpcmNsZSBjeD0iMjMiIGN5PSIxMCIgcj0iMiIgZmlsbD0iIzVCOUNGNiIgb3BhY2l0eT0iMC40Ii8+PGNpcmNsZSBjeD0iOSIgY3k9IjIyIiByPSIyIiBmaWxsPSIjNUI5Q0Y2IiBvcGFjaXR5PSIwLjQiLz48L3N2Zz4=" data-real="https://i.postimg.cc/KjLL5M4N/image.png" data-logo="openrouter" class="logo-row" alt="OR"/><span>OpenRouter (<span id="row-or">$50</span>/เดือน)</span></span>
+        <span class="val">฿<span id="val-or">1,775</span></span>
+      </div>
+      <div class="trow">
+        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0VBNEIwMCIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPm44bjwvdGV4dD48L3N2Zz4=" data-real="https://i.postimg.cc/wTXLyLCM/n8n-icon.webp" data-logo="n8n" class="logo-row" alt="n8n"/>n8n Cloud Pro (€60)</span>
+        <span class="val">฿2,310</span>
+      </div>
+      <div class="trow">
+        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzFDMUMxQyIvPjxwb2x5Z29uIHBvaW50cz0iMTYsNiAyNiwyNCA2LDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzRUNGOEUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBvbHlnb24gcG9pbnRzPSIxNiwxMiAyMiwyMyAxMCwyMyIgZmlsbD0iIzNFQ0Y4RSIgb3BhY2l0eT0iMC4zIi8+PC9zdmc+" data-real="https://i.postimg.cc/HnQcM1Pb/supabase.webp" data-logo="supabase" class="logo-row" alt="Supabase"/><span id="row-supa">Supabase Pro + Micro</span></span>
+        <span class="val">฿<span id="val-supa">888</span></span>
+      </div>
+      <div class="trow">
+        <span class="lbl"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTI0LjUgMTZjMC0uNi0uMS0xLjItLjItMS44SDE2djMuNGg0LjdjLS4yIDEtLjkgMS45LTEuOCAyLjR2MmgyLjlDMjMuNCAyMC41IDI0LjUgMTguNCAyNC41IDE2eiIgZmlsbD0iIzQyODVGNCIvPjxwYXRoIGQ9Ik0xNiAyNmMyLjQgMCA0LjUtLjggNS45LTIuMWwtMi45LTIuMmMtLjguNS0xLjguOS0zIC45LTIuMyAwLTQuMy0xLjUtNS0zLjZIOHYyLjJDOS40IDI0IDEyLjUgMjYgMTYgMjZ6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTExIDE5Yy0uMi0uNS0uMy0xLjEtLjMtMS43cy4xLTEuMi4zLTEuN1YxMy40SDhDNy4zIDE0LjcgNyAxNiA3IDE3LjNzLjMgMi41IDEgMy42TDExIDE5eiIgZmlsbD0iI0ZCQkMwNCIvPjxwYXRoIGQ9Ik0xNiAxMS40YzEuMyAwIDIuNS41IDMuNCAxLjNsMi41LTIuNUMyMC40IDguNyAxOC40IDggMTYgOGMtMy41IDAtNi42IDItOCA1bDMgMi4yYy43LTIuMSAyLjctMy44IDUtMy44eiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0xNiAxNS4zaDguNHYxLjdIMTZ6IiBmaWxsPSIjNDI4NUY0Ii8+PC9zdmc+" data-real="https://i.postimg.cc/Z5f9pcVJ/Hi-View-Solutions-Google-Workspace-Reseller-Super-G-Icon.png" data-logo="google" class="logo-row" alt="Google"/><span id="row-goog">Google One 200 GB</span></span>
+        <span class="val">฿<span id="val-goog">99</span></span>
+      </div>
+      <div id="addon-rows"></div>
+    </div>
+    <div class="tfooter">
+      <div>
+        <div style="font-size:13px;color:var(--text2);font-weight:500">ค่าใช้จ่ายรวมโดยประมาณ / เดือน</div>
+        <div class="mono-sm" style="margin-top:4px">* OpenRouter เป็นค่าประมาณการ ปรับตามการใช้งานจริง</div>
+      </div>
+      <div style="text-align:right">
+        <div class="grand">฿<span id="grand-thb">0</span></div>
+        <div class="grand-usd">~$<span id="grand-usd">0</span> USD / เดือน</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY POINTS -->
+<div class="section an d6">
+  <div class="slabel">ประเด็นสำคัญ</div>
+  <div class="kpgrid">
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">✅</span><div><div class="kp-t">ดูแลระบบคนเดียวได้</div><div class="kp-d">Managed Cloud ทุก service ไม่ต้องมี IT Team ดูแล Server</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">💰</span><div><div class="kp-t">ประหยัดด้วย Google One</div><div class="kp-d">แชร์โฟลเดอร์แทน Workspace ลดต้นทุนได้กว่า ฿1,000/เดือน</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">⚡</span><div><div class="kp-t">Supabase Compute ยืดหยุ่น</div><div class="kp-d">Scale up/down ทันที ไม่ต้อง migrate ข้อมูล</div></div></div>
+    <div class="kpc"><span style="font-size:16px;flex-shrink:0;margin-top:1px">📈</span><div><div class="kp-t">Scale ตามการใช้งาน</div><div class="kp-d">ปรับ Claude Plan · OpenRouter · Compute ได้ทุกเดือน</div></div></div>
+  </div>
+</div>
+
+<footer>
+  <span>ราคาอ้างอิง ณ พฤษภาคม 2568 · อาจมีการเปลี่ยนแปลงตามนโยบาย Provider</span>
+  <span>บริษัท อีซูซุสงวนไทยเชียงราย</span>
+</footer>
+</div>
+
+<script>
+const USD=35.5;
+const OR=[50,75,100,150,200,300];
+const HINTS=['💡 $50 · ช่วงเริ่มต้น ทดสอบระบบ ปริมาณ query ไม่สูง','⚙️ $75 · เริ่มใช้งานจริง query เบาๆ สม่ำเสมอ','⚙️ $100 · ใช้งานประจำวันระดับกลาง','🚀 $150 · ระบบทำงานหนัก วิเคราะห์เอกสารปริมาณมาก','🚀 $200 · ใช้งานหนักต่อเนื่อง หลาย workflow','⚡ $300 · Full Automation ทำงานตลอดทั้งวัน'];
+let state={claude:{thb:3550,label:'Claude Max 5x ($100/เดือน)'},or:{idx:0},supa:{thb:888,label:'Supabase Pro + Micro'},google:{thb:99,label:'Google One 200 GB'},addons:{line:{on:false,thb:0,name:'LINE Messaging API'},email:{on:false,thb:0,name:'Resend'},webhook:{on:false,thb:0,name:'Webhook'},slack:{on:false,thb:0,name:'Slack / Google Chat'}}};
+
+/* Try loading real logos on GitHub Pages */
+document.querySelectorAll('img[data-real]').forEach(img=>{
+  const real=img.dataset.real;
+  const t=new Image();
+  t.onload=()=>{img.src=real;};
+  t.src=real;
+});
+
+/* Radio cards */
+document.querySelectorAll('[data-group]').forEach(card=>{
+  if(!card.dataset.thb) return;
+  card.addEventListener('click',()=>{
+    const g=card.dataset.group,thb=+card.dataset.thb,label=card.dataset.label;
+    document.querySelectorAll(`[data-group="${g}"]`).forEach(c=>c.classList.remove('active'));
+    card.classList.add('active');
+    if(g==='claude'){state.claude={thb,label};document.getElementById('row-claude').textContent=label;document.getElementById('val-claude').textContent=thb.toLocaleString();}
+    if(g==='supa'){state.supa={thb,label};document.getElementById('row-supa').textContent=label;document.getElementById('val-supa').textContent=thb.toLocaleString();}
+    if(g==='google'){state.google={thb,label};document.getElementById('row-goog').textContent=label;document.getElementById('val-goog').textContent=thb.toLocaleString();}
+    calc();
+  });
+});
+
+/* Slider */
+const slider=document.getElementById('or-slider');
+function updSlider(i){
+  const usd=OR[i],thb=Math.round(usd*USD);state.or.idx=i;
+  document.getElementById('or-usd').textContent=usd;
+  document.getElementById('or-thb').textContent=thb.toLocaleString();
+  document.getElementById('or-hint').textContent=HINTS[i];
+  document.getElementById('row-or').textContent='$'+usd;
+  document.getElementById('val-or').textContent=thb.toLocaleString();
+  slider.style.setProperty('--pct',(i/(OR.length-1))*100+'%');
+  document.querySelectorAll('.or-step').forEach((s,j)=>s.style.color=j===i?'var(--blue)':'var(--text4)');
+  calc();
+}
+slider.addEventListener('input',e=>updSlider(+e.target.value));
+document.querySelectorAll('.or-step').forEach(s=>s.addEventListener('click',()=>{slider.value=+s.dataset.i;updSlider(+s.dataset.i);}));
+
+/* Addons */
+function toggleAddon(id){
+  const a=state.addons[id];a.on=!a.on;
+  document.getElementById('pill-'+id).classList.toggle('on',a.on);
+  document.getElementById('addon-'+id).classList.toggle('on',a.on);
+  updBadge(id);updStrip();calc();
+}
+window.toggleAddon=toggleAddon;
+
+function setAddonTier(id,thb,btn,detail){
+  const a=state.addons[id];a.thb=thb;
+  btn.closest('.acard').querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=document.getElementById('detail-'+id);if(d)d.textContent=detail;
+  if(!a.on)toggleAddon(id);else{updBadge(id);updStrip();calc();}
+}
+window.setAddonTier=setAddonTier;
+
+function updBadge(id){
+  const a=state.addons[id],el=document.getElementById('badge-'+id);if(!el)return;
+  if(id==='webhook'||id==='slack'){el.innerHTML='<span class="badge b-green">FREE</span>';return;}
+  if(a.on)el.innerHTML=a.thb===0?'<span class="badge b-green">FREE</span>':`<div style="text-align:right"><div style="font-size:13px;font-weight:600">฿${a.thb.toLocaleString()}</div><div style="font-size:10px;color:var(--text3)">/เดือน</div></div>`;
+  else el.innerHTML='';
+}
+function updStrip(){
+  const strip=document.getElementById('addon-strip'),active=Object.values(state.addons).filter(a=>a.on);
+  if(!active.length){strip.style.display='none';return;}
+  strip.style.display='flex';
+  document.getElementById('addon-names').textContent=active.map(a=>a.name).join(' · ');
+  const tot=active.reduce((s,a)=>s+a.thb,0);
+  document.getElementById('addon-cost').textContent=tot===0?'+฿0 (ฟรี 🎉)':`+฿${tot.toLocaleString()}`;
+}
+function calc(){
+  const core=state.claude.thb+Math.round(OR[state.or.idx]*USD)+2310+state.supa.thb+state.google.thb;
+  const aSum=Object.values(state.addons).reduce((s,a)=>a.on?s+a.thb:s,0);
+  const grand=core+aSum;
+  const rows=document.getElementById('addon-rows');
+  const actA=Object.values(state.addons).filter(a=>a.on);
+  rows.innerHTML=!actA.length?'':'<div style="padding:6px 0 2px;font-size:9px;color:#3A4020;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase">Notification Add-ons</div>'+actA.map(a=>`<div class="trow"><span class="lbl" style="color:#5E7040">${a.name}</span><span class="val" style="color:${a.thb===0?'#4CAF50':'#88AA48'}">${a.thb===0?'ฟรี':'฿'+a.thb.toLocaleString()}</span></div>`).join('');
+  document.getElementById('grand-thb').textContent=grand.toLocaleString();
+  document.getElementById('grand-usd').textContent=Math.round(grand/USD).toLocaleString();
+}
+calc();
+</script>
+</body>
+</html>
