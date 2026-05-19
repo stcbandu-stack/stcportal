@@ -19,7 +19,6 @@
     --green-bd:   #BBF7D0;
     --red-bg:     #FEF2F2;
     --red-bd:     #FCA5A5;
-    --amber:      #D97706;
     --amber-bg:   #FFFBEB;
     --gray-50:    #F9FAFB;
     --gray-100:   #F3F4F6;
@@ -30,86 +29,42 @@
     --radius-sm:  8px;
     --radius-md:  12px;
     --radius-lg:  18px;
-    --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
     --shadow-md:  0 4px 16px rgba(0,0,0,.09);
-    --shadow-lg:  0 12px 40px rgba(0,0,0,.12);
-    --transition: 0.2s cubic-bezier(.4,0,.2,1);
+    --shadow-lg:  0 12px 40px rgba(0,0,0,.14);
+    --tr: 0.18s ease;
   }
 
   body {
     font-family: 'Sarabun', sans-serif;
-    background: #F0F5FF;
+    background: #EEF4FF;
     min-height: 100vh;
     color: var(--gray-900);
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── HEADER ── */
+  /* ── HEADER / HERO ─────────────────────────────────────── */
   .header {
-    background: var(--blue-dark);
+    background:
+      linear-gradient(to bottom, rgba(0,20,80,.60) 0%, rgba(10,0,50,.72) 100%),
+      linear-gradient(135deg, #003087 0%, #1a0050 100%);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
-    overflow: hidden;
-  }
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -80px; right: -80px;
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    background: rgba(213,0,27,.12);
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; left: 10%;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.04);
   }
 
-  /* ── BANNER ── */
-  .banner-wrap {
-    margin: 16px 16px 0;
-    border-radius: var(--radius-md);
-    border: 2px dashed rgba(255,255,255,.25);
-    background: rgba(0,0,0,.18);
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-    min-height: 100px;
-    display: flex;
-    align-items: center;
-  }
-  .banner-placeholder {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 18px 22px;
-    width: 100%;
-  }
-  .banner-icon {
-    width: 64px; height: 64px;
-    border-radius: 10px;
-    background: rgba(255,255,255,.1);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 30px;
-  }
-  .banner-text { color: rgba(255,255,255,.65); font-size: 13px; line-height: 1.6; }
-  .banner-text strong { color: rgba(255,255,255,.85); font-weight: 600; display: block; }
-
-  /* ── HERO TEXT ── */
   .hero {
-    padding: 20px 20px 28px;
+    padding: 32px 20px 48px;
     text-align: center;
-    position: relative; z-index: 1;
+    color: white;
   }
   .hero-company {
     font-size: 11px;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: rgba(255,255,255,.6);
-    margin-bottom: 10px;
+    color: rgba(255,255,255,.65);
+    margin-bottom: 12px;
   }
   .hero-badge {
     display: inline-flex;
@@ -119,37 +74,36 @@
     color: white;
     font-size: 12px;
     font-weight: 600;
-    padding: 5px 14px;
+    padding: 5px 16px;
     border-radius: 999px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
   .hero-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: white;
-    line-height: 1.55;
-    margin-bottom: 6px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 8px;
   }
   .hero-sub {
     font-size: 13px;
-    color: rgba(255,255,255,.6);
+    color: rgba(255,255,255,.65);
+    line-height: 1.6;
   }
 
-  /* ── PROGRESS BAR ── */
-  .progress-bar-wrap {
+  /* ── PROGRESS BAR ──────────────────────────────────────── */
+  .progress-wrap {
     background: white;
     border-bottom: 1px solid var(--gray-200);
-    padding: 12px 20px;
+    padding: 10px 20px;
     display: none;
   }
-  .progress-bar-wrap.visible { display: block; }
+  .progress-wrap.show { display: block; }
   .progress-meta {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 7px;
-    font-size: 12.5px;
+    font-size: 12px;
     color: var(--gray-600);
+    margin-bottom: 6px;
   }
   .progress-pct { font-weight: 600; color: var(--blue-main); }
   .progress-track {
@@ -157,7 +111,7 @@
     background: var(--gray-200);
     border-radius: 999px;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
   }
   .progress-fill {
     height: 100%;
@@ -166,30 +120,35 @@
     transition: width .6s ease;
     width: 0;
   }
-  .progress-tags {
-    display: flex;
-    gap: 16px;
+  .progress-tags { display: flex; gap: 14px; }
+  .tag-yes { font-size: 11.5px; color: var(--green); font-weight: 500; }
+  .tag-no  { font-size: 11.5px; color: #DC2626; font-weight: 500; }
+
+  /* ── PAGE BODY ─────────────────────────────────────────── */
+  .page-body {
+    max-width: 520px;
+    margin: -28px auto 0;
+    padding: 0 16px 40px;
+    position: relative;
+    z-index: 10;
   }
-  .tag-yes { font-size: 12px; color: var(--green); font-weight: 500; }
-  .tag-no  { font-size: 12px; color: #DC2626; font-weight: 500; }
 
-  /* ── CARD ── */
-  .page-body { max-width: 520px; margin: 0 auto; padding: 22px 16px 40px; }
-
+  /* ── CARD ──────────────────────────────────────────────── */
   .card {
     background: white;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    overflow: hidden;
+    overflow: visible;
   }
 
   .card-section {
-    padding: 22px 22px 18px;
+    padding: 22px 22px 20px;
     border-bottom: 1px solid var(--gray-100);
+    overflow: visible;
   }
   .card-section:last-child { border-bottom: none; }
 
-  /* ── STEP LABEL ── */
+  /* ── STEP LABEL ────────────────────────────────────────── */
   .step-label {
     display: flex;
     align-items: center;
@@ -202,21 +161,21 @@
     background: var(--blue-dark);
     color: white;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: background var(--transition);
+    transition: background var(--tr);
   }
   .step-num.done { background: var(--green); }
-  .step-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+  .step-title { font-size: 15px; font-weight: 600; }
 
-  /* ── SEARCH INPUT ── */
+  /* ── SEARCH ────────────────────────────────────────────── */
   .search-wrap { position: relative; }
+
   .search-icon {
     position: absolute; left: 13px; top: 50%;
     transform: translateY(-50%);
-    font-size: 18px; color: var(--gray-400);
-    pointer-events: none;
+    color: var(--gray-400); pointer-events: none; font-size: 16px;
   }
   .search-input {
     width: 100%;
@@ -227,38 +186,34 @@
     font-size: 15px;
     color: var(--gray-900);
     background: var(--gray-50);
-    transition: border-color var(--transition), box-shadow var(--transition);
+    transition: border-color var(--tr), box-shadow var(--tr);
     outline: none;
   }
   .search-input:focus {
     border-color: var(--blue-main);
-    box-shadow: 0 0 0 3px rgba(0,86,162,.12);
+    box-shadow: 0 0 0 3px rgba(0,86,162,.1);
     background: white;
   }
-  .search-input.selected {
-    border-color: var(--blue-main);
-    background: white;
-  }
+  .search-input.has-val { border-color: var(--blue-main); background: white; }
+
   .clear-btn {
     position: absolute; right: 10px; top: 50%;
     transform: translateY(-50%);
     background: none; border: none; cursor: pointer;
-    color: var(--gray-400); font-size: 18px; padding: 4px;
-    border-radius: 50%; display: none;
-    transition: color var(--transition);
+    color: var(--gray-400); font-size: 16px; padding: 4px;
+    border-radius: 50%; display: none; line-height: 1;
   }
-  .clear-btn:hover { color: var(--gray-600); }
-  .clear-btn.visible { display: flex; }
+  .clear-btn.show { display: flex; align-items: center; }
 
-  /* ── DROPDOWN ── */
+  /* ── DROPDOWN ──────────────────────────────────────────── */
   .dropdown {
     position: absolute;
-    top: calc(100% + 5px); left: 0; right: 0;
+    top: calc(100% + 4px); left: 0; right: 0;
     background: white;
     border: 1px solid var(--gray-200);
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-lg);
-    z-index: 999;
+    z-index: 9999;
     overflow: hidden;
     display: none;
   }
@@ -271,7 +226,7 @@
     padding: 10px 14px;
     cursor: pointer;
     border-bottom: 1px solid var(--gray-100);
-    transition: background var(--transition);
+    transition: background var(--tr);
   }
   .drop-item:last-child { border-bottom: none; }
   .drop-item:hover { background: var(--blue-light); }
@@ -280,55 +235,53 @@
     width: 34px; height: 34px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: white;
+    font-size: 13px; font-weight: 700; color: white;
     flex-shrink: 0;
   }
-  .drop-info { flex: 1; min-width: 0; }
-  .drop-name { font-size: 14px; font-weight: 500; color: var(--gray-900); }
+  .drop-name { font-size: 14px; font-weight: 500; }
   .drop-sub  { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
-
-  .drop-badge-done {
+  .drop-done {
+    margin-left: auto; flex-shrink: 0;
     font-size: 10px; font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 999px;
+    padding: 2px 7px; border-radius: 999px;
     background: #FEF3C7; color: #92400E;
-    flex-shrink: 0;
   }
   .drop-empty {
-    padding: 20px; text-align: center; color: var(--gray-400); font-size: 14px;
+    padding: 20px; text-align: center;
+    color: var(--gray-400); font-size: 14px;
   }
 
-  /* ── EMPLOYEE INFO CARD ── */
+  /* ── EMP INFO ──────────────────────────────────────────── */
   .emp-info {
     display: none;
-    margin-top: 14px;
-    border-radius: var(--radius-sm);
-    padding: 14px;
+    margin-top: 12px;
+    padding: 12px 14px;
     background: var(--blue-light);
     border: 1px solid #C3DCFF;
+    border-radius: var(--radius-sm);
     align-items: center;
     gap: 12px;
   }
-  .emp-info.visible { display: flex; }
-  .emp-avatar-lg {
-    width: 44px; height: 44px;
+  .emp-info.show { display: flex; }
+
+  .emp-avatar {
+    width: 40px; height: 40px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 600; color: white;
+    font-size: 15px; font-weight: 700; color: white;
     flex-shrink: 0;
   }
   .emp-name  { font-size: 15px; font-weight: 600; color: var(--blue-dark); }
   .emp-dept  {
-    display: inline-flex; align-items: center;
-    padding: 3px 10px;
+    display: inline-flex;
+    padding: 2px 10px;
     border-radius: 999px;
     font-size: 12px; font-weight: 600; color: white;
-    margin-top: 4px;
+    margin-top: 3px;
   }
-  .emp-branch { font-size: 12px; color: var(--gray-400); margin-left: 6px; }
-  .check-icon { margin-left: auto; font-size: 22px; color: var(--green); }
+  .emp-branch { font-size: 11px; color: var(--gray-400); margin-left: 6px; }
 
-  /* ── DUPLICATE WARNING ── */
+  /* ── WARNINGS ──────────────────────────────────────────── */
   .dup-warn {
     display: none;
     margin-top: 10px;
@@ -336,14 +289,12 @@
     background: var(--amber-bg);
     border: 1px solid #FDE68A;
     border-radius: var(--radius-sm);
-    font-size: 13px;
-    color: #92400E;
-    align-items: center;
-    gap: 8px;
+    font-size: 13px; color: #92400E;
+    align-items: center; gap: 8px;
   }
-  .dup-warn.visible { display: flex; }
+  .dup-warn.show { display: flex; }
 
-  /* ── CHOICE CARDS ── */
+  /* ── CHOICE CARDS ──────────────────────────────────────── */
   .choice-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -353,232 +304,188 @@
   .choice-card {
     border: 1.5px solid var(--gray-200);
     border-radius: var(--radius-md);
-    padding: 20px 14px;
+    padding: 20px 12px;
     cursor: pointer;
     text-align: center;
     background: var(--gray-50);
-    transition: all var(--transition);
+    transition: all var(--tr);
     user-select: none;
   }
   .choice-card:hover { border-color: var(--gray-400); background: white; }
-  .choice-card.selected-yes {
+  .choice-card.sel-yes {
     border-color: var(--green);
     background: var(--green-bg);
     box-shadow: 0 0 0 3px rgba(22,163,74,.1);
   }
-  .choice-card.selected-no {
+  .choice-card.sel-no {
     border-color: #EF4444;
     background: var(--red-bg);
     box-shadow: 0 0 0 3px rgba(239,68,68,.1);
   }
-  .choice-icon { font-size: 36px; display: block; margin-bottom: 10px; }
-  .choice-label {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--gray-600);
-    line-height: 1.4;
-    transition: color var(--transition);
-  }
-  .choice-card.selected-yes .choice-label { color: var(--green); }
-  .choice-card.selected-no  .choice-label { color: #DC2626; }
+  .choice-icon  { font-size: 36px; display: block; margin-bottom: 10px; }
+  .choice-label { font-size: 13.5px; font-weight: 600; color: var(--gray-500); line-height: 1.4; }
+  .choice-card.sel-yes .choice-label { color: var(--green); }
+  .choice-card.sel-no  .choice-label { color: #DC2626; }
 
-  /* ── SUBMIT BUTTON ── */
+  /* ── SUBMIT BTN ────────────────────────────────────────── */
   .btn-submit {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     border: none;
     border-radius: var(--radius-sm);
     background: var(--gray-200);
     color: var(--gray-400);
     font-family: 'Sarabun', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 15px; font-weight: 600;
     cursor: not-allowed;
-    transition: all var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    transition: all var(--tr);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
   .btn-submit.ready {
-    background: var(--blue-dark);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0,48,135,.3);
+    background: var(--blue-dark); color: white; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,48,135,.28);
   }
-  .btn-submit.ready:hover { background: var(--blue-main); transform: translateY(-1px); }
-  .btn-submit.ready:active { transform: translateY(0); }
-  .btn-submit.loading { background: var(--gray-200); cursor: wait; }
+  .btn-submit.ready:hover  { background: var(--blue-main); transform: translateY(-1px); }
+  .btn-submit.ready:active { transform: none; }
 
-  /* ── SPINNER ── */
+  /* ── SPINNER ───────────────────────────────────────────── */
   .spinner {
-    width: 18px; height: 18px;
+    width: 17px; height: 17px;
     border: 2.5px solid rgba(255,255,255,.3);
     border-top-color: white;
     border-radius: 50%;
     animation: spin .7s linear infinite;
     display: none;
   }
-  .spinner.visible { display: block; }
+  .spinner.show { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── SUCCESS STATE ── */
-  .success-panel {
-    display: none;
-    padding: 36px 24px;
-    text-align: center;
-  }
-  .success-panel.visible { display: block; }
+  /* ── SUCCESS ───────────────────────────────────────────── */
+  .success-panel { display: none; padding: 36px 24px; text-align: center; }
+  .success-panel.show { display: block; }
 
   .success-circle {
-    width: 80px; height: 80px;
+    width: 76px; height: 76px;
     border-radius: 50%;
     background: var(--green-bg);
     border: 2px solid var(--green-bd);
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 18px;
-    font-size: 38px;
+    margin: 0 auto 16px; font-size: 36px;
   }
-  .success-title { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
-  .success-name  { font-size: 15px; color: var(--gray-600); margin-bottom: 12px; }
+  .success-title { font-size: 21px; font-weight: 700; margin-bottom: 5px; }
+  .success-name  { font-size: 14px; color: var(--gray-600); margin-bottom: 12px; }
   .success-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 18px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 28px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 18px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; margin-bottom: 26px;
   }
   .success-badge.yes { background: var(--green-bg); color: #15803D; border: 1px solid var(--green-bd); }
   .success-badge.no  { background: var(--red-bg);   color: #B91C1C; border: 1px solid var(--red-bd); }
 
   .btn-reset {
-    padding: 11px 26px;
+    padding: 10px 26px;
     border: 1.5px solid var(--gray-200);
     border-radius: var(--radius-sm);
-    background: white;
-    color: var(--gray-600);
+    background: white; color: var(--gray-600);
     font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 14px; font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: all var(--tr);
   }
-  .btn-reset:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-reset:hover { background: var(--gray-50); }
 
-  /* ── ERROR TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #1F2937;
-    color: white;
-    font-size: 13.5px;
-    padding: 12px 22px;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-lg);
-    z-index: 9999;
-    transition: transform .3s ease;
-    white-space: nowrap;
+  /* ── SKELETON ──────────────────────────────────────────── */
+  .skeleton {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 36px;
+    color: var(--gray-400); font-size: 14px;
   }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .sk-spin {
+    width: 18px; height: 18px;
+    border: 2.5px solid var(--gray-200);
+    border-top-color: var(--blue-main);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
 
-  /* ── ADMIN TOGGLE ── */
+  /* ── ADMIN ─────────────────────────────────────────────── */
   .admin-toggle {
-    text-align: center;
-    margin-top: 14px;
+    text-align: center; margin-top: 14px;
   }
   .btn-admin {
     background: none; border: none; cursor: pointer;
     font-family: 'Sarabun', sans-serif;
     font-size: 12px; color: var(--gray-400);
     display: inline-flex; align-items: center; gap: 5px;
-    padding: 4px 8px;
-    transition: color var(--transition);
+    padding: 4px 8px; transition: color var(--tr);
   }
   .btn-admin:hover { color: var(--gray-600); }
 
-  /* ── ADMIN PANEL ── */
   .admin-panel {
-    background: white;
-    border-radius: var(--radius-lg);
+    background: white; border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    padding: 20px;
-    margin-top: 12px;
-    display: none;
+    padding: 20px; margin-top: 10px; display: none;
   }
-  .admin-panel.visible { display: block; }
+  .admin-panel.show { display: block; }
   .admin-title {
-    font-size: 15px; font-weight: 600; color: var(--gray-900);
+    font-size: 15px; font-weight: 600;
     display: flex; align-items: center; gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   .stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
-    margin-bottom: 16px;
   }
   .stat-card {
-    background: var(--gray-50);
+    background: var(--gray-50); border-radius: var(--radius-sm);
+    padding: 14px 10px; text-align: center;
+  }
+  .stat-num { font-size: 26px; font-weight: 700; }
+  .stat-lbl { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+  .c-blue  .stat-num { color: var(--blue-main); }
+  .c-green .stat-num { color: var(--green); }
+  .c-red   .stat-num { color: #DC2626; }
+
+  /* ── TOAST ─────────────────────────────────────────────── */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1F2937; color: white;
+    font-size: 13.5px; padding: 11px 22px;
     border-radius: var(--radius-sm);
-    padding: 14px 10px;
-    text-align: center;
+    box-shadow: var(--shadow-lg);
+    z-index: 9999; white-space: nowrap;
+    transition: transform .3s ease; pointer-events: none;
   }
-  .stat-num  { font-size: 26px; font-weight: 700; }
-  .stat-lbl  { font-size: 11px; color: var(--gray-400); margin-top: 3px; }
-  .stat-card.c-blue  .stat-num { color: var(--blue-main); }
-  .stat-card.c-green .stat-num { color: var(--green); }
-  .stat-card.c-red   .stat-num { color: #DC2626; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* ── LOADING SKELETON ── */
-  .skeleton {
-    display: flex; align-items: center; justify-content: center;
-    gap: 10px;
-    padding: 32px;
-    color: var(--gray-400);
-    font-size: 14px;
-  }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 400px) {
-    .choice-card { padding: 16px 10px; }
+    .hero-title { font-size: 18px; }
+    .choice-card { padding: 16px 8px; }
     .choice-icon { font-size: 28px; }
-    .choice-label { font-size: 12.5px; }
-    .hero-title { font-size: 17px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
 <div class="header">
-  <div class="banner-wrap">
-    <div class="banner-placeholder">
-      <div class="banner-icon">🖼️</div>
-      <div class="banner-text">
-        <strong>[ BANNER PLACEHOLDER ]</strong>
-        วางรูปแบนเนอร์วัคซีนไข้หวัดใหญ่ที่นี่<br>
-        แนะนำขนาด 1200 × 300 px
-      </div>
-    </div>
-  </div>
-
   <div class="hero">
     <div class="hero-company">Isuzu Songwanthai Chiangrai</div>
     <div class="hero-badge">💉 ปี 2569</div>
     <h1 class="hero-title">
-      แบบสำรวจความต้องการ<br>
-      ฉีดวัคซีนไข้หวัดใหญ่ประจำปี 2569
+      แบบสำรวจความต้องการ<br>ฉีดวัคซีนไข้หวัดใหญ่ประจำปี 2569
     </h1>
-    <p class="hero-sub">ค้นหาชื่อและแจ้งความประสงค์ผ่านแบบฟอร์มด้านล่าง</p>
+    <p class="hero-sub">
+      ค้นหาชื่อและแจ้งความประสงค์ผ่านแบบฟอร์มด้านล่าง<br>
+      เพื่อให้บริษัทจัดเตรียมวัคซีนได้อย่างเพียงพอ
+    </p>
   </div>
 </div>
 
-<!-- ── PROGRESS BAR ── -->
-<div class="progress-bar-wrap" id="progressWrap">
+<!-- ══ PROGRESS BAR ════════════════════════════════════════ -->
+<div class="progress-wrap" id="progressWrap">
   <div class="progress-meta">
     <span>ตอบแล้ว <strong id="pTotal">0</strong> / 143 คน</span>
     <span class="progress-pct" id="pPct">0%</span>
@@ -592,79 +499,70 @@
   </div>
 </div>
 
-<!-- ── MAIN ── -->
+<!-- ══ MAIN ════════════════════════════════════════════════ -->
 <div class="page-body">
+  <div class="card" id="mainCard">
 
-  <!-- FORM CARD -->
-  <div class="card" id="formCard">
-
-    <!-- Skeleton loading -->
-    <div class="skeleton" id="loadSkeleton">
-      <div class="spinner visible" style="border-color:rgba(0,0,0,.1);border-top-color:var(--blue-main);"></div>
+    <!-- Loading -->
+    <div class="skeleton" id="skeleton">
+      <div class="sk-spin"></div>
       กำลังโหลดรายชื่อพนักงาน...
     </div>
 
-    <!-- Step 1 -->
-    <div class="card-section" id="step1Section" style="display:none">
+    <!-- Step 1: ค้นหาชื่อ -->
+    <div class="card-section" id="sec1" style="display:none">
       <div class="step-label">
-        <div class="step-num" id="step1Num">1</div>
+        <div class="step-num" id="num1">1</div>
         <span class="step-title">ค้นหาชื่อพนักงาน</span>
       </div>
 
       <div class="search-wrap" id="searchWrap">
         <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="searchInput"
-          class="search-input"
-          placeholder="พิมพ์ชื่อ หรือ นามสกุล เพื่อค้นหา..."
-          autocomplete="off"
-        >
+        <input type="text" id="searchInput" class="search-input"
+               placeholder="พิมพ์ชื่อ หรือ นามสกุล..." autocomplete="off">
         <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
         <div class="dropdown" id="dropdown"></div>
       </div>
 
-      <!-- Employee info -->
       <div class="emp-info" id="empInfo">
-        <div class="emp-avatar-lg" id="empAvatar"></div>
+        <div class="emp-avatar" id="empAvatar"></div>
         <div style="flex:1;min-width:0">
           <div class="emp-name" id="empName"></div>
-          <div style="display:flex;align-items:center;gap:4px;margin-top:4px">
+          <div style="display:flex;align-items:center;gap:4px;margin-top:4px;flex-wrap:wrap">
             <span class="emp-dept" id="empDept"></span>
             <span class="emp-branch" id="empBranch"></span>
           </div>
         </div>
-        <span class="check-icon">✅</span>
+        <span style="font-size:20px;flex-shrink:0">✅</span>
       </div>
 
-      <!-- Duplicate warning -->
       <div class="dup-warn" id="dupWarn">
-        <span style="font-size:18px">⚠️</span>
+        <span style="font-size:18px;flex-shrink:0">⚠️</span>
         <span>คุณได้ส่งข้อมูลไปแล้ว — <strong>ไม่สามารถส่งซ้ำได้</strong></span>
       </div>
     </div>
 
-    <!-- Step 2 -->
-    <div class="card-section" id="step2Section" style="display:none">
+    <!-- Step 2: เลือกความประสงค์ -->
+    <div class="card-section" id="sec2" style="display:none">
       <div class="step-label">
-        <div class="step-num" id="step2Num">2</div>
+        <div class="step-num" id="num2">2</div>
         <span class="step-title">ความประสงค์การฉีดวัคซีน</span>
       </div>
 
       <div class="choice-grid">
-        <div class="choice-card" id="cardYes" onclick="selectChoice('yes')">
+        <div class="choice-card" id="cardYes" onclick="pick('yes')">
           <span class="choice-icon">💉</span>
           <div class="choice-label">ประสงค์<br>ฉีดวัคซีน</div>
         </div>
-        <div class="choice-card" id="cardNo" onclick="selectChoice('no')">
+        <div class="choice-card" id="cardNo" onclick="pick('no')">
           <span class="choice-icon">🚫</span>
           <div class="choice-label">ไม่ประสงค์<br>ฉีดวัคซีน</div>
         </div>
       </div>
 
-      <button class="btn-submit" id="btnSubmit" onclick="submitForm()">
-        <div class="spinner" id="btnSpinner"></div>
-        <span id="btnText">📤 ส่งข้อมูล</span>
+      <button class="btn-submit" id="btnSubmit" onclick="doSubmit()">
+        <div class="spinner" id="btnSpin"></div>
+        <span id="btnTxt">📤 ส่งข้อมูล</span>
       </button>
     </div>
 
@@ -672,18 +570,17 @@
     <div class="success-panel" id="successPanel">
       <div class="success-circle">✅</div>
       <div class="success-title">ส่งข้อมูลสำเร็จ!</div>
-      <div class="success-name" id="successName"></div>
-      <div class="success-badge" id="successBadge"></div>
-      <div><button class="btn-reset" onclick="resetForm()">📋 ส่งข้อมูลอีกคน</button></div>
+      <div class="success-name" id="sucName"></div>
+      <div class="success-badge" id="sucBadge"></div>
+      <button class="btn-reset" onclick="resetForm()">📋 ส่งข้อมูลอีกคน</button>
     </div>
 
-  </div><!-- /card -->
+  </div>
 
-  <!-- ADMIN -->
+  <!-- Admin -->
   <div class="admin-toggle">
     <button class="btn-admin" onclick="toggleAdmin()">
-      <span id="adminBtnIcon">📊</span>
-      <span id="adminBtnText">ดูสรุปผลสำรวจ (Admin)</span>
+      📊 <span id="adminTxt">ดูสรุปผลสำรวจ (Admin)</span>
     </button>
   </div>
 
@@ -704,255 +601,245 @@
       </div>
     </div>
   </div>
+</div>
 
-</div><!-- /page-body -->
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATE ─────────────────────────────────────────────────
-var EMPLOYEES       = [];
-var SUBMITTED_IDS   = [];
-var selectedEmp     = null;
-var selectedChoice  = null;
-var isDuplicate     = false;
-var isAdminOpen     = false;
+// ══════════════════════════════════════════════════════════
+//  ⚙️  CONFIG — แก้ตรงนี้จุดเดียว!
+//  1. ไปที่ Apps Script → Deploy → New Deployment → Web App
+//  2. Execute as: Me | Who has access: Anyone
+//  3. Copy URL มาวางตรงนี้
+// ══════════════════════════════════════════════════════════
+var GAS_URL = 'https://script.google.com/macros/s/AKfycby4XF0u8hK1QiPQg3C5HkG8MnFg3eac3askFv4O595DkhrpjqBq3vyysyCD9u-Nd05s/exec';
 
-// Dept color map
+// ══ STATE ══════════════════════════════════════════════════
+var EMPLOYEES     = [];
+var SUBMITTED_IDS = [];
+var selEmp        = null;
+var selChoice     = null;
+var isDup         = false;
+var adminOpen     = false;
+
 var DEPT_COLOR = {
   'บริหาร':'#6366F1','ขาย':'#0EA5E9','ธุรการขาย':'#8B5CF6',
   'บัญชี':'#10B981','การเงิน':'#F59E0B','บุคคล-จัดซื้อ':'#EC4899',
   'ศูนย์บริการ':'#0056A2','ออฟฟิต':'#64748B','ปรับสภาพ':'#78716C',
 };
-function deptColor(d) { return DEPT_COLOR[d] || '#64748B'; }
+function dc(d) { return DEPT_COLOR[d] || '#64748B'; }
 
-// ── INIT ──────────────────────────────────────────────────
+// ══ API HELPERS ════════════════════════════════════════════
+// GET request → ?action=xxx
+function apiGet(action) {
+  return fetch(GAS_URL + '?action=' + action, {
+    redirect: 'follow'
+  }).then(function(r) { return r.json(); });
+}
+
+// POST request → body JSON (ไม่ set Content-Type เพื่อหลีกเลี่ยง CORS preflight)
+function apiPost(action, payload) {
+  return fetch(GAS_URL, {
+    method:   'POST',
+    redirect: 'follow',
+    body:     JSON.stringify({ action: action, payload: payload }),
+  }).then(function(r) { return r.json(); });
+}
+
+// ══ INIT ═══════════════════════════════════════════════════
 window.onload = function() {
-  google.script.run
-    .withSuccessHandler(onEmployeesLoaded)
-    .withFailureHandler(onError)
-    .getEmployees();
-
+  apiGet('getEmployees')
+    .then(onLoaded)
+    .catch(function(e) {
+      document.getElementById('skeleton').innerHTML =
+        '<span style="color:#DC2626">⚠️ โหลดไม่สำเร็จ — กรุณา Refresh</span>';
+    });
   loadSummary();
 };
 
-function onEmployeesLoaded(result) {
-  document.getElementById('loadSkeleton').style.display = 'none';
-  if (!result.ok) { showToast('โหลดข้อมูลไม่สำเร็จ: ' + result.error); return; }
-  EMPLOYEES = result.data;
-  document.getElementById('step1Section').style.display = 'block';
-  document.getElementById('step2Section').style.display = 'none';
+function onLoaded(res) {
+  document.getElementById('skeleton').style.display = 'none';
+  if (!res.ok) { showToast('Error: ' + res.error); return; }
+  EMPLOYEES     = res.data;
+  SUBMITTED_IDS = res.submittedIds || [];
+  document.getElementById('sec1').style.display = 'block';
   document.getElementById('searchInput').focus();
 }
 
-function onError(err) {
-  showToast('เกิดข้อผิดพลาด: ' + err.message);
-  document.getElementById('loadSkeleton').innerHTML = '<span style="color:#DC2626">⚠️ โหลดข้อมูลไม่สำเร็จ กรุณา Refresh</span>';
-}
-
-// ── SEARCH ────────────────────────────────────────────────
-var searchTimeout;
+// ══ SEARCH ═════════════════════════════════════════════════
+var searchTimer;
 document.getElementById('searchInput').addEventListener('input', function() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(runSearch, 120);
-  document.getElementById('clearBtn').classList.toggle('visible', this.value.length > 0);
-  if (selectedEmp && this.value !== selectedEmp.fullName) {
-    selectedEmp = null;
-    selectedChoice = null;
-    isDuplicate = false;
-    document.getElementById('empInfo').classList.remove('visible');
-    document.getElementById('dupWarn').classList.remove('visible');
-    document.getElementById('step2Section').style.display = 'none';
-    document.getElementById('step1Num').classList.remove('done');
-    resetChoiceCards();
-    updateSubmitBtn();
-  }
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(runSearch, 100);
+  document.getElementById('clearBtn').classList.toggle('show', this.value.length > 0);
+  if (selEmp && this.value !== selEmp.fullName) resetSelection();
 });
 
 function runSearch() {
-  var q = document.getElementById('searchInput').value.trim();
+  var q  = document.getElementById('searchInput').value.trim();
   var dd = document.getElementById('dropdown');
   if (q.length < 1) { dd.classList.remove('open'); return; }
 
   var results = EMPLOYEES.filter(function(e) {
-    return e.firstName.indexOf(q) >= 0 ||
-           e.lastName.indexOf(q) >= 0 ||
-           e.fullName.indexOf(q) >= 0;
+    return e.fullName.indexOf(q)  >= 0 ||
+           e.firstName.indexOf(q) >= 0 ||
+           e.lastName.indexOf(q)  >= 0;
   }).slice(0, 8);
 
-  if (results.length === 0) {
-    dd.innerHTML = '<div class="drop-empty">ไม่พบชื่อในรายการ</div>';
+  if (!results.length) {
+    dd.innerHTML = '<div class="drop-empty">ไม่พบชื่อในรายการ 🔍</div>';
   } else {
     dd.innerHTML = results.map(function(e) {
       var done = SUBMITTED_IDS.indexOf(e.id) >= 0;
-      var col  = deptColor(e.dept);
-      return '<div class="drop-item" onclick="selectEmployee(' + e.id + ')">' +
-        '<div class="drop-avatar" style="background:' + col + '">' + e.firstName[0] + '</div>' +
-        '<div class="drop-info">' +
+      var col  = dc(e.dept);
+      var init = e.fullName.replace(/^(นาย|นาง|นางสาว)/, '').trim()[0] || '?';
+      return '<div class="drop-item" onclick="selectEmp(' + e.id + ')">' +
+        '<div class="drop-avatar" style="background:' + col + '">' + init + '</div>' +
+        '<div style="flex:1;min-width:0">' +
           '<div class="drop-name">' + e.fullName + '</div>' +
-          '<div class="drop-sub">แผนก' + e.dept + ' · ' + (e.branch || '—') + '</div>' +
+          '<div class="drop-sub">แผนก' + e.dept + (e.branch ? ' · ' + e.branch : '') + '</div>' +
         '</div>' +
-        (done ? '<span class="drop-badge-done">ส่งแล้ว</span>' : '') +
+        (done ? '<span class="drop-done">ส่งแล้ว</span>' : '') +
       '</div>';
     }).join('');
   }
   dd.classList.add('open');
 }
 
-function selectEmployee(empId) {
-  selectedEmp = EMPLOYEES.find(function(e) { return e.id === empId; });
-  if (!selectedEmp) return;
+function selectEmp(empId) {
+  selEmp = EMPLOYEES.find(function(e) { return e.id === empId; });
+  if (!selEmp) return;
 
-  document.getElementById('searchInput').value = selectedEmp.fullName;
-  document.getElementById('searchInput').classList.add('selected');
-  document.getElementById('clearBtn').classList.add('visible');
+  document.getElementById('searchInput').value = selEmp.fullName;
+  document.getElementById('searchInput').classList.add('has-val');
+  document.getElementById('clearBtn').classList.add('show');
   document.getElementById('dropdown').classList.remove('open');
 
-  // Show emp info
-  var col = deptColor(selectedEmp.dept);
+  var col  = dc(selEmp.dept);
+  var init = selEmp.fullName.replace(/^(นาย|นาง|นางสาว)/, '').trim()[0] || '?';
   document.getElementById('empAvatar').style.background = col;
-  document.getElementById('empAvatar').textContent = selectedEmp.firstName[0] || '?';
-  document.getElementById('empName').textContent = selectedEmp.fullName;
-  document.getElementById('empDept').textContent = 'แผนก' + selectedEmp.dept;
+  document.getElementById('empAvatar').textContent = init;
+  document.getElementById('empName').textContent   = selEmp.fullName;
+  document.getElementById('empDept').textContent   = 'แผนก' + selEmp.dept;
   document.getElementById('empDept').style.background = col;
-  document.getElementById('empBranch').textContent = selectedEmp.branch ? '· ' + selectedEmp.branch : '';
-  document.getElementById('empInfo').classList.add('visible');
+  document.getElementById('empBranch').textContent = selEmp.branch ? '· ' + selEmp.branch : '';
+  document.getElementById('empInfo').classList.add('show');
 
-  // Check duplicate server-side
-  google.script.run
-    .withSuccessHandler(function(res) {
-      isDuplicate = res.ok && res.duplicate;
-      document.getElementById('dupWarn').classList.toggle('visible', isDuplicate);
-      document.getElementById('step1Num').classList.toggle('done', !isDuplicate);
-      if (!isDuplicate) {
-        document.getElementById('step2Section').style.display = 'block';
-      }
-    })
-    .withFailureHandler(function() { isDuplicate = false; document.getElementById('step2Section').style.display = 'block'; })
-    .checkDuplicate(selectedEmp.id);
+  isDup = SUBMITTED_IDS.indexOf(selEmp.id) >= 0;
+  document.getElementById('dupWarn').classList.toggle('show', isDup);
+  document.getElementById('num1').classList.toggle('done', !isDup);
+  document.getElementById('sec2').style.display = isDup ? 'none' : 'block';
 }
 
 function clearSearch() {
   document.getElementById('searchInput').value = '';
-  document.getElementById('searchInput').classList.remove('selected');
-  document.getElementById('clearBtn').classList.remove('visible');
+  document.getElementById('searchInput').classList.remove('has-val');
+  document.getElementById('clearBtn').classList.remove('show');
   document.getElementById('dropdown').classList.remove('open');
-  document.getElementById('empInfo').classList.remove('visible');
-  document.getElementById('dupWarn').classList.remove('visible');
-  document.getElementById('step2Section').style.display = 'none';
-  document.getElementById('step1Num').classList.remove('done');
-  selectedEmp = null; selectedChoice = null; isDuplicate = false;
-  resetChoiceCards(); updateSubmitBtn();
   document.getElementById('searchInput').focus();
+  resetSelection();
 }
 
-// Close dropdown on outside click
+function resetSelection() {
+  selEmp = null; selChoice = null; isDup = false;
+  document.getElementById('empInfo').classList.remove('show');
+  document.getElementById('dupWarn').classList.remove('show');
+  document.getElementById('sec2').style.display = 'none';
+  document.getElementById('num1').classList.remove('done');
+  resetCards(); updateBtn();
+}
+
 document.addEventListener('click', function(e) {
-  var wrap = document.getElementById('searchWrap');
-  if (wrap && !wrap.contains(e.target)) {
-    document.getElementById('dropdown').classList.remove('open');
-  }
+  var w = document.getElementById('searchWrap');
+  if (!w.contains(e.target)) document.getElementById('dropdown').classList.remove('open');
 });
 
-// ── CHOICE ────────────────────────────────────────────────
-function selectChoice(val) {
-  selectedChoice = val;
-  resetChoiceCards();
-  document.getElementById(val === 'yes' ? 'cardYes' : 'cardNo')
-    .classList.add(val === 'yes' ? 'selected-yes' : 'selected-no');
-  document.getElementById('step2Num').classList.add('done');
-  updateSubmitBtn();
+// ══ CHOICE ═════════════════════════════════════════════════
+function pick(val) {
+  selChoice = val;
+  document.getElementById('cardYes').className = 'choice-card' + (val === 'yes' ? ' sel-yes' : '');
+  document.getElementById('cardNo').className  = 'choice-card' + (val === 'no'  ? ' sel-no'  : '');
+  document.getElementById('num2').classList.add('done');
+  updateBtn();
 }
 
-function resetChoiceCards() {
-  document.getElementById('cardYes').classList.remove('selected-yes','selected-no');
-  document.getElementById('cardNo').classList.remove('selected-yes','selected-no');
-  document.getElementById('step2Num').classList.remove('done');
+function resetCards() {
+  document.getElementById('cardYes').className = 'choice-card';
+  document.getElementById('cardNo').className  = 'choice-card';
+  document.getElementById('num2').classList.remove('done');
 }
 
-function updateSubmitBtn() {
-  var ready = selectedEmp && selectedChoice && !isDuplicate;
+function updateBtn() {
+  var ok = selEmp && selChoice && !isDup;
+  document.getElementById('btnSubmit').className = 'btn-submit' + (ok ? ' ready' : '');
+}
+
+// ══ SUBMIT ═════════════════════════════════════════════════
+function doSubmit() {
+  if (!selEmp || !selChoice || isDup) return;
   var btn = document.getElementById('btnSubmit');
-  btn.classList.toggle('ready', !!ready);
+  btn.className = 'btn-submit';
+  document.getElementById('btnSpin').classList.add('show');
+  document.getElementById('btnTxt').textContent = 'กำลังบันทึก...';
+
+  apiPost('submitResponse', {
+    id:       selEmp.id,
+    fullName: selEmp.fullName,
+    dept:     selEmp.dept,
+    branch:   selEmp.branch,
+    choice:   selChoice,
+  })
+  .then(function(res) {
+    document.getElementById('btnSpin').classList.remove('show');
+    if (res.ok) {
+      SUBMITTED_IDS.push(selEmp.id);
+      showSuccess();
+      loadSummary();
+    } else {
+      showToast(res.error || 'ไม่สามารถบันทึกได้');
+      btn.className = 'btn-submit ready';
+      document.getElementById('btnTxt').textContent = '📤 ส่งข้อมูล';
+    }
+  })
+  .catch(function() {
+    document.getElementById('btnSpin').classList.remove('show');
+    btn.className = 'btn-submit ready';
+    document.getElementById('btnTxt').textContent = '📤 ส่งข้อมูล';
+    showToast('เกิดข้อผิดพลาด กรุณาลองใหม่');
+  });
 }
 
-// ── SUBMIT ────────────────────────────────────────────────
-function submitForm() {
-  if (!selectedEmp || !selectedChoice || isDuplicate) return;
-
-  var btn    = document.getElementById('btnSubmit');
-  var spin   = document.getElementById('btnSpinner');
-  var btnTxt = document.getElementById('btnText');
-
-  btn.classList.remove('ready');
-  btn.classList.add('loading');
-  spin.classList.add('visible');
-  btnTxt.textContent = 'กำลังบันทึก...';
-
-  google.script.run
-    .withSuccessHandler(function(res) {
-      spin.classList.remove('visible');
-      if (res.ok) {
-        showSuccess();
-        loadSummary();
-        SUBMITTED_IDS.push(selectedEmp.id);
-      } else {
-        showToast(res.error || 'ไม่สามารถบันทึกได้');
-        btn.classList.add('ready');
-        btnTxt.textContent = '📤 ส่งข้อมูล';
-      }
-      btn.classList.remove('loading');
-    })
-    .withFailureHandler(function(err) {
-      spin.classList.remove('visible');
-      btn.classList.add('ready'); btn.classList.remove('loading');
-      btnTxt.textContent = '📤 ส่งข้อมูล';
-      showToast('เกิดข้อผิดพลาด: ' + err.message);
-    })
-    .submitResponse({
-      id:       selectedEmp.id,
-      fullName: selectedEmp.fullName,
-      dept:     selectedEmp.dept,
-      branch:   selectedEmp.branch,
-      choice:   selectedChoice,
-    });
-}
-
-// ── SUCCESS ───────────────────────────────────────────────
+// ══ SUCCESS ════════════════════════════════════════════════
 function showSuccess() {
-  document.getElementById('step1Section').style.display = 'none';
-  document.getElementById('step2Section').style.display = 'none';
-
-  document.getElementById('successName').textContent = selectedEmp.fullName;
-
-  var badge = document.getElementById('successBadge');
-  if (selectedChoice === 'yes') {
-    badge.textContent = '✅  ประสงค์ฉีดวัคซีน';
-    badge.className = 'success-badge yes';
+  document.getElementById('sec1').style.display = 'none';
+  document.getElementById('sec2').style.display = 'none';
+  document.getElementById('sucName').textContent = selEmp.fullName;
+  var b = document.getElementById('sucBadge');
+  if (selChoice === 'yes') {
+    b.textContent = '✅  ประสงค์ฉีดวัคซีน';
+    b.className = 'success-badge yes';
   } else {
-    badge.textContent = '🚫  ไม่ประสงค์ฉีดวัคซีน';
-    badge.className = 'success-badge no';
+    b.textContent = '🚫  ไม่ประสงค์ฉีดวัคซีน';
+    b.className = 'success-badge no';
   }
-  document.getElementById('successPanel').classList.add('visible');
+  document.getElementById('successPanel').classList.add('show');
 }
 
 function resetForm() {
-  selectedEmp = null; selectedChoice = null; isDuplicate = false;
-  document.getElementById('successPanel').classList.remove('visible');
-  document.getElementById('step1Section').style.display = 'block';
-  document.getElementById('step2Section').style.display = 'none';
-  document.getElementById('step1Num').classList.remove('done');
-  document.getElementById('step2Num').classList.remove('done');
-  resetChoiceCards();
-  updateSubmitBtn();
+  selEmp = null; selChoice = null; isDup = false;
+  document.getElementById('successPanel').classList.remove('show');
+  document.getElementById('sec1').style.display = 'block';
+  document.getElementById('sec2').style.display = 'none';
+  document.getElementById('num1').classList.remove('done');
+  document.getElementById('btnTxt').textContent = '📤 ส่งข้อมูล';
+  resetCards(); updateBtn();
   clearSearch();
 }
 
-// ── SUMMARY ───────────────────────────────────────────────
+// ══ SUMMARY ════════════════════════════════════════════════
 function loadSummary() {
-  google.script.run
-    .withSuccessHandler(function(r) {
+  apiGet('getSummary')
+    .then(function(r) {
       if (!r.ok) return;
       var pct = Math.round(r.total / 143 * 100);
       document.getElementById('pTotal').textContent = r.total;
@@ -960,30 +847,26 @@ function loadSummary() {
       document.getElementById('pNo').textContent    = r.no;
       document.getElementById('pPct').textContent   = pct + '%';
       document.getElementById('pFill').style.width  = pct + '%';
-
       document.getElementById('aTotal').textContent = r.total;
       document.getElementById('aYes').textContent   = r.yes;
       document.getElementById('aNo').textContent    = r.no;
-
-      if (r.total > 0) document.getElementById('progressWrap').classList.add('visible');
+      if (r.total > 0) document.getElementById('progressWrap').classList.add('show');
     })
-    .withFailureHandler(function(){})
-    .getSummary();
+    .catch(function() {});
 }
 
-// ── ADMIN ─────────────────────────────────────────────────
+// ══ ADMIN ═══════════════════════════════════════════════════
 function toggleAdmin() {
-  isAdminOpen = !isAdminOpen;
-  document.getElementById('adminPanel').classList.toggle('visible', isAdminOpen);
-  document.getElementById('adminBtnText').textContent = isAdminOpen ? 'ซ่อนผลสำรวจ' : 'ดูสรุปผลสำรวจ (Admin)';
-  if (isAdminOpen) loadSummary();
+  adminOpen = !adminOpen;
+  document.getElementById('adminPanel').classList.toggle('show', adminOpen);
+  document.getElementById('adminTxt').textContent = adminOpen ? 'ซ่อนผลสำรวจ' : 'ดูสรุปผลสำรวจ (Admin)';
+  if (adminOpen) loadSummary();
 }
 
-// ── TOAST ─────────────────────────────────────────────────
+// ══ TOAST ═══════════════════════════════════════════════════
 function showToast(msg) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(function() { t.classList.remove('show'); }, 3500);
 }
 </script>
