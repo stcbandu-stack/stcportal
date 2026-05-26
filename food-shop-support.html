@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สั่งงานป้ายร้าน — อีซูซุสงวนไทย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#D0021B;--dark:#0D0D0D;--coal:#1A1A1A;--panel:#222;
+  --border:#333;--muted:#666;--silver:#AAA;--white:#F5F5F5;
+  --accent:#E8B84B;--green:#2ECC71;--blue:#4A9EFF;
+  --th:'Sarabun',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--white);font-family:var(--th);font-size:15px;line-height:1.6;min-height:100vh}
+
+/* HEADER */
+header{background:var(--coal);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase}
+.logo-mark{width:26px;height:26px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;clip-path:polygon(0 0,85% 0,100% 50%,85% 100%,0 100%)}
+.logo-sub{color:var(--muted);font-weight:300}
+nav{display:flex;gap:3px}
+.nav-btn{background:none;border:1px solid transparent;color:var(--silver);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:var(--th);font-size:13px;transition:all .15s}
+.nav-btn:hover{border-color:var(--border);color:var(--white);background:var(--panel)}
+.nav-btn.active{color:var(--accent);border-color:var(--accent)}
+
+/* VIEWS */
+.view{display:none}.view.active{display:block}
+
+/* HERO */
+.hero{padding:28px 20px 24px;position:relative;overflow:hidden}
+.hero-order{background:linear-gradient(135deg,var(--red) 0%,#7a000f 100%)}
+.hero-status{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)}
+.hero h1{font-size:20px;font-weight:700;line-height:1.3}
+.hero p{color:rgba(255,255,255,.65);font-size:13px;margin-top:3px}
+.hero-icon{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:52px;opacity:.12}
+
+/* WRAP */
+.wrap{max-width:700px;margin:0 auto;padding:20px 16px 60px}
+
+/* SECTION */
+.section{background:var(--coal);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:14px}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FORM */
+.field{margin-bottom:12px}.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;color:var(--silver);margin-bottom:5px;font-weight:600}
+input,select,textarea{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:5px;color:var(--white);font-family:var(--th);font-size:14px;padding:8px 10px;outline:none;transition:border-color .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:72px}
+select option{background:var(--panel)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 80px;gap:8px}
+
+/* SHOP CARD */
+.shop-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;overflow:hidden;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.shop-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.shop-num{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--accent);background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.3);border-radius:3px;padding:2px 7px}
+.shop-name-input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);border-radius:0;padding:4px 0;font-size:14px;font-weight:600}
+.shop-name-input:focus{border-bottom-color:var(--accent)}
+.shop-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:3px;transition:color .15s;line-height:1}
+.shop-del:hover{color:var(--red)}
+.shop-body{padding:12px 14px}
+
+/* SIGN ROW */
+.sign-row{display:grid;grid-template-columns:auto 1fr 1fr 1fr 1fr 28px;gap:6px;align-items:start;margin-bottom:8px}
+.sign-row:last-child{margin-bottom:0}
+.sign-no-badge{font-family:var(--mono);font-size:10px;color:var(--muted);padding-top:9px;white-space:nowrap}
+.sign-row input,.sign-row select,.sign-row textarea{font-size:13px;padding:7px 8px}
+.sign-row-del{background:none;border:none;color:var(--border);cursor:pointer;font-size:15px;padding-top:7px;transition:color .15s;line-height:1}
+.sign-row-del:hover{color:var(--red)}
+
+.add-sign-btn{background:none;border:1px dashed var(--border);border-radius:5px;color:var(--muted);cursor:pointer;font-family:var(--th);font-size:13px;padding:8px;width:100%;margin-top:8px;transition:all .15s}
+.add-sign-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.add-sign-btn:disabled{opacity:.3;cursor:default}
+
+/* BUTTONS */
+.btn-add-shop{width:100%;background:none;border:1px dashed var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-family:var(--th);font-size:14px;padding:14px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-add-shop:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,184,75,.04)}
+.btn-submit{width:100%;background:var(--red);border:none;border-radius:8px;color:#fff;cursor:pointer;font-family:var(--th);font-size:15px;font-weight:700;padding:15px;transition:all .2s;margin-top:18px}
+.btn-submit:hover:not(:disabled){background:#b00216;transform:translateY(-1px)}
+.btn-submit:disabled{background:var(--muted);cursor:default;transform:none}
+
+/* SUCCESS */
+.success-box{background:var(--coal);border:1px solid var(--green);border-radius:10px;padding:28px 20px;text-align:center;margin:20px 0}
+.success-icon{font-size:44px;margin-bottom:10px}
+.uid-display{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);background:rgba(232,184,75,.1);border:1px solid rgba(232,184,75,.3);border-radius:7px;padding:12px 20px;margin:14px 0;letter-spacing:.08em}
+.btn-copy{background:var(--panel);border:1px solid var(--border);color:var(--silver);border-radius:5px;padding:7px 14px;cursor:pointer;font-family:var(--th);font-size:13px;transition:all .15s}
+.btn-copy:hover{border-color:var(--accent);color:var(--accent)}
+
+/* STATUS VIEW */
+.search-row{display:flex;gap:8px;margin-top:14px}
+.search-row input{flex:1;font-family:var(--mono);letter-spacing:.04em}
+.btn-search{background:var(--red);border:none;border-radius:5px;color:#fff;cursor:pointer;font-family:var(--th);font-size:14px;font-weight:600;padding:8px 20px;transition:background .15s;white-space:nowrap}
+.btn-search:hover{background:#b00216}
+
+/* RESULT CARD */
+.result-card{background:var(--coal);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:14px}
+.result-head{background:var(--panel);border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.result-head .rh-info .order-id-tag{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:3px}
+.result-head .rh-info .branch-tag{color:var(--muted);font-size:12px}
+.result-head .rh-info .date-tag{color:var(--muted);font-size:11px}
+.status-badge{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;font-family:var(--mono);white-space:nowrap}
+.status-badge.pending{background:rgba(232,184,75,.12);color:var(--accent);border:1px solid rgba(232,184,75,.35)}
+.status-badge.done{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.35)}
+
+/* SHOP RESULT */
+.shop-result{border-bottom:1px solid var(--border);padding:14px}
+.shop-result:last-child{border-bottom:none}
+.shop-result-name{font-size:14px;font-weight:700;margin-bottom:10px;color:var(--white)}
+.sign-result-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px dashed var(--border)}
+.sign-result-row:last-child{border-bottom:none}
+.sign-result-no{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--panel);border-radius:3px;padding:2px 5px;flex-shrink:0;margin-top:1px}
+.sign-result-info .type{font-size:13px;font-weight:600}
+.sign-result-info .detail{font-size:12px;color:var(--silver);white-space:pre-wrap;margin-top:2px}
+.sign-result-meta{margin-left:auto;text-align:right;flex-shrink:0}
+.sign-result-meta .size{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.sign-result-meta .qty{font-size:11px;color:var(--muted)}
+.note-box{margin:12px 14px 0;background:rgba(232,184,75,.05);border:1px solid rgba(232,184,75,.2);border-radius:5px;padding:9px 11px;font-size:13px;color:var(--silver)}
+.note-box strong{color:var(--accent)}
+
+/* MSG */
+.msg{text-align:center;padding:36px 20px;color:var(--muted);font-size:14px}
+.msg.err{color:#ff6b6b}
+.spinner{width:22px;height:22px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+footer{text-align:center;padding:20px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:40px}
+
+@media(max-width:560px){
+  .sign-row{grid-template-columns:auto 1fr 1fr;grid-template-rows:auto auto}
+  .g2,.g3{grid-template-columns:1fr}
+  nav .nav-btn{padding:5px 8px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">I</div>
+    <span>สงวนไทย <span class="logo-sub">· Signs</span></span>
+  </div>
+  <nav>
+    <button class="nav-btn active" onclick="showView('order',this)">📋 สั่งงาน</button>
+    <button class="nav-btn" onclick="showView('status',this)">🔍 สถานะ</button>
+  </nav>
+</header>
+
+<!-- ═══ VIEW: ORDER ═══ -->
+<div id="view-order" class="view active">
+  <div class="hero hero-order">
+    <div class="hero-icon">🪧</div>
+    <h1>สั่งงานป้ายร้าน</h1>
+    <p>เลือกสาขา → เพิ่มร้านค้า → ระบุรายการป้าย → ส่งงาน</p>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div id="success-state" style="display:none">
+    <div class="wrap">
+      <div class="success-box">
+        <div class="success-icon">✅</div>
+        <h2 style="font-size:18px">ส่งคำสั่งงานสำเร็จ!</h2>
+        <p style="color:var(--silver);font-size:13px;margin-top:4px">เก็บ Order ID ไว้ติดตามสถานะ</p>
+        <div class="uid-display" id="result-uid">—</div>
+        <button class="btn-copy" onclick="copyUID()">📋 คัดลอก Order ID</button>
+        <br><br>
+        <button class="btn-copy" onclick="resetOrder()" style="margin-top:6px">+ สั่งงานใหม่</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM STATE -->
+  <div id="form-state">
+    <div class="wrap">
+
+      <!-- BRANCH -->
+      <div class="section">
+        <div class="sec-label">สาขาที่สั่งงาน</div>
+        <div class="field">
+          <select id="branch" required>
+            <option value="" disabled selected>— เลือกสาขา —</option>
+            <option value="พาน">สาขาพาน</option>
+            <option value="แม่สาย">สาขาแม่สาย</option>
+            <option value="เชียงของ">สาขาเชียงของ</option>
+            <option value="อื่นๆ">อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SHOPS -->
+      <div class="section">
+        <div class="sec-label">รายการร้านค้า</div>
+        <div id="shop-list"></div>
+        <button type="button" class="btn-add-shop" onclick="addShop()">
+          + เพิ่มร้านค้า
+        </button>
+      </div>
+
+      <button class="btn-submit" id="submit-btn" onclick="submitOrder()">
+        ส่งคำสั่งงาน →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW: STATUS ═══ -->
+<div id="view-status" class="view">
+  <div class="hero hero-status">
+    <div class="hero-icon">🔍</div>
+    <h1>ตรวจสอบสถานะ</h1>
+    <p>กรอก Order ID ที่ได้รับหลังส่งงาน</p>
+    <div class="search-row">
+      <input type="text" id="uid-input" placeholder="ORD-XXXXXXXX"
+        style="max-width:260px"
+        onkeydown="if(event.key==='Enter')checkStatus()">
+      <button class="btn-search" onclick="checkStatus()">ค้นหา</button>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:4px">
+    <div id="status-result"></div>
+  </div>
+</div>
+
+<footer>© อีซูซุสงวนไทย · ระบบสั่งงานป้ายร้านค้า</footer>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────
+const GAS_URL = "AKfycbz4Z5L4jufzFQFeQ_umou-hfwkDdotWhp7jCEQ3YGINSWn0oGkO92nKRD4VoTjGatC5fQ"; // ← แก้ตรงนี้
+// ─────────────────────────────────────────────────────────────
+
+let shopIdx = 0;
+
+// ─── NAVIGATION ──────────────────────────────────────────────
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── SHOP MANAGEMENT ─────────────────────────────────────────
+function addShop(shopName='') {
+  shopIdx++;
+  const id   = shopIdx;
+  const list = document.getElementById('shop-list');
+  const card = document.createElement('div');
+  card.className = 'shop-card';
+  card.dataset.shopId = id;
+  card.innerHTML = `
+    <div class="shop-head">
+      <span class="shop-num">ร้านที่ ${id}</span>
+      <input class="shop-name-input tbl-input" type="text"
+        placeholder="ชื่อร้านค้า..." value="${shopName}"
+        data-field="shop_name">
+      <button class="shop-del" onclick="removeShop(this)" title="ลบร้านนี้">✕</button>
+    </div>
+    <div class="shop-body">
+      <div class="sign-header" style="display:grid;grid-template-columns:auto 1fr 1fr 1fr 1fr 28px;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+        <span></span>
+        <span style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase">ประเภทป้าย</span>
+        <span style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase">รายละเอียด</span>
+        <span style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase">ขนาด (cm)</span>
+        <span style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase">จำนวน</span>
+        <span></span>
+      </div>
+      <div class="sign-rows"></div>
+      <button type="button" class="add-sign-btn" onclick="addSign(this)">
+        + เพิ่มป้าย (สูงสุด 5 รายการ)
+      </button>
+    </div>
+  `;
+  list.appendChild(card);
+  addSign(card.querySelector('.add-sign-btn')); // เปิดป้ายแรกอัตโนมัติ
+  updateShopNumbers();
+}
+
+function removeShop(btn) {
+  btn.closest('.shop-card').remove();
+  updateShopNumbers();
+}
+
+function updateShopNumbers() {
+  document.querySelectorAll('.shop-card').forEach((card, i) => {
+    card.querySelector('.shop-num').textContent = `ร้านที่ ${i+1}`;
+  });
+}
+
+// ─── SIGN MANAGEMENT ─────────────────────────────────────────
+function addSign(btn) {
+  const body     = btn.closest('.shop-body');
+  const signRows = body.querySelector('.sign-rows');
+  const count    = signRows.querySelectorAll('.sign-row').length;
+  if (count >= 5) return;
+
+  const no  = count + 1;
+  const row = document.createElement('div');
+  row.className = 'sign-row';
+  row.innerHTML = `
+    <span class="sign-no-badge">#${no}</span>
+    <select data-field="type">
+      <option value="" disabled selected>ประเภท</option>
+      <option>ป้ายหน้าร้าน</option>
+      <option>ป้ายเมนู</option>
+    </select>
+    <input type="text" data-field="detail" placeholder="รายละเอียด / เมนู">
+    <input type="text" data-field="size"   placeholder="เช่น 230x150">
+    <input type="number" data-field="qty"  placeholder="1" min="1">
+    <button type="button" class="sign-row-del" onclick="removeSign(this)">✕</button>
+  `;
+  signRows.appendChild(row);
+  updateSignNumbers(signRows);
+  updateAddSignBtn(btn);
+}
+
+function removeSign(btn) {
+  const row      = btn.closest('.sign-row');
+  const signRows = row.closest('.sign-rows');
+  const addBtn   = signRows.closest('.shop-body').querySelector('.add-sign-btn');
+  row.remove();
+  updateSignNumbers(signRows);
+  updateAddSignBtn(addBtn);
+}
+
+function updateSignNumbers(signRows) {
+  signRows.querySelectorAll('.sign-row').forEach((r, i) => {
+    r.querySelector('.sign-no-badge').textContent = `#${i+1}`;
+  });
+}
+
+function updateAddSignBtn(btn) {
+  const count = btn.closest('.shop-body').querySelectorAll('.sign-row').length;
+  btn.disabled = count >= 5;
+  btn.textContent = count >= 5
+    ? '✓ ครบ 5 รายการแล้ว (สูงสุด)'
+    : '+ เพิ่มป้าย (สูงสุด 5 รายการ)';
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────
+async function submitOrder() {
+  const branch = document.getElementById('branch').value;
+  if (!branch) { alert('กรุณาเลือกสาขาก่อนครับ'); return; }
+
+  const shopCards = document.querySelectorAll('.shop-card');
+  if (!shopCards.length) { alert('กรุณาเพิ่มร้านค้าอย่างน้อย 1 ร้าน'); return; }
+
+  // Collect & validate
+  const shops = [];
+  let valid = true;
+
+  shopCards.forEach(card => {
+    const shopName = card.querySelector('[data-field="shop_name"]').value.trim();
+    if (!shopName) { card.querySelector('[data-field="shop_name"]').focus(); valid = false; return; }
+
+    const signEls = card.querySelectorAll('.sign-row');
+    if (!signEls.length) { valid = false; alert(`ร้าน "${shopName}" ยังไม่มีรายการป้าย`); return; }
+
+    const signs = [];
+    signEls.forEach(row => {
+      const type   = row.querySelector('[data-field="type"]').value;
+      const detail = row.querySelector('[data-field="detail"]').value.trim();
+      const size   = row.querySelector('[data-field="size"]').value.trim();
+      const qty    = row.querySelector('[data-field="qty"]').value;
+      if (!type || !size || !qty) { valid = false; return; }
+      signs.push({ type, detail, size, qty });
+    });
+    shops.push({ shop_name: shopName, signs });
+  });
+
+  if (!valid) { alert('กรุณากรอกข้อมูลให้ครบทุกช่องที่มี * ครับ'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+
+  try {
+    const res  = await fetch(GAS_URL, {
+      method: 'POST',
+      body:   JSON.stringify({ branch, shops })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+
+    document.getElementById('form-state').style.display    = 'none';
+    document.getElementById('success-state').style.display = 'block';
+    document.getElementById('result-uid').textContent      = data.order_id;
+
+  } catch (err) {
+    alert('เกิดข้อผิดพลาด: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = 'ส่งคำสั่งงาน →';
+  }
+}
+
+function copyUID() {
+  const id = document.getElementById('result-uid').textContent;
+  navigator.clipboard.writeText(id).then(() => alert('คัดลอกแล้ว: ' + id));
+}
+
+function resetOrder() {
+  document.getElementById('form-state').style.display    = 'block';
+  document.getElementById('success-state').style.display = 'none';
+  document.getElementById('branch').value = '';
+  document.getElementById('shop-list').innerHTML = '';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'ส่งคำสั่งงาน →';
+  shopIdx = 0;
+  addShop();
+}
+
+// ─── STATUS ───────────────────────────────────────────────────
+async function checkStatus() {
+  const uid = document.getElementById('uid-input').value.trim().toUpperCase();
+  if (!uid) return;
+
+  const box = document.getElementById('status-result');
+  box.innerHTML = `<div class="msg"><div class="spinner"></div>กำลังค้นหา...</div>`;
+
+  try {
+    const res  = await fetch(`${GAS_URL}?order_id=${encodeURIComponent(uid)}`);
+    const data = await res.json();
+
+    if (!data.success) {
+      box.innerHTML = `<div class="msg err">❌ ${esc(data.error)}</div>`;
+      return;
+    }
+
+    const { order, shops } = data;
+    const badge = order.status === 'done'
+      ? `<span class="status-badge done">● เสร็จแล้ว</span>`
+      : `<span class="status-badge pending">● กำลังดำเนินการ</span>`;
+
+    const shopsHtml = shops.map(shop => `
+      <div class="shop-result">
+        <div class="shop-result-name">🏪 ${esc(shop.shop_name)}</div>
+        ${shop.signs.map((s, i) => `
+          <div class="sign-result-row">
+            <span class="sign-result-no">#${i+1}</span>
+            <div class="sign-result-info">
+              <div class="type">${esc(s.type)}</div>
+              ${s.detail ? `<div class="detail">${esc(s.detail)}</div>` : ''}
+            </div>
+            <div class="sign-result-meta">
+              <div class="size">${esc(s.size)} cm</div>
+              <div class="qty">× ${esc(String(s.qty))} ป้าย</div>
+            </div>
+          </div>`).join('')}
+      </div>`).join('');
+
+    const noteHtml = order.note
+      ? `<div class="note-box"><strong>📝 หมายเหตุ:</strong> ${esc(order.note)}</div>`
+      : '';
+
+    box.innerHTML = `
+      <div class="result-card">
+        <div class="result-head">
+          <div class="rh-info">
+            <div class="order-id-tag">${esc(order.order_id)}</div>
+            <div class="branch-tag">📍 ${esc(order.branch)}</div>
+            <div class="date-tag">🕐 ${esc(String(order.created_at))}</div>
+          </div>
+          ${badge}
+        </div>
+        ${shopsHtml}
+        ${noteHtml}
+      </div>`;
+  } catch(e) {
+    box.innerHTML = `<div class="msg err">❌ เชื่อมต่อไม่ได้</div>`;
+  }
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+addShop();
+</script>
+</body>
+</html>
