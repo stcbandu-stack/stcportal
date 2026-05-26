@@ -48,10 +48,13 @@ nav{display:flex;gap:3px}
 /* FORM */
 .field{margin-bottom:12px}.field:last-child{margin-bottom:0}
 label{display:block;font-size:12px;color:var(--silver);margin-bottom:5px;font-weight:600}
-input,select,textarea{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:5px;color:var(--white);font-family:var(--th);font-size:14px;padding:8px 10px;outline:none;transition:border-color .15s;-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+input,select,textarea{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:5px;color:var(--white);font-family:var(--th);font-size:14px;padding:8px 10px;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(232,184,75,.15)}
 textarea{resize:vertical;min-height:72px}
-select option{background:var(--panel)}
+input::placeholder,textarea::placeholder{color:var(--muted);font-style:italic;font-size:13px}
+select.unselected{color:var(--muted) !important}
+select option{background:var(--coal);color:var(--white)}
+.field-error{border-color:#ff4444 !important;box-shadow:0 0 0 2px rgba(255,68,68,.18) !important}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .g3{display:grid;grid-template-columns:1fr 1fr 80px;gap:8px}
 
@@ -143,7 +146,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:12px;border-t
 <header>
   <div class="logo">
     <div class="logo-mark">I</div>
-    <span>สงวนไทย <span class="logo-sub">· Signs</span></span>
+    <span>SANGUANTHAI <span class="logo-sub">· Signs</span></span>
   </div>
   <nav>
     <button class="nav-btn active" onclick="showView('order',this)">📋 สั่งงาน</button>
@@ -182,12 +185,12 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:12px;border-t
       <div class="section">
         <div class="sec-label">สาขาที่สั่งงาน</div>
         <div class="field">
-          <select id="branch" required>
+          <select id="branch" required class="unselected" onchange="markSelected(this)">
             <option value="" disabled selected>— เลือกสาขา —</option>
             <option value="พาน">บ้านดู่</option>
             <option value="แม่สาย">พาน</option>
-            <option value="เชียงของ">แม่สาย</option>
-            <option value="อื่นๆ">แม่จัน</option>
+            <option value="บ้านดู่">แม่สาย</option>
+            <option value="เชียงของ">แม่จัน</option>
           </select>
         </div>
       </div>
@@ -302,8 +305,8 @@ function addSign(btn) {
   row.className = 'sign-row';
   row.innerHTML = `
     <span class="sign-no-badge">#${no}</span>
-    <select data-field="type">
-      <option value="" disabled selected>ประเภท</option>
+    <select data-field="type" class="unselected" onchange="markSelected(this)">
+      <option value="" disabled selected>— เลือกประเภท —</option>
       <option>ป้ายหน้าร้าน</option>
       <option>ป้ายเมนู</option>
     </select>
@@ -348,30 +351,57 @@ async function submitOrder() {
   const shopCards = document.querySelectorAll('.shop-card');
   if (!shopCards.length) { alert('กรุณาเพิ่มร้านค้าอย่างน้อย 1 ร้าน'); return; }
 
+  // Clear previous errors
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+
   // Collect & validate
   const shops = [];
   let valid = true;
+  let firstError = null;
+
+  // Validate branch
+  const branchEl = document.getElementById('branch');
+  if (!branchEl.value) {
+    branchEl.classList.add('field-error');
+    valid = false;
+    firstError = firstError || branchEl;
+  }
 
   shopCards.forEach(card => {
-    const shopName = card.querySelector('[data-field="shop_name"]').value.trim();
-    if (!shopName) { card.querySelector('[data-field="shop_name"]').focus(); valid = false; return; }
+    const nameEl = card.querySelector('[data-field="shop_name"]');
+    const shopName = nameEl.value.trim();
+    if (!shopName) {
+      nameEl.classList.add('field-error');
+      valid = false;
+      firstError = firstError || nameEl;
+      return;
+    }
 
     const signEls = card.querySelectorAll('.sign-row');
-    if (!signEls.length) { valid = false; alert(`ร้าน "${shopName}" ยังไม่มีรายการป้าย`); return; }
+    if (!signEls.length) { valid = false; return; }
 
     const signs = [];
     signEls.forEach(row => {
-      const type   = row.querySelector('[data-field="type"]').value;
-      const detail = row.querySelector('[data-field="detail"]').value.trim();
-      const size   = row.querySelector('[data-field="size"]').value.trim();
-      const qty    = row.querySelector('[data-field="qty"]').value;
-      if (!type || !size || !qty) { valid = false; return; }
-      signs.push({ type, detail, size, qty });
+      const typeEl   = row.querySelector('[data-field="type"]');
+      const sizeEl   = row.querySelector('[data-field="size"]');
+      const qtyEl    = row.querySelector('[data-field="qty"]');
+      const type     = typeEl.value;
+      const size     = sizeEl.value.trim();
+      const qty      = qtyEl.value;
+      const detail   = row.querySelector('[data-field="detail"]').value.trim();
+
+      if (!type)  { typeEl.classList.add('field-error'); valid = false; firstError = firstError || typeEl; }
+      if (!size)  { sizeEl.classList.add('field-error'); valid = false; firstError = firstError || sizeEl; }
+      if (!qty)   { qtyEl.classList.add('field-error');  valid = false; firstError = firstError || qtyEl; }
+      if (type && size && qty) signs.push({ type, detail, size, qty });
     });
-    shops.push({ shop_name: shopName, signs });
+    if (signs.length) shops.push({ shop_name: shopName, signs });
   });
 
-  if (!valid) { alert('กรุณากรอกข้อมูลให้ครบทุกช่องที่มี * ครับ'); return; }
+  if (!valid) {
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
@@ -480,6 +510,8 @@ function esc(s) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────
+// mark select helper
+function markSelected(el){el.classList.remove("unselected");el.classList.remove("field-error")}
 addShop();
 </script>
 </body>
