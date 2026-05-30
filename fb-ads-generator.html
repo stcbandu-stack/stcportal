@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เครื่องมือสร้างรหัสสำหรับ Facebook Ads</title>
-    
+
     <!-- Google Fonts: Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
+
     <!-- Vue 3 CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Phosphor Icons CDN -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -48,20 +48,20 @@
             }
         }
     </script>
-    
+
     <style>
         /* Custom scrollbar for a cleaner look */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
+
         .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
         .fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen antialiased selection:bg-fb selection:text-white relative overflow-x-hidden">
-    
+
     <!-- Decorative Animated Background -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden flex justify-between items-center">
         <i class="ph-fill ph-facebook-logo absolute -bottom-20 -left-20 text-[400px] text-fb/5 animate-float-slow"></i>
@@ -69,32 +69,50 @@
     </div>
 
     <div id="app" class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 relative z-10">
-        
+
         <!-- Header -->
-        <header class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 pt-4">
-            <img src="https://www.isuzu-stc.com/STC-LOGO-RGB.svg" alt="Isuzu STC Logo" class="h-10 sm:h-12 object-contain">
+        <header class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 pt-4">
+            <img :src="activeTab.logo" :alt="activeTab.label" class="h-10 sm:h-12 object-contain transition-opacity duration-300">
             <div class="text-center sm:text-right">
                 <h1 class="text-2xl font-semibold text-slate-900">เครื่องมือสร้างรหัส</h1>
                 <p class="text-fb font-medium">สำหรับ Facebook Ads</p>
             </div>
         </header>
 
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-4 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100 w-full sm:w-auto sm:inline-flex">
+            <button
+                v-for="tab in tabs"
+                :key="tab.id"
+                @click="switchTab(tab.id)"
+                :class="[
+                    'flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200',
+                    activeTabId === tab.id
+                        ? 'bg-fb text-white shadow-md shadow-fb/20'
+                        : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                ]"
+            >
+                <i :class="['ph-fill', tab.icon, 'text-lg']"></i>
+                {{ tab.label }}
+            </button>
+        </div>
+
         <!-- Main Card -->
         <main class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden relative">
-            
+
             <!-- Loading Overlay -->
-            <div v-if="isLoading" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+            <div v-if="active.isLoading" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
                 <i class="ph ph-spinner-gap animate-spin text-4xl text-fb mb-2"></i>
                 <p class="text-slate-500 font-medium animate-pulse">กำลังโหลดข้อมูลจากฐานข้อมูล...</p>
             </div>
 
             <!-- Error Message -->
-            <div v-if="error" class="p-6 bg-red-50 border-b border-red-100 flex items-start gap-3 text-red-700">
+            <div v-if="active.error" class="p-6 bg-red-50 border-b border-red-100 flex items-start gap-3 text-red-700">
                 <i class="ph-fill ph-warning-circle text-xl mt-0.5"></i>
                 <div>
                     <h3 class="font-semibold">เกิดข้อผิดพลาดในการโหลดข้อมูล</h3>
-                    <p class="text-sm mt-1">{{ error }}</p>
-                    <button @click="fetchData" class="mt-3 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg text-sm font-medium transition-colors">
+                    <p class="text-sm mt-1">{{ active.error }}</p>
+                    <button @click="fetchData(activeTabId)" class="mt-3 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg text-sm font-medium transition-colors">
                         ลองใหม่อีกครั้ง
                     </button>
                 </div>
@@ -103,110 +121,68 @@
             <div class="p-6 sm:p-8">
                 <!-- Form Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <!-- Ads Option -->
-                    <div class="space-y-2 lg:col-span-3 bg-blue-50 p-4 sm:p-5 rounded-2xl border border-blue-200 shadow-sm">
-                        <label class="block text-base font-semibold text-fb flex items-center gap-2">
-                            <i class="ph-fill ph-target text-xl"></i>
-                            วัตถุประสงค์ ในการยิง Ads <span class="text-red-500">*</span>
-                        </label>
-                        <select v-model="selections.ads_option" class="w-full rounded-xl border-blue-300 shadow-sm focus:border-fb focus:ring-fb bg-white text-blue-900 font-medium hover:border-blue-400 transition-colors py-3 px-4 border-2 outline-none appearance-none cursor-pointer">
-                            <option value="">-- เลือกวัตถุประสงค์ --</option>
-                            <option v-for="opt in options.ads_option" :key="opt.value" :value="opt.value">
-                                {{ opt.label }}
-                            </option>
-                        </select>
-                    </div>
 
-                    <!-- Page -->
-                    <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-slate-700">สาขา (Page)</label>
-                        <select v-model="selections.page" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
-                            <option value="">-- เลือกสาขา --</option>
-                            <option v-for="opt in options.page" :key="opt.value" :value="opt.value">
-                                {{ opt.label }}
-                            </option>
-                        </select>
-                    </div>
+                    <template v-for="field in activeTab.fields" :key="field.key">
 
-                    <!-- Car Type -->
-                    <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-slate-700">ประเภทรถ (Car Type)</label>
-                        <select v-model="selections.car_type" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
-                            <option value="">-- เลือกประเภทรถ --</option>
-                            <option v-for="opt in options.car_type" :key="opt.value" :value="opt.value">
-                                {{ opt.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Model -->
-                    <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-slate-700">รุ่นรถ (Model)</label>
-                        <select v-model="selections.model" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
-                            <option value="">-- เลือกรุ่นรถ --</option>
-                            <option v-for="opt in options.model" :key="opt.value" :value="opt.value">
-                                {{ opt.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Sub Model -->
-                    <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-slate-700">เครื่องยนต์ (Sub Model)</label>
-                        <select v-model="selections.sub_model" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
-                            <option value="">-- เลือกเครื่องยนต์ --</option>
-                            <option v-for="opt in options.sub_model" :key="opt.value" :value="opt.value">
-                                {{ opt.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Year -->
-                    <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-slate-700">ปี (Year)</label>
-                        <select v-model="selections.year" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
-                            <option value="">-- เลือกปี --</option>
-                            <option v-for="opt in options.year" :key="opt.value" :value="opt.value">
-                                {{ opt.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Sales (Autocomplete) -->
-                    <div class="space-y-1.5 relative" ref="salesDropdownRef">
-                        <label class="block text-sm font-medium text-slate-700">ชื่อเซลล์ (Sales)</label>
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                v-model="salesSearchText"
-                                @focus="isSalesDropdownOpen = true"
-                                @input="handleSalesInput"
-                                placeholder="พิมพ์ค้นหาชื่อเซลล์..."
-                                class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none pr-10"
-                            >
-                            <button v-if="salesSearchText" @click="clearSales" class="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                                <i class="ph-fill ph-x-circle"></i>
-                            </button>
-                            <i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        <!-- Primary field (Ads Option) -->
+                        <div v-if="field.primary" class="space-y-2 lg:col-span-3 bg-blue-50 p-4 sm:p-5 rounded-2xl border border-blue-200 shadow-sm">
+                            <label class="block text-base font-semibold text-fb flex items-center gap-2">
+                                <i :class="['ph-fill', field.icon || 'ph-target', 'text-xl']"></i>
+                                {{ field.label }} <span class="text-red-500">*</span>
+                            </label>
+                            <select v-model="active.selections[field.key]" class="w-full rounded-xl border-blue-300 shadow-sm focus:border-fb focus:ring-fb bg-white text-blue-900 font-medium hover:border-blue-400 transition-colors py-3 px-4 border-2 outline-none appearance-none cursor-pointer">
+                                <option value="">-- เลือก{{ field.short || field.label }} --</option>
+                                <option v-for="opt in active.options[field.key]" :key="opt.value" :value="opt.value">
+                                    {{ opt.label }}
+                                </option>
+                            </select>
                         </div>
-                        
-                        <!-- Dropdown -->
-                        <transition name="fade">
-                            <ul v-if="isSalesDropdownOpen" class="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                                <li v-if="filteredSalesOptions.length === 0" class="py-2.5 px-3 text-slate-500 text-sm text-center">ไม่พบข้อมูล</li>
-                                <li 
-                                    v-for="opt in filteredSalesOptions" 
+
+                        <!-- Searchable autocomplete field (Model, Sales) -->
+                        <div v-else-if="field.autocomplete" class="space-y-1.5 relative" :ref="el => setFieldRef(field.key, el)">
+                            <label class="block text-sm font-medium text-slate-700">{{ field.label }}</label>
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    v-model="active.searchText[field.key]"
+                                    @focus="active.dropdownOpen[field.key] = true"
+                                    @input="handleAutocompleteInput(field)"
+                                    :placeholder="field.placeholder || 'พิมพ์เพื่อค้นหา...'"
+                                    class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none pr-10"
+                                >
+                                <button v-if="active.searchText[field.key]" @click="clearAutocomplete(field)" class="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                    <i class="ph-fill ph-x-circle"></i>
+                                </button>
+                                <i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                            </div>
+
+                            <!-- Dropdown -->
+                            <ul v-if="active.dropdownOpen[field.key]" class="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                <li v-if="filteredOptions(field).length === 0" class="py-2.5 px-3 text-slate-500 text-sm text-center">ไม่พบข้อมูล</li>
+                                <li
+                                    v-for="opt in filteredOptions(field)"
                                     :key="opt.value"
-                                    @mousedown.prevent="selectSales(opt)"
-                                    class="py-2.5 px-3 hover:bg-fb hover:text-white cursor-pointer transition-colors text-sm flex justify-between items-center group"
+                                    @mousedown.prevent="selectOption(field, opt)"
+                                    class="py-2.5 px-3 hover:bg-fb hover:text-white cursor-pointer transition-colors text-sm flex justify-between items-center gap-3 group"
                                 >
                                     <span>{{ opt.label }}</span>
-                                    <span class="text-xs text-slate-400 group-hover:text-blue-100">{{ opt.value }}</span>
+                                    <span class="text-xs text-slate-400 group-hover:text-blue-100 shrink-0">{{ opt.value }}</span>
                                 </li>
                             </ul>
-                        </transition>
-                    </div>
+                        </div>
+
+                        <!-- Standard select field -->
+                        <div v-else class="space-y-1.5">
+                            <label class="block text-sm font-medium text-slate-700">{{ field.label }}</label>
+                            <select v-model="active.selections[field.key]" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-fb focus:ring-fb bg-slate-50 hover:bg-slate-100 transition-colors py-2.5 px-3 border outline-none appearance-none cursor-pointer">
+                                <option value="">-- เลือก{{ field.short || field.label }} --</option>
+                                <option v-for="opt in active.options[field.key]" :key="opt.value" :value="opt.value">
+                                    {{ opt.label }}
+                                </option>
+                            </select>
+                        </div>
+
+                    </template>
                 </div>
 
                 <hr class="my-8 border-slate-100">
@@ -218,12 +194,12 @@
                             <i class="ph-fill ph-code text-fb text-xl"></i>
                             ผลลัพธ์ Code สำหรับใช้งาน
                         </h2>
-                        <button 
-                            @click="copyCode" 
+                        <button
+                            @click="copyCode"
                             :class="[
                                 'flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-200 transform active:scale-95 text-sm w-full sm:w-auto justify-center',
-                                copySuccess 
-                                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/20' 
+                                copySuccess
+                                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
                                     : 'bg-fb hover:bg-fb-hover text-white shadow-md shadow-fb/20'
                             ]"
                         >
@@ -231,13 +207,13 @@
                             {{ copySuccess ? 'คัดลอกสำเร็จแล้ว!' : 'คัดลอกโค้ด' }}
                         </button>
                     </div>
-                    
+
                     <div class="bg-slate-900 rounded-2xl p-6 sm:p-10 font-mono text-2xl sm:text-4xl md:text-5xl text-emerald-400 font-bold break-all border-4 border-slate-800 shadow-inner relative group text-center leading-relaxed tracking-wider">
                         <!-- Hint Placeholder -->
                         <span v-if="!hasAnySelection" class="text-slate-500 text-lg sm:text-2xl select-none font-sans font-normal tracking-normal">
                             กรุณาเลือกข้อมูลด้านบนเพื่อสร้างโค้ด...
                         </span>
-                        
+
                         <!-- Generated Code -->
                         <span v-else>
                             <template v-for="(part, index) in codeParts" :key="index">
@@ -246,14 +222,14 @@
                             </template>
                         </span>
                     </div>
-                    
+
                     <!-- Guide Note -->
                     <p class="text-xs text-slate-500 mt-3 flex items-start gap-1.5">
                         <i class="ph-fill ph-info text-slate-400 mt-0.5"></i>
-                        <span>รูปแบบ: วัตถุประสงค์ - สาขา - ประเภทรถ - รุ่นรถ - เครื่องยนต์ - ปี - รหัสเซลล์ (ระบบจะจดจำค่าที่คุณเลือกไว้ให้อัตโนมัติ)</span>
+                        <span>{{ activeTab.note }} (ระบบจะจดจำค่าที่คุณเลือกไว้ให้อัตโนมัติ)</span>
                     </p>
                 </div>
-                
+
                 <div class="mt-6 flex justify-end">
                      <button @click="resetForm" class="text-sm text-slate-500 hover:text-red-600 font-medium transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-red-50">
                         <i class="ph ph-trash"></i>
@@ -263,7 +239,7 @@
 
             </div>
         </main>
-        
+
         <footer class="text-center mt-8 text-sm text-slate-400">
             <p>Facebook Ads Code Generator &copy; {{ new Date().getFullYear() }}</p>
         </footer>
@@ -274,60 +250,98 @@
 
         createApp({
             setup() {
-                const TSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmx2X77txNwjluwGB3Nu-2s62iKTJSWpUeQz-fdNje1HpxeJUJhojr7RSB08S--AYct2sixrOYO_bm/pub?gid=0&single=true&output=tsv';
-                const STORAGE_KEY = 'fb_ads_generator_cache';
-                
-                const isLoading = ref(true);
-                const error = ref(null);
-                const copySuccess = ref(false);
+                // Shared published-sheet base. Each tab is a separate worksheet (gid).
+                const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmx2X77txNwjluwGB3Nu-2s62iKTJSWpUeQz-fdNje1HpxeJUJhojr7RSB08S--AYct2sixrOYO_bm/pub';
+                const tsvUrl = (gid) => `${SHEET_BASE}?gid=${gid}&single=true&output=tsv`;
 
-                // Models for user selections
-                const selections = reactive({
-                    ads_option: '',
-                    page: '',
-                    car_type: '',
-                    model: '',
-                    sub_model: '',
-                    year: '',
-                    sales: ''
+                // ── Tab definitions ────────────────────────────────────────────────
+                // Each field: key = sheet column holding the LABEL, valueKey = column
+                // holding the CODE that goes into the generated string.
+                // autocomplete: true  → searchable type-to-filter dropdown (for long lists).
+                const tabs = [
+                    {
+                        id: 'new',
+                        label: 'รถมือ 1',
+                        icon: 'ph-car',
+                        logo: 'https://www.isuzu-stc.com/STC-LOGO-RGB.svg',
+                        gid: '0',
+                        storageKey: 'fb_ads_generator_cache',
+                        note: 'รูปแบบ: วัตถุประสงค์ - สาขา - ประเภทรถ - รุ่นรถ - เครื่องยนต์ - ปี - รหัสเซลล์',
+                        fields: [
+                            { key: 'ads_option', valueKey: 'ads_option_code', label: 'วัตถุประสงค์ ในการยิง Ads', short: 'วัตถุประสงค์', primary: true, icon: 'ph-target' },
+                            { key: 'page',        valueKey: 'page_code',        label: 'สาขา (Page)',            short: 'สาขา' },
+                            { key: 'car_type',    valueKey: 'car_type_code',    label: 'ประเภทรถ (Car Type)',    short: 'ประเภทรถ' },
+                            { key: 'model',       valueKey: 'model_code',       label: 'รุ่นรถ (Model)',         short: 'รุ่นรถ', autocomplete: true, placeholder: 'พิมพ์ค้นหารุ่นรถ...' },
+                            { key: 'sub_model',   valueKey: 'sub_model_code',   label: 'เครื่องยนต์ (Sub Model)', short: 'เครื่องยนต์', autocomplete: true, placeholder: 'พิมพ์ค้นหาเครื่องยนต์...' },
+                            { key: 'year',        valueKey: 'year_code',        label: 'ปี (Year)',              short: 'ปี' },
+                            { key: 'sales',       valueKey: 'sc_code',          label: 'ชื่อเซลล์ (Sales)',       short: 'เซลล์', autocomplete: true, placeholder: 'พิมพ์ค้นหาชื่อเซลล์...' },
+                        ],
+                    },
+                    {
+                        id: 'used',
+                        label: 'รถมือสอง',
+                        icon: 'ph-car-profile',
+                        logo: 'https://res.cloudinary.com/dbsppor3j/image/upload/v1780108045/used_car_stc_logo_arlv2i.png',
+                        gid: '986872616', // worksheet "ads_code_2"
+                        storageKey: 'fb_ads_generator_cache_used',
+                        note: 'รูปแบบ: วัตถุประสงค์ - สาขา - ประเภทรถ - ยี่ห้อ - รุ่นรถ - ปี - รหัสเซลล์',
+                        fields: [
+                            { key: 'ads_option', valueKey: 'ads_option_code', label: 'วัตถุประสงค์ ในการยิง Ads', short: 'วัตถุประสงค์', primary: true, icon: 'ph-target' },
+                            { key: 'page',        valueKey: 'page_code',        label: 'สาขา (Page)',         short: 'สาขา' },
+                            { key: 'car_type',    valueKey: 'car_type_code',    label: 'ประเภทรถ (Car Type)', short: 'ประเภทรถ' },
+                            { key: 'brand',       valueKey: 'brand_code',       label: 'ยี่ห้อ (Brand)',      short: 'ยี่ห้อ' },
+                            { key: 'model',       valueKey: 'model_code',       label: 'รุ่นรถ (Model)',      short: 'รุ่นรถ', autocomplete: true, placeholder: 'พิมพ์ค้นหารุ่นรถ...' },
+                            { key: 'year',        valueKey: 'year_code',        label: 'ปี (Year)',           short: 'ปี' },
+                            { key: 'sales',       valueKey: 'sc_code',          label: 'ชื่อเซลล์ (Sales)',    short: 'เซลล์', autocomplete: true, placeholder: 'พิมพ์ค้นหาชื่อเซลล์...' },
+                        ],
+                    },
+                ];
+
+                const autocompleteFields = (tab) => tab.fields.filter(f => f.autocomplete);
+
+                // ── Per-tab reactive state ─────────────────────────────────────────
+                const makeState = (tab) => reactive({
+                    selections:   Object.fromEntries(tab.fields.map(f => [f.key, ''])),
+                    options:      Object.fromEntries(tab.fields.map(f => [f.key, []])),
+                    searchText:   Object.fromEntries(autocompleteFields(tab).map(f => [f.key, ''])),
+                    dropdownOpen: Object.fromEntries(autocompleteFields(tab).map(f => [f.key, false])),
+                    isLoading: false,
+                    isLoaded: false,
+                    error: null,
                 });
 
-                // Autocomplete state for Sales
-                const salesSearchText = ref('');
-                const isSalesDropdownOpen = ref(false);
-                const salesDropdownRef = ref(null);
+                const states = reactive(Object.fromEntries(tabs.map(t => [t.id, makeState(t)])));
+                const activeTabId = ref(tabs[0].id);
 
-                // Load cached selections from Local Storage
-                const loadSelections = () => {
-                    const cached = localStorage.getItem(STORAGE_KEY);
-                    if (cached) {
-                        try {
-                            const parsed = JSON.parse(cached);
-                            Object.keys(selections).forEach(key => {
-                                if (parsed[key] !== undefined) {
-                                    selections[key] = parsed[key];
-                                }
-                            });
-                        } catch (e) {
-                            console.error('Failed to parse cached data', e);
-                        }
+                const activeTab = computed(() => tabs.find(t => t.id === activeTabId.value));
+                const active = computed(() => states[activeTabId.value]);
+
+                // DOM refs for each autocomplete wrapper (for click-outside detection)
+                const fieldRefs = {};
+                const setFieldRef = (key, el) => { if (el) fieldRefs[key] = el; };
+
+                const copySuccess = ref(false);
+
+                // Load cached selections for a tab from Local Storage
+                const loadSelections = (tab) => {
+                    const state = states[tab.id];
+                    const cached = localStorage.getItem(tab.storageKey);
+                    if (!cached) return;
+                    try {
+                        const parsed = JSON.parse(cached);
+                        Object.keys(state.selections).forEach(key => {
+                            if (parsed[key] !== undefined) state.selections[key] = parsed[key];
+                        });
+                    } catch (e) {
+                        console.error('Failed to parse cached data', e);
                     }
                 };
 
-                // Watch for selection changes and save to Local Storage automatically
-                watch(selections, (newSelections) => {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSelections));
-                }, { deep: true });
-
-                // Extracted unique options for dropdowns
-                const options = reactive({
-                    ads_option: [],
-                    page: [],
-                    car_type: [],
-                    model: [],
-                    sub_model: [],
-                    year: [],
-                    sales: []
+                // Persist each tab's selections automatically
+                tabs.forEach(tab => {
+                    watch(() => states[tab.id].selections, (val) => {
+                        localStorage.setItem(tab.storageKey, JSON.stringify(val));
+                    }, { deep: true });
                 });
 
                 // Helper to extract unique Label & Value pairs from raw data
@@ -344,37 +358,26 @@
                     return Array.from(map, ([value, label]) => ({ label, value }));
                 };
 
-                // Fetch and parse TSV
-                const fetchData = async () => {
-                    isLoading.value = true;
-                    error.value = null;
-                    try {
-                        // เพิ่ม Timestamp ต่อท้าย URL เพื่อป้องกัน Browser Cache (บังคับดึงข้อมูลใหม่เสมอ)
-                        const noCacheUrl = `${TSV_URL}&_t=${new Date().getTime()}`;
-                        const response = await fetch(noCacheUrl, { cache: 'no-store' });
-                        
-                        if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบการตั้งค่าการแชร์ไฟล์ Google Sheets');
-                        
-                        const text = await response.text();
-                        parseTSV(text);
-                    } catch (err) {
-                        console.error('Fetch Error:', err);
-                        error.value = err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล';
-                    } finally {
-                        isLoading.value = false;
+                // Sync an autocomplete field's visible text to its selected option's label
+                const syncAutocompleteText = (tab, field) => {
+                    const state = states[tab.id];
+                    if (state.selections[field.key]) {
+                        const opt = state.options[field.key].find(o => o.value === state.selections[field.key]);
+                        if (opt) state.searchText[field.key] = opt.label;
                     }
                 };
 
-                const parseTSV = (text) => {
+                const parseTSV = (text, tab) => {
+                    const state = states[tab.id];
                     const lines = text.split('\n').filter(line => line.trim() !== '');
                     if (lines.length < 2) {
-                        error.value = 'ไม่พบข้อมูลในไฟล์ หรือรูปแบบไฟล์ไม่ถูกต้อง';
+                        state.error = 'ไม่พบข้อมูลในไฟล์ หรือรูปแบบไฟล์ไม่ถูกต้อง';
                         return;
                     }
 
                     // Extract headers (clean up carriage returns)
                     const headers = lines[0].replace(/\r/g, '').split('\t').map(h => h.trim());
-                    
+
                     // Parse rows into objects
                     const rawData = lines.slice(1).map(line => {
                         const values = line.replace(/\r/g, '').split('\t');
@@ -385,72 +388,99 @@
                         return rowObj;
                     });
 
-                    // Populate options
-                    options.ads_option = extractUniquePairs(rawData, 'ads_option', 'ads_option_code');
-                    options.page = extractUniquePairs(rawData, 'page', 'page_code');
-                    options.car_type = extractUniquePairs(rawData, 'car_type', 'car_type_code');
-                    options.model = extractUniquePairs(rawData, 'model', 'model_code');
-                    options.sub_model = extractUniquePairs(rawData, 'sub_model', 'sub_model_code');
-                    options.year = extractUniquePairs(rawData, 'year', 'year_code');
-                    options.sales = extractUniquePairs(rawData, 'sales', 'sc_code');
+                    // Populate options for every field defined on this tab
+                    tab.fields.forEach(f => {
+                        state.options[f.key] = extractUniquePairs(rawData, f.key, f.valueKey);
+                    });
 
-                    // Sync Sales search text if loaded from cache
-                    if (selections.sales) {
-                        const selectedOpt = options.sales.find(o => o.value === selections.sales);
-                        if (selectedOpt) salesSearchText.value = selectedOpt.label;
+                    // Restore the visible text of autocomplete fields loaded from cache
+                    autocompleteFields(tab).forEach(f => syncAutocompleteText(tab, f));
+                };
+
+                // Fetch and parse a tab's worksheet
+                const fetchData = async (tabId) => {
+                    const tab = tabs.find(t => t.id === tabId);
+                    const state = states[tabId];
+                    state.isLoading = true;
+                    state.error = null;
+                    try {
+                        // เพิ่ม Timestamp ต่อท้าย URL เพื่อป้องกัน Browser Cache (บังคับดึงข้อมูลใหม่เสมอ)
+                        const noCacheUrl = `${tsvUrl(tab.gid)}&_t=${new Date().getTime()}`;
+                        const response = await fetch(noCacheUrl, { cache: 'no-store' });
+
+                        if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบการตั้งค่าการแชร์ไฟล์ Google Sheets');
+
+                        const text = await response.text();
+                        parseTSV(text, tab);
+                        state.isLoaded = true;
+                    } catch (err) {
+                        console.error('Fetch Error:', err);
+                        state.error = err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล';
+                    } finally {
+                        state.isLoading = false;
                     }
                 };
 
-                // Autocomplete Logic
-                const filteredSalesOptions = computed(() => {
-                    if (!salesSearchText.value) return options.sales;
-                    const query = salesSearchText.value.toLowerCase();
-                    return options.sales.filter(opt => 
-                        opt.label.toLowerCase().includes(query) || 
+                // Lazy-load a tab the first time it is shown
+                const switchTab = (id) => {
+                    activeTabId.value = id;
+                    const state = states[id];
+                    if (!state.isLoaded && !state.isLoading) fetchData(id);
+                };
+
+                // ── Generic autocomplete logic (operates on the active tab) ────────
+                const filteredOptions = (field) => {
+                    const state = active.value;
+                    const opts = state.options[field.key] || [];
+                    const query = (state.searchText[field.key] || '').toLowerCase();
+                    if (!query) return opts;
+                    return opts.filter(opt =>
+                        opt.label.toLowerCase().includes(query) ||
                         opt.value.toLowerCase().includes(query)
                     );
-                });
-
-                const handleSalesInput = () => {
-                    isSalesDropdownOpen.value = true;
-                    selections.sales = ''; // Clear selection while typing
                 };
 
-                const selectSales = (opt) => {
-                    selections.sales = opt.value;
-                    salesSearchText.value = opt.label;
-                    isSalesDropdownOpen.value = false;
+                const handleAutocompleteInput = (field) => {
+                    const state = active.value;
+                    state.dropdownOpen[field.key] = true;
+                    state.selections[field.key] = ''; // Clear selection while typing
                 };
 
-                const clearSales = () => {
-                    salesSearchText.value = '';
-                    selections.sales = '';
-                    isSalesDropdownOpen.value = true;
+                const selectOption = (field, opt) => {
+                    const state = active.value;
+                    state.selections[field.key] = opt.value;
+                    state.searchText[field.key] = opt.label;
+                    state.dropdownOpen[field.key] = false;
+                };
+
+                const clearAutocomplete = (field) => {
+                    const state = active.value;
+                    state.searchText[field.key] = '';
+                    state.selections[field.key] = '';
+                    state.dropdownOpen[field.key] = true;
                 };
 
                 const handleClickOutside = (event) => {
-                    if (salesDropdownRef.value && !salesDropdownRef.value.contains(event.target)) {
-                        isSalesDropdownOpen.value = false;
-                        if (!selections.sales) {
-                            salesSearchText.value = '';
+                    const state = active.value;
+                    const tab = activeTab.value;
+                    autocompleteFields(tab).forEach(field => {
+                        const el = fieldRefs[field.key];
+                        if (!el || el.contains(event.target) || !state.dropdownOpen[field.key]) return;
+                        state.dropdownOpen[field.key] = false;
+                        // Restore the input text to the selected label (or clear if none)
+                        if (!state.selections[field.key]) {
+                            state.searchText[field.key] = '';
                         } else {
-                            const selectedOpt = options.sales.find(o => o.value === selections.sales);
-                            if (selectedOpt) salesSearchText.value = selectedOpt.label;
+                            const opt = state.options[field.key].find(o => o.value === state.selections[field.key]);
+                            if (opt) state.searchText[field.key] = opt.label;
                         }
-                    }
+                    });
                 };
 
-                // Computed properties for code generation
+                // ── Code generation ────────────────────────────────────────────────
                 const codeParts = computed(() => {
-                    return [
-                        { key: 'ads_option', value: selections.ads_option },
-                        { key: 'page', value: selections.page },
-                        { key: 'car_type', value: selections.car_type },
-                        { key: 'model', value: selections.model },
-                        { key: 'sub_model', value: selections.sub_model },
-                        { key: 'year', value: selections.year },
-                        { key: 'sales', value: selections.sales }
-                    ];
+                    const state = active.value;
+                    return activeTab.value.fields.map(f => ({ key: f.key, value: state.selections[f.key] }));
                 });
 
                 const generatedCodeString = computed(() => {
@@ -458,15 +488,15 @@
                 });
 
                 const hasAnySelection = computed(() => {
-                    return Object.values(selections).some(val => val !== '');
+                    return Object.values(active.value.selections).some(val => val !== '');
                 });
 
-                // Actions
+                // ── Actions ────────────────────────────────────────────────────────
                 const copyCode = async () => {
                     if (!hasAnySelection.value) return; // Prevent copying if nothing is selected
-                    
+
                     const textToCopy = generatedCodeString.value;
-                    
+
                     try {
                         // Use modern clipboard API
                         await navigator.clipboard.writeText(textToCopy);
@@ -498,17 +528,20 @@
                 };
 
                 const resetForm = () => {
-                    Object.keys(selections).forEach(key => {
-                        selections[key] = '';
+                    const tab = activeTab.value;
+                    const state = active.value;
+                    Object.keys(state.selections).forEach(key => {
+                        state.selections[key] = '';
                     });
-                    salesSearchText.value = ''; // Reset autocomplete text
-                    localStorage.removeItem(STORAGE_KEY);
+                    // Reset every autocomplete field's visible text
+                    autocompleteFields(tab).forEach(f => { state.searchText[f.key] = ''; });
+                    localStorage.removeItem(tab.storageKey);
                 };
 
-                // Lifecycle
+                // ── Lifecycle ──────────────────────────────────────────────────────
                 onMounted(() => {
-                    loadSelections(); // Load cache first
-                    fetchData();      // Then fetch options
+                    tabs.forEach(loadSelections); // Load cache for all tabs first
+                    fetchData(activeTabId.value); // Then fetch the active tab's options
                     document.addEventListener('mousedown', handleClickOutside);
                 });
 
@@ -517,24 +550,23 @@
                 });
 
                 return {
-                    isLoading,
-                    error,
-                    options,
-                    selections,
-                    salesSearchText,
-                    isSalesDropdownOpen,
-                    salesDropdownRef,
-                    filteredSalesOptions,
-                    handleSalesInput,
-                    selectSales,
-                    clearSales,
+                    tabs,
+                    activeTabId,
+                    activeTab,
+                    active,
+                    switchTab,
+                    setFieldRef,
+                    filteredOptions,
+                    handleAutocompleteInput,
+                    selectOption,
+                    clearAutocomplete,
                     codeParts,
                     generatedCodeString,
                     hasAnySelection,
                     copySuccess,
                     copyCode,
                     fetchData,
-                    resetForm
+                    resetForm,
                 };
             }
         }).mount('#app');
